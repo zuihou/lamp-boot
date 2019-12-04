@@ -1,0 +1,11 @@
+zuihou:
+  mysql:
+    biz-database: zuihou_base
+  swagger:
+    docket:
+      demo:
+        title: 演示服务
+        base-package: com.github.zuihou.demo.controller
+
+server:
+  port: 8770
