@@ -75,26 +75,9 @@ http://doc.tangyh.top/zuihou-admin-cloud
 ![qq群.png](docs/image/qq群.png)
 
 ## 功能点介绍:
- - **服务注册&发现与调用：**
-
-基于Nacos来实现的服务注册与发现，使用使用Feign来实现服务互调, 可以做到使用HTTP请求远程调用时能与调用本地方法一样的编码体验，开发者完全感知不到这是远程方法，更感知不到这是个HTTP请求。
-
  - **服务鉴权:**
 
 通过JWT的方式来加强服务之间调度的权限验证，保证内部服务的安全性。
-
- - **负载均衡：**
-
-将服务保留的rest进行代理和网关控制，除了平常经常使用的node.js、nginx外，Spring Cloud系列的zuul和rebbion，可以帮我们进行正常的网关管控和负载均衡。其中扩展和借鉴国外项目的扩展基于JWT的Zuul限流插件，方面进行限流。
-
- - **熔断机制：**
-
-因为采取了服务的分布，为了避免服务之间的调用“雪崩”，采用了Hystrix的作为熔断器，避免了服务之间的“雪崩”。
-
- - **监控：**
-
-利用Spring Boot Admin 来监控各个独立Service的运行状态；利用turbine来实时查看接口的运行状态和调用频率；通过Zipkin来查看各个服务之间的调用链等。
-
  - **数据权限**
 
 利用基于Mybatis的DataScopeInterceptor拦截器实现了简单的数据权限
@@ -154,17 +137,8 @@ http://doc.tangyh.top/zuihou-admin-cloud
     - 前端：vue 
     - 持久层框架： Mybatis-plus 
     - 代码生成器：基于Mybatis-plus-generator自定义  [https://github.com/zuihou/zuihou-generator.git]
-    - API网关：Zuul 
-    - 服务注册与发现：Eureka -> Nacos
-    - 服务消费：OpenFeign
-    - 负载均衡：Ribbon
-    - 配置中心：Nacos
-    - 服务熔断：Hystrix
     - 项目构建：Maven 3.3
-    - 分布式事务： seata
-    - 分布式系统的流量防卫兵： Sentinel
     - 监控： spring-boot-admin 2.x
-    - 链路调用跟踪： zipkin 2.x
     - 文件服务器：FastDFS 5.0.5/阿里云OSS/本地存储
     - Nginx
 - 部署方面：
@@ -191,18 +165,6 @@ PS: Lombok版本过低会导致枚举类型的参数无法正确获取参数，�
     4，合并超过5次的朋友，直接拉为项目开发者
     
     
-## 项目截图：
-spring-boot-admin监控界面:
-![SBA监控.png](docs/image/监控界面/sba-1.png)
-spring-boot-admin监控界面:
-![SBA监控.png](docs/image/监控界面/sba-2.png)
-API 界面:
-![admin-api.png](docs/image/项目相关/admin-api.png)
-注册中心界面:
-![eureka注册中心界面.png](docs/image/项目相关/eureka.png)
-定时任务调度界面:
-![eureka注册中心界面.png](docs/image/项目相关/zuihou-jobs-server.png)
-
 ## 感谢：
 - swagger-bootstrap-ui
 - mybatis-plus
@@ -210,8 +172,6 @@ API 界面:
 - hutool
 - guava
 - 等等
-
-
 
 ## 写在最后：
     本项目正在开发阶段，由于码主白天要上班，只有晚上、周末能挤点时间来敲敲代码，所以进度可能比较慢，文档、注释也不齐全。 
