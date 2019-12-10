@@ -23,7 +23,6 @@
 
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-authority-biz</artifactId>
@@ -34,8 +33,6 @@
                 <artifactId>zuihou-authority-controller</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-
         </dependencies>
     </dependencyManagement>
 </project>

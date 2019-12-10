@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.zuihou</groupId>
-        <artifactId>zuihou-dependencies</artifactId>
+        <artifactId>zuihou-boot-dependencies</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../zuihou-dependencies</relativePath>
+        <relativePath>../zuihou-boot-dependencies</relativePath>
     </parent>
 
     <artifactId>zuihou-backend</artifactId>
@@ -17,10 +17,11 @@
 
     <modules>
         <module>zuihou-authority</module>
-    
     </modules>
     <dependencyManagement>
         <dependencies>
+
+
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-config</artifactId>
