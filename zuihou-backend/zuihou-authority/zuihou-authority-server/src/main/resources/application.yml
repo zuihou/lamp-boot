@@ -1,0 +1,192 @@
+zuihou:
+  redis:
+    ip: 127.0.0.1
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+  mysql:
+    ip: 127.0.0.1
+    port: 3306
+    driverClassName: com.mysql.cj.jdbc.Driver
+    database: zuihou_defaults
+    username: root
+    password: root
+    biz-database: zuihou_base
+  swagger:
+    enabled: true
+    global-operation-parameters:
+      - name: tenant
+        description: 租户编码
+        modelRef: String
+        parameterType: header
+        required: true
+        defaultValue: "0000"
+    docket:
+      general:
+        title: 通用模块
+        base-package: com.github.zuihou.general.controller
+      auth:
+        title: 权限模块
+        base-package: com.github.zuihou.authority.controller.auth
+      common:
+        title: 公共模块
+        base-package: com.github.zuihou.authority.controller.common
+      core:
+        title: 组织模块
+        base-package: com.github.zuihou.authority.controller.core
+      tenant:
+        title: 租户模块
+        base-package: com.github.zuihou.authority.controller.defaults
+      sms:
+        title: 短信模块
+        base-package: com.github.zuihou.sms.controller
+      msgs:
+        title: 消息模块
+        base-package: com.github.zuihou.msgs.controller
+      mail:
+        title: 邮件模块
+        base-package: com.github.zuihou.mail.controller
+      file:
+        title: 文件服务
+        base-package: com.github.zuihou.file.controller
+
+authentication:
+  user:
+    header-name: token
+    expire: 43200               # 外部token有效期为12小时
+    pri-key: client/pri.key    # 加密
+    pub-key: client/pub.key    # 解密
+
+j2cache:
+  #  config-location: /j2cache.properties
+  open-spring-cache: true
+  cache-clean-mode: passive
+  allow-null-values: true
+  redis-client: lettuce
+  l2-cache-open: true
+  # l2-cache-open: false     # 关闭二级缓存
+  broadcast: net.oschina.j2cache.cache.support.redis.SpringRedisPubSubPolicy
+  #  broadcast: jgroups       # 关闭二级缓存
+  L1:
+    provider_class: caffeine
+  L2:
+    provider_class: net.oschina.j2cache.cache.support.redis.SpringRedisProvider
+    config_section: lettuce
+  sync_ttl_to_redis: true
+  default_cache_null_object: false
+  serialization: fst
+caffeine:
+  properties: /j2cache/caffeine.properties   # 这个配置文件需要放在项目中
+lettuce:
+  mode: single
+  namespace:
+  storage: generic
+  channel: j2cache
+  scheme: redis
+  hosts: ${zuihou.redis.ip}:${zuihou.redis.port}
+  password: ${zuihou.redis.password}
+  database: 0
+  sentinelMasterId:
+  maxTotal: 100
+  maxIdle: 10
+  minIdle: 10
+  timeout: 10000
+
+
+
+
+server:
+  port: 8764
+  undertow:
+    io-threads: 8 # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    worker-threads: 120  # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    buffer-size: 2048  # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理 , 每块buffer的空间大小,越小的空间被利用越充分
+    direct-buffers: true  # 是否分配的直接内存
+
+dozer:
+  mappingFiles:
+    - classpath:dozer/global.dozer.xml
+    - classpath:dozer/biz.dozer.xml
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+      enabled: true
+
+id-generator:
+  machine-code: 1  # id生成器机器掩码
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 512MB      # Max file size，默认1M
+      max-request-size: 512MB   # Max request size，默认10M
+  cache:
+    type: GENERIC
+  datasource:
+    druid:
+      username: ${zuihou.mysql.username}
+      password: ${zuihou.mysql.password}
+      driver-class-name: ${zuihou.mysql.driverClassName}
+      url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      initialSize: 10
+      minIdle: 10
+      maxActive: 500
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 'x'
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
+      filters: stat,wall
+      filter:
+        wall:
+          enabled: true
+          config:
+            commentAllow: true
+            multiStatementAllow: true
+            noneBaseStatementAllow: true
+      web-stat-filter:  # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js , *.gif ,*.jpg ,*.png ,*.css ,*.ico , /druid/*"
+        session-stat-max-count: 1000
+        profile-enable: true
+        session-stat-enable: false
+      stat-view-servlet:  #展示Druid的统计信息,StatViewServlet的用途包括：1.提供监控信息展示的html页面2.提供监控信息的JSON API
+        enabled: true
+        url-pattern: /druid/*   #根据配置中的url-pattern来访问内置监控页面，如果是上面的配置，内置监控页面的首页是/druid/index.html例如：http://127.0.0.1:9000/druid/index.html
+        reset-enable: true    #允许清空统计数据
+        login-username: zuihou
+        login-password: zuihou
+
+
+logging:
+  path: /data/projects/logs
+
+# 用于/actuator/info
+info:
+  name: '@project.name@'
+  description: '@project.description@'
+  version: '@project.version@'
+  spring-boot-version: '@spring.boot.version@'

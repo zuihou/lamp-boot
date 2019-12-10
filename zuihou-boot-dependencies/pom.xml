@@ -64,11 +64,11 @@
         <spring.version>5.1.4.RELEASE</spring.version>
         <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
         <mybatis.version>3.5.2</mybatis.version>
-        <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
         <mybatisplus.version>3.2.0</mybatisplus.version>
-        <p6spy.version>3.8.1</p6spy.version>
         <mybatis.dynamic.version>2.5.4</mybatis.dynamic.version>
         <mybatis.spring.version>2.0.2</mybatis.spring.version>
+        <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
+        <p6spy.version>3.8.1</p6spy.version>
         <fastjson.version>1.2.60</fastjson.version>
         <alibaba.druid.version>1.1.18</alibaba.druid.version>
         <mysql.version>6.0.6</mysql.version>
