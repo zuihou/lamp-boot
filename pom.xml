@@ -15,13 +15,13 @@
     <name>${project.artifactId}</name>
     <description>zuihou-admin-boot</description>
     <packaging>pom</packaging>
-     <modules>
+    <modules>
         <module>zuihou-boot-dependencies</module>
-         <!--        <module>zuihou-commons</module>-->
+        <module>zuihou-commons</module>
         <module>zuihou-backend</module>
     </modules>
 
-  <licenses>
+    <licenses>
         <license>
             <name>Apache 2</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>

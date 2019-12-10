@@ -9,6 +9,7 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../zuihou-boot-dependencies</relativePath>
     </parent>
+    <groupId>com.github.zuihou</groupId>
     <artifactId>zuihou-commons</artifactId>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
