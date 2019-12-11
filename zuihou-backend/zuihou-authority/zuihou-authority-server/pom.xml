@@ -19,6 +19,18 @@
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-authority-controller</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-msgs-controller</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-sms-controller</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-file-controller</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.zuihou</groupId>
@@ -32,7 +44,7 @@
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-xss-starter</artifactId>
         </dependency>
-      
+
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-config</artifactId>

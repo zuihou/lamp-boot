@@ -98,6 +98,10 @@
 
         <jetty-server.version>9.4.14.v20181114</jetty-server.version>
 
+        <jjwt.version>0.7.0</jjwt.version>
+        <qcloudsms.version>1.0.6</qcloudsms.version>
+        <bce-java-sdk.version>0.10.21</bce-java-sdk.version>
+
         <hutool.version>4.5.6</hutool.version>
         <antisamy.version>1.5.7</antisamy.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -130,13 +134,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.alibaba.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-alibaba-dependencies</artifactId>-->
-<!--                <version>${spring-cloud-alibaba-dependencies.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>org.lionsoul</groupId>
@@ -255,7 +259,20 @@
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
-                <version>0.7.0</version>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- 腾讯云add  -->
+            <dependency>
+                <groupId>com.github.qcloudsms</groupId>
+                <artifactId>qcloudsms</artifactId>
+                <version>${qcloudsms.version}</version>
+            </dependency>
+            <!-- 百度 -->
+            <dependency>
+                <groupId>com.baidubce</groupId>
+                <artifactId>bce-java-sdk</artifactId>
+                <version>${bce-java-sdk.version}</version>
             </dependency>
 
             <!-- jackson 序列化 -->

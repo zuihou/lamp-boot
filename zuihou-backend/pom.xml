@@ -20,8 +20,6 @@
     </modules>
     <dependencyManagement>
         <dependencies>
-
-
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-config</artifactId>

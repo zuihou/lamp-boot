@@ -1,4 +1,7 @@
 zuihou:
+  nginx:
+    ip: 127.0.0.1      # 正式环境需要将该ip设置成nginx对应的 公网ip
+    port: 10000
   redis:
     ip: 127.0.0.1
     port: 16379
@@ -11,6 +14,21 @@ zuihou:
     username: root
     password: root
     biz-database: zuihou_base
+  file:
+    type: LOCAL # FAST_DFS LOCAL
+    storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
+    uriPrefix: http://${zuihou.nginx.ip}:${zuihou.nginx.port}/file/   # 文件访问 需要通过这个uri前缀进行访问
+    inner-uri-prefix: null  #  内网的url前缀
+    down-by-id: http://${zuihou.nginx.ip}:${zuihou.nginx.port}/api/file/attachment/download?ids[]=%s
+    down-by-biz-id: http://${zuihou.nginx.ip}:${zuihou.nginx.port}/api/file/attachment/download/biz?bizIds[]=%s
+    down-by-url: http://${zuihou.nginx.ip}:${zuihou.nginx.port}/api/file/attachment/download/url?url=%s&filename=%s
+    ali:
+      # 请填写自己的阿里云存储配置
+      uriPrefix: http://test.oss-cn-shenzhen.aliyuncs.com/
+      bucket-name: test
+      endpoint: http://oss-cn-shenzhen.aliyuncs.com
+      access-key-id: test
+      access-key-secret: test
   swagger:
     enabled: true
     global-operation-parameters:

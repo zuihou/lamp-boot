@@ -19,6 +19,13 @@ import com.github.zuihou.base.BaseEnum;
 import com.github.zuihou.base.R;
 import com.github.zuihou.common.enums.HttpMethod;
 import com.github.zuihou.database.mybatis.auth.DataScopeType;
+import com.github.zuihou.file.enumeration.DataType;
+import com.github.zuihou.msgs.enumeration.MsgsBizType;
+import com.github.zuihou.msgs.enumeration.MsgsCenterType;
+import com.github.zuihou.sms.enumeration.ProviderType;
+import com.github.zuihou.sms.enumeration.SendStatus;
+import com.github.zuihou.sms.enumeration.SourceType;
+import com.github.zuihou.sms.enumeration.TaskStatus;
 import com.github.zuihou.utils.MapHelper;
 import com.google.common.collect.ImmutableMap;
 
@@ -51,7 +58,7 @@ public class GeneralController {
     @ApiOperation(value = "获取当前系统所有枚举", notes = "获取当前系统所有枚举")
     @GetMapping("/enums")
     public R<Map<String, Map<String, String>>> enums() {
-        Map<String, Map<String, String>> map = new HashMap<>(7);
+        Map<String, Map<String, String>> map = new HashMap<>(16, 0.95F);
         map.put(HttpMethod.class.getSimpleName(), BaseEnum.getMap(HttpMethod.values()));
         map.put(DataScopeType.class.getSimpleName(), BaseEnum.getMap(DataScopeType.values()));
         map.put(LogType.class.getSimpleName(), BaseEnum.getMap(LogType.values()));
@@ -59,6 +66,15 @@ public class GeneralController {
         map.put(Sex.class.getSimpleName(), BaseEnum.getMap(Sex.values()));
         map.put(TenantTypeEnum.class.getSimpleName(), BaseEnum.getMap(TenantTypeEnum.values()));
         map.put(TenantStatusEnum.class.getSimpleName(), BaseEnum.getMap(TenantStatusEnum.values()));
+
+        map.put(MsgsCenterType.class.getSimpleName(), BaseEnum.getMap(MsgsCenterType.values()));
+        map.put(MsgsBizType.class.getSimpleName(), BaseEnum.getMap(MsgsBizType.values()));
+        map.put(ProviderType.class.getSimpleName(), BaseEnum.getMap(ProviderType.values()));
+        map.put(SourceType.class.getSimpleName(), BaseEnum.getMap(SourceType.values()));
+        map.put(SendStatus.class.getSimpleName(), BaseEnum.getMap(SendStatus.values()));
+        map.put(TaskStatus.class.getSimpleName(), BaseEnum.getMap(TaskStatus.values()));
+
+        map.put(DataType.class.getSimpleName(), BaseEnum.getMap(DataType.values()));
         return R.success(map);
     }
 

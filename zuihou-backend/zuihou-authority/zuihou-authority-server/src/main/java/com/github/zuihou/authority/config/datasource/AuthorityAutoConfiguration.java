@@ -40,7 +40,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @Slf4j
 @MapperScan(
         basePackages = {
-                "com.github.zuihou.authority.dao",
+                "com.github.zuihou",
         },
         annotationClass = Repository.class,
         sqlSessionFactoryRef = "authoritySqlSessionFactory")
