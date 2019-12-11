@@ -7,6 +7,8 @@ import com.github.zuihou.user.interceptor.ContextHandlerInterceptor;
 import com.github.zuihou.user.resolver.ContextArgumentResolver;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author zuihou
  * @date 2018/8/25
  */
+@Configuration
 public class LoginArgResolverConfig implements WebMvcConfigurer {
     @Lazy
     @Autowired
@@ -46,14 +49,17 @@ public class LoginArgResolverConfig implements WebMvcConfigurer {
             String[] commonPathPatterns = getExcludeCommonPathPatterns();
             registry.addInterceptor(getHandlerInterceptor())
                     .addPathPatterns("/**")
+                    .order(10)
                     .excludePathPatterns(commonPathPatterns);
             WebMvcConfigurer.super.addInterceptors(registry);
         }
     }
 
+    @Bean
     protected HandlerInterceptor getHandlerInterceptor() {
         return new ContextHandlerInterceptor();
     }
+
 
     /**
      * auth-client 中的拦截器需要排除拦截的地址

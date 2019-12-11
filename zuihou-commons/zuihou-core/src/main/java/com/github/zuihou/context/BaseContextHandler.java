@@ -128,11 +128,13 @@ public class BaseContextHandler {
         Object value = get(BaseContextConstants.JWT_KEY_ORG_ID);
         return NumberHelper.longValueOf0(value);
     }
-
     public static void setOrgId(String val) {
         set(BaseContextConstants.JWT_KEY_ORG_ID, val);
     }
 
+    public static void setOrgId(Long val) {
+        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
+    }
 
     public static Long getStationId() {
         Object value = get(BaseContextConstants.JWT_KEY_STATION_ID);
@@ -140,6 +142,10 @@ public class BaseContextHandler {
     }
 
     public static void setStationId(String val) {
+        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
+    }
+
+    public static void setStationId(Long val) {
         set(BaseContextConstants.JWT_KEY_STATION_ID, val);
     }
 

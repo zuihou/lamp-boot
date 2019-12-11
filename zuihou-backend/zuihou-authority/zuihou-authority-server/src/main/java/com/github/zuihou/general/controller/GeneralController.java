@@ -13,11 +13,15 @@ import com.github.zuihou.authority.enumeration.auth.Sex;
 import com.github.zuihou.authority.enumeration.common.LogType;
 import com.github.zuihou.authority.enumeration.defaults.TenantStatusEnum;
 import com.github.zuihou.authority.enumeration.defaults.TenantTypeEnum;
+import com.github.zuihou.authority.service.common.DictionaryItemService;
 import com.github.zuihou.authority.service.core.OrgService;
 import com.github.zuihou.authority.service.core.StationService;
 import com.github.zuihou.base.BaseEnum;
 import com.github.zuihou.base.R;
+import com.github.zuihou.common.constant.DictionaryCode;
 import com.github.zuihou.common.enums.HttpMethod;
+import com.github.zuihou.context.BaseContextConstants;
+import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.mybatis.auth.DataScopeType;
 import com.github.zuihou.file.enumeration.DataType;
 import com.github.zuihou.msgs.enumeration.MsgsBizType;
@@ -54,10 +58,16 @@ public class GeneralController {
     private OrgService orgService;
     @Autowired
     private StationService stationService;
+    @Autowired
+    private DictionaryItemService dictionaryItemService;
 
     @ApiOperation(value = "获取当前系统所有枚举", notes = "获取当前系统所有枚举")
     @GetMapping("/enums")
     public R<Map<String, Map<String, String>>> enums() {
+        return R.success(getEnums());
+    }
+
+    private Map getEnums() {
         Map<String, Map<String, String>> map = new HashMap<>(16, 0.95F);
         map.put(HttpMethod.class.getSimpleName(), BaseEnum.getMap(HttpMethod.values()));
         map.put(DataScopeType.class.getSimpleName(), BaseEnum.getMap(DataScopeType.values()));
@@ -75,9 +85,24 @@ public class GeneralController {
         map.put(TaskStatus.class.getSimpleName(), BaseEnum.getMap(TaskStatus.values()));
 
         map.put(DataType.class.getSimpleName(), BaseEnum.getMap(DataType.values()));
-        return R.success(map);
+        return map;
     }
 
+    @ApiOperation(value = "获取当前系统所有数据字典和枚举", notes = "获取当前系统所有数据字典和枚举")
+    @GetMapping("/dictionary/enums")
+    public R<Map<String, Map<String, String>>> dictionaryAndEnum(HttpServletRequest request) {
+        BaseContextHandler.setTenant(request.getHeader(BaseContextConstants.TENANT));
+        Map<String, Map<String, String>> map = new HashMap<>(4);
+
+        map.putAll(getEnums());
+
+        //整个系统的数据字典
+        Map<String, Map<String, String>> itemMap = dictionaryItemService.map(DictionaryCode.ALL);
+        if (!itemMap.isEmpty()) {
+            map.putAll(itemMap);
+        }
+        return R.success(map);
+    }
 
     /**
      * 查询所有组织
@@ -86,7 +111,7 @@ public class GeneralController {
      */
     @ApiOperation(value = "查询所有组织", notes = "查询所有组织")
     @GetMapping("/orgs")
-    public R<Map<String, Map<Long, String>>> find() {
+    public R<Map<String, Map<Long, String>>> orgs() {
         Map<String, Map<Long, String>> map = new HashMap<>(2);
         List<Station> stationList = stationService.list();
         List<Org> orgList = orgService.list();

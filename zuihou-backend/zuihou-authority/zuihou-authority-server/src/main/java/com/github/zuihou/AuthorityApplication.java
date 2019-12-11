@@ -3,6 +3,7 @@ package com.github.zuihou;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.github.zuihou.auth.client.EnableAuthClient;
 import com.github.zuihou.auth.server.EnableAuthServer;
 import com.github.zuihou.user.annotation.EnableLoginArgResolver;
 import com.github.zuihou.validator.config.EnableFormValidator;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAuthServer
+@EnableAuthClient
 @Configuration
 @Slf4j
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
