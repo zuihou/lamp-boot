@@ -1,10 +1,5 @@
 package com.github.zuihou;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.zuihou.authority.dao.auth.MenuMapper;
 import com.github.zuihou.authority.dao.auth.ResourceMapper;
@@ -14,16 +9,17 @@ import com.github.zuihou.authority.entity.auth.Resource;
 import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.authority.entity.common.OptLog;
 import com.github.zuihou.authority.entity.core.Org;
+import com.github.zuihou.authority.entity.defaults.GlobalUser;
 import com.github.zuihou.authority.service.auth.ResourceService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.core.OrgService;
+import com.github.zuihou.authority.service.defaults.GlobalUserService;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.dozer.DozerUtils;
 import com.github.zuihou.log.entity.OptLogDTO;
 import com.github.zuihou.utils.NumberHelper;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +27,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 测试类
@@ -61,6 +62,8 @@ public class TestResource {
     private UserService userService;
     @Autowired
     private DozerUtils dozer;
+    @Autowired
+    private GlobalUserService globalUserService;
 
     @Before
     public void setTenant() {
@@ -68,6 +71,14 @@ public class TestResource {
         BaseContextHandler.setDatabase("zuihou_base");
     }
 
+    @Test
+    public void test222() {
+        String account = "zuihou";
+        List<GlobalUser> list = globalUserService.list(Wrappers.lambdaQuery(GlobalUser.builder().account(account).tenantCode("0000").build()));
+        List<GlobalUser> list1 = globalUserService.list(Wrappers.<GlobalUser>lambdaQuery().eq(GlobalUser::getAccount, account));
+        String customSqlSegment = Wrappers.<GlobalUser>lambdaQuery().eq(GlobalUser::getAccount, account).getCustomSqlSegment();
+        System.out.println(list.size());
+    }
 
     @Test
     public void testSaveUser() {

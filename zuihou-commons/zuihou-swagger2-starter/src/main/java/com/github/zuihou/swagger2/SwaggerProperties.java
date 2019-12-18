@@ -1,16 +1,16 @@
 package com.github.zuihou.swagger2;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * swagger2 属性配置
@@ -20,7 +20,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2018/11/18 9:17
  */
 @Data
-//@RefreshScope
 @ConfigurationProperties(prefix = "zuihou.swagger")
 public class SwaggerProperties {
     /**

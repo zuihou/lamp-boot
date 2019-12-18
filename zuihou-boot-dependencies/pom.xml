@@ -74,7 +74,7 @@
         <mysql.version>6.0.6</mysql.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <swagger.version>1.5.21</swagger.version>
-        <sbu.version>1.9.6</sbu.version>
+        <knife4j.version>2.0.0</knife4j.version>
         <dozer.version>6.4.0</dozer.version>
         <lombok.version>1.18.8</lombok.version>
         <guava.version>20.0</guava.version>
@@ -237,8 +237,14 @@
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
                 <artifactId>swagger-models</artifactId>
-                <version>1.5.21</version>
+                <version>${swagger.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -252,9 +258,20 @@
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>swagger-bootstrap-ui</artifactId>
-                <version>${sbu.version}</version>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-ui</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>com.github.xiaoymin</groupId>-->
+            <!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
+            <!--                <version>${sbu.version}</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>

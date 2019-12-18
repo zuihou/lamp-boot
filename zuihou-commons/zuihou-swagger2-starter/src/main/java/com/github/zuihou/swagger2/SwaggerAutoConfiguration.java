@@ -1,18 +1,8 @@
 package com.github.zuihou.swagger2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.github.xiaoymin.swaggerbootstrapui.model.OrderExtensions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +29,14 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * swagger 包扫描配置
@@ -128,8 +126,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
-                    .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                    .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())));
+                    .globalResponseMessage(RequestMethod.DELETE, getResponseMessages());
+//                    .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())));
 
             configurableBeanFactory.registerSingleton(groupName, docket);
             docketList.add(docket);
@@ -196,7 +194,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())))
+//                .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())))
                 ;
     }
 
