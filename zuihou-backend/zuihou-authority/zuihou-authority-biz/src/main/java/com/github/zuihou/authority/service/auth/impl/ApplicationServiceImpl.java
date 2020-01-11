@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.zuihou.authority.dao.auth.ApplicationMapper;
 import com.github.zuihou.authority.entity.auth.Application;
 import com.github.zuihou.authority.service.auth.ApplicationService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author zuihou
- * @date 2019-07-03
+ * @date 2019-12-15
  */
 @Slf4j
 @Service

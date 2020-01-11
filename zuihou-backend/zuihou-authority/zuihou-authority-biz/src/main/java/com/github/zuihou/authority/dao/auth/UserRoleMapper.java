@@ -2,7 +2,6 @@ package com.github.zuihou.authority.dao.auth;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.zuihou.authority.entity.auth.UserRole;
-
 import org.springframework.stereotype.Repository;
 
 /**

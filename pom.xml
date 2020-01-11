@@ -16,7 +16,7 @@
     <description>zuihou-admin-boot</description>
     <packaging>pom</packaging>
     <modules>
-        <module>zuihou-boot-dependencies</module>
+        <module>zuihou-dependencies</module>
         <module>zuihou-commons</module>
         <module>zuihou-backend</module>
     </modules>

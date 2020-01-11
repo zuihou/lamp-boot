@@ -31,7 +31,10 @@
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-file-controller</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-swagger2-starter</artifactId>

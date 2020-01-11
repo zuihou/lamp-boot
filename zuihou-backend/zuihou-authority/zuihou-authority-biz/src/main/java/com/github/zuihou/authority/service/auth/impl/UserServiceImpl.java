@@ -1,15 +1,6 @@
 package com.github.zuihou.authority.service.auth.impl;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.zuihou.authority.dao.auth.UserMapper;
@@ -33,12 +24,14 @@ import com.github.zuihou.database.mybatis.auth.DataScopeType;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.utils.BizAssert;
-
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -67,6 +60,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public IPage<User> findPage(IPage<User> page, LbqWrapper<User> wrapper) {
         return baseMapper.findPage(page, wrapper, new DataScope());
+    }
+
+    @Override
+    public int resetPassErrorNum(Long id) {
+        return baseMapper.resetPassErrorNum(id);
     }
 
     @Override
@@ -142,7 +140,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateLoginTime(String account) {
-        baseMapper.update(User.builder().lastLoginTime(LocalDateTime.now()).build(), Wraps.<User>lbQ().eq(User::getAccount, account));
+//        baseMapper.update(User.builder().lastLoginTime(LocalDateTime.now()).build(), Wraps.<User>lbQ().eq(User::getAccount, account));
+        baseMapper.updateLastLoginTime(account, LocalDateTime.now());
     }
 
     @Override

@@ -3,7 +3,7 @@
 <mapper namespace="com.github.zuihou.authority.dao.auth.UserMapper">
 
     <select id="findUserByRoleId" resultMap="BaseResultMap" parameterType="map">
-        SELECT id, account, name, mobile, sex
+        SELECT u.id as id, account, name, mobile, sex
         FROM c_auth_user u INNER JOIN c_auth_user_role ur on u.id = ur.user_id
         where ur.role_id = #{roleId, jdbcType=BIGINT}
         <if test="keyword != null and keyword != ''">
@@ -15,6 +15,14 @@
     <update id="incrPasswordErrorNumById">
         update c_auth_user set password_error_num = password_error_num + 1, password_error_last_time = SYSDATE()
         where id = #{id, jdbcType=BIGINT}
+    </update>
+    <update id="resetPassErrorNum">
+        update c_auth_user set password_error_num = 0, password_error_last_time = SYSDATE()
+        where id = #{id, jdbcType=BIGINT}
+    </update>
+    <update id="updateLastLoginTime">
+        update c_auth_user set last_login_time = #{now, jdbcType=TIMESTAMP}
+        where account = #{account, jdbcType=BIGINT}
     </update>
 
 

@@ -1,13 +1,13 @@
 package com.github.zuihou.authority.service.auth;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.zuihou.authority.dto.auth.UserUpdatePasswordDTO;
 import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -116,4 +116,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     Boolean updatePassword(UserUpdatePasswordDTO data);
+
+    /**
+     * 重置密码错误次数
+     *
+     * @param id
+     * @return
+     */
+    int resetPassErrorNum(Long id);
 }

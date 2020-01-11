@@ -5,11 +5,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.2.RELEASE</version>
+        <version>2.2.2.RELEASE</version>
         <relativePath/>
     </parent>
     <groupId>com.github.zuihou</groupId>
-    <artifactId>zuihou-boot-dependencies</artifactId>
+    <artifactId>zuihou-dependencies</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
@@ -57,55 +57,52 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot-admin.version>2.1.3</spring-boot-admin.version>
-        <spring.boot.version>2.1.2.RELEASE</spring.boot.version>
-        <spring.cloud.version>Greenwich.RELEASE</spring.cloud.version>
-        <spring-cloud-alibaba-dependencies.version>2.1.0.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <spring.version>5.1.4.RELEASE</spring.version>
-        <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+        <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
+        <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
+        <spring-cloud-alibaba-dependencies.version>2.1.1.RELEASE</spring-cloud-alibaba-dependencies.version>
+        <seata.version>1.0.0</seata.version>
+        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring-boot-admin.version>2.2.0</spring-boot-admin.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <mybatis.version>3.5.2</mybatis.version>
-        <mybatisplus.version>3.2.0</mybatisplus.version>
-        <mybatis.dynamic.version>2.5.4</mybatis.dynamic.version>
-        <mybatis.spring.version>2.0.2</mybatis.spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <p6spy.version>3.8.1</p6spy.version>
-        <fastjson.version>1.2.60</fastjson.version>
+        <mybatisplus.version>3.2.0</mybatisplus.version>
+        <p6spy.version>3.8.7</p6spy.version>
+        <fastjson.version>1.2.62</fastjson.version>
         <druid.version>1.1.21</druid.version>
         <mysql.version>6.0.6</mysql.version>
+        <knife4j.version>2.0.1</knife4j.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <swagger.version>1.5.21</swagger.version>
-        <knife4j.version>2.0.0</knife4j.version>
-        <dozer.version>6.4.0</dozer.version>
-        <lombok.version>1.18.8</lombok.version>
+        <dozer.version>6.5.0</dozer.version>
+        <lombok.version>1.18.10</lombok.version>
+        <easy-captcha.version>1.6.2</easy-captcha.version>
         <guava.version>20.0</guava.version>
         <tobato-fastdfs-client.version>1.26.6</tobato-fastdfs-client.version>
         <qiniu-java-sdk>7.2.18</qiniu-java-sdk>
-        <j2cache.version>2.7.8-release</j2cache.version>
-        <hibernate.validator.version>6.0.14.Final</hibernate.validator.version>
-        <commons.fileupload.version>1.4</commons.fileupload.version>
-        <commons.io.version>2.4</commons.io.version>
+        <j2cache.version>2.8.0-release</j2cache.version>
+        <hibernate.validator.version>6.1.0.Final</hibernate.validator.version>
         <commons-exec.version>1.3</commons-exec.version>
         <commons-email.version>1.5</commons-email.version>
-        <commons.collections4.version>4.1</commons.collections4.version>
+        <commons.collections4.version>4.4</commons.collections4.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-io.version>2.6</commons-io.version>
 
         <maven.test.skip>true</maven.test.skip>
-        <poi.ooxml.version>3.15</poi.ooxml.version>
         <shiro.version>1.4.0</shiro.version>
 
+        <asm.version>5.0.4</asm.version>
         <groovy-all.version>2.5.5</groovy-all.version>
         <quartz.version>2.3.0</quartz.version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
-
-        <jetty-server.version>9.4.14.v20181114</jetty-server.version>
 
         <jjwt.version>0.7.0</jjwt.version>
+
         <qcloudsms.version>1.0.6</qcloudsms.version>
         <bce-java-sdk.version>0.10.21</bce-java-sdk.version>
 
-        <hutool.version>4.5.6</hutool.version>
+
+        <hutool.version>5.1.0</hutool.version>
         <antisamy.version>1.5.7</antisamy.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-io.version>2.5</commons-io.version>
         <caffeine.version>2.8.0</caffeine.version>
         <ip2region.version>1.7.2</ip2region.version>
         <bitwalker.version>1.21</bitwalker.version>
@@ -120,13 +117,6 @@
     <dependencyManagement>
 
         <dependencies>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
-<!--                <version>${spring.cloud.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
@@ -170,11 +160,11 @@
                 <artifactId>mybatis-typehandlers-jsr310</artifactId>
                 <version>${mybatis.typehandlers.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>com.alibaba</groupId>-->
+            <!--                <artifactId>druid</artifactId>-->
+            <!--                <version>${druid.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
@@ -256,6 +246,7 @@
                 <artifactId>springfox-core</artifactId>
                 <version>${springfox.swagger2.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
@@ -267,11 +258,6 @@
                 <version>${knife4j.version}</version>
             </dependency>
 
-            <!--            <dependency>-->
-            <!--                <groupId>com.github.xiaoymin</groupId>-->
-            <!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
-            <!--                <version>${sbu.version}</version>-->
-            <!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>

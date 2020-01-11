@@ -1,12 +1,11 @@
 package com.github.zuihou.context;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.utils.NumberHelper;
 import com.github.zuihou.utils.StrHelper;
 
-import cn.hutool.core.util.StrUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -17,7 +16,7 @@ import cn.hutool.core.util.StrUtil;
  * @createTime 2017-12-13 16:52
  */
 public class BaseContextHandler {
-    public static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
 
     public static void set(String key, Long value) {
         Map<String, String> map = getLocalMap();
@@ -28,6 +27,12 @@ public class BaseContextHandler {
         Map<String, String> map = getLocalMap();
         map.put(key, value == null ? "" : value);
     }
+
+    public static void set(String key, Boolean value) {
+        Map<String, String> map = getLocalMap();
+        map.put(key, value == null ? "false" : value.toString());
+    }
+
 
     public static Map<String, String> getLocalMap() {
         Map<String, String> map = THREAD_LOCAL.get();
@@ -46,6 +51,20 @@ public class BaseContextHandler {
     public static String get(String key) {
         Map<String, String> map = getLocalMap();
         return map.getOrDefault(key, "");
+    }
+
+    public static Boolean isBoot() {
+        Object value = get(BaseContextConstants.IS_BOOT);
+        return NumberHelper.boolValueOf0(value);
+    }
+
+    /**
+     * 账号id
+     *
+     * @param val
+     */
+    public static void setBoot(Boolean val) {
+        set(BaseContextConstants.IS_BOOT, val);
     }
 
     /**
@@ -128,6 +147,7 @@ public class BaseContextHandler {
         Object value = get(BaseContextConstants.JWT_KEY_ORG_ID);
         return NumberHelper.longValueOf0(value);
     }
+
     public static void setOrgId(String val) {
         set(BaseContextConstants.JWT_KEY_ORG_ID, val);
     }
@@ -167,7 +187,6 @@ public class BaseContextHandler {
     public static void setDatabase(String val) {
         set(BaseContextConstants.DATABASE_NAME, val);
     }
-
 
 
     private static String returnObjectValue(Object value) {

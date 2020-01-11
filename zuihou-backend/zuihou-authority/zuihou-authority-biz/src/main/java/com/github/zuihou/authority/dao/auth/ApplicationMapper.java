@@ -2,7 +2,6 @@ package com.github.zuihou.authority.dao.auth;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.zuihou.authority.entity.auth.Application;
-
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author zuihou
- * @date 2019-07-03
+ * @date 2019-12-15
  */
 @Repository
 public interface ApplicationMapper extends BaseMapper<Application> {

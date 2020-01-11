@@ -6,6 +6,7 @@ zuihou:
     ip: 127.0.0.1
     port: 16379
     password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
   mysql:
     ip: 127.0.0.1
     port: 3306
@@ -14,6 +15,15 @@ zuihou:
     username: root
     password: root
     biz-database: zuihou_base
+  rabbitmq:
+    enabled: false
+    ip: 127.0.0.1
+    port: 5672
+    username: zuihou
+    password: zuihou
+  database:
+    isMultiTenant: true   # 是否启用多租户
+    isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
@@ -102,15 +112,12 @@ lettuce:
   scheme: redis
   hosts: ${zuihou.redis.ip}:${zuihou.redis.port}
   password: ${zuihou.redis.password}
-  database: 0
+  database: ${zuihou.redis.database}
   sentinelMasterId:
   maxTotal: 100
   maxIdle: 10
   minIdle: 10
   timeout: 10000
-
-
-
 
 server:
   port: 8764
@@ -164,6 +171,7 @@ spring:
       password: ${zuihou.mysql.password}
       driver-class-name: ${zuihou.mysql.driverClassName}
       url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      db-type: mysql
       initialSize: 10
       minIdle: 10
       maxActive: 500
@@ -197,10 +205,44 @@ spring:
         reset-enable: true    #允许清空统计数据
         login-username: zuihou
         login-password: zuihou
+  redis:
+    host: ${zuihou.redis.ip}
+    password: ${zuihou.redis.password}
+    port: ${zuihou.redis.port}
+    database: ${zuihou.redis.database}
+  rabbitmq:
+    enabled: ${zuihou.rabbitmq.enabled}
+    host: ${zuihou.rabbitmq.ip}
+    port: ${zuihou.rabbitmq.port}
+    username: ${zuihou.rabbitmq.username}
+    password: ${zuihou.rabbitmq.password}
+    listener:
+      type: direct # simple direct
+
+
+mybatis-plus:
+  mapper-locations:
+    - classpath*:mapper_**/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.github.zuihou.*.entity;com.github.zuihou.database.mybatis.typehandler
+  global-config:
+    db-config:
+      id-type: INPUT
+      insert-strategy: NOT_NULL
+      update-strategy: NOT_NULL
+      select-strategy: NOT_EMPTY
+  configuration:
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
 
 
 logging:
-  path: /data/projects/logs
+  file:
+    path: /data/projects/logs
+    name: ${logging.file.path}/${spring.application.name}/root.log
 
 # 用于/actuator/info
 info:
