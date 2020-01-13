@@ -1,8 +1,6 @@
 package com.github.zuihou.user.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.auth.client.properties.AuthClientProperties;
 import com.github.zuihou.auth.client.utils.JwtTokenClientUtils;
 import com.github.zuihou.auth.utils.JwtUserInfo;
@@ -11,13 +9,14 @@ import com.github.zuihou.common.adapter.IgnoreTokenConfig;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.utils.StrPool;
-
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 网关：
@@ -82,7 +81,7 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
             }
 
         } catch (Exception e) {
-            log.warn("解析token信息时，发生异常. ", e);
+            log.warn("解析token信息时，发生异常. url=" + request.getRequestURI(), e);
         }
         return super.preHandle(request, response, handler);
     }
