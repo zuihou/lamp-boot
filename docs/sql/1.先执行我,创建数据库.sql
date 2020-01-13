@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS `zuihou_defaults` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `zuihou_base_0000` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
