@@ -39,7 +39,7 @@ http://doc.tangyh.top/zuihou-admin-cloud
 | 开发&运营后台 | https://gitee.com/zuihou111/zuihou-admin-ui | https://github.com/zuihou/zuihou-admin-ui |
 | 代码生成器 | 无 | https://github.com/zuihou/zuihou-generator |
 
-## 演示地址
+## zuihou-admin-cloud 演示地址 
 
 | 项目 | 演示地址 | 管理员账号 | 普通账号 |
 |---|---|---|---|
@@ -55,7 +55,7 @@ B公司和C公司分别拿着账号， 在 zuihou-ui(租户后台) 上试用， 
 穷逼C公司没钱， 就花了20W使用A公司部署的云环境， 服务器和数据等都存在A公司的云服务器上。
 ```
 
-## 老版本演示地址，代码已经不在更新
+## zuihou-admin-boot 演示地址 
 
 | 项目 | 演示地址 | 管理员账号 | 普通账号 |
 |---|---|---|---|
