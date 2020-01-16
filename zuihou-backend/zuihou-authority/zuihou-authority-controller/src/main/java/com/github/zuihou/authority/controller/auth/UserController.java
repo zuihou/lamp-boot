@@ -5,6 +5,7 @@ import com.github.zuihou.authority.dto.auth.*;
 import com.github.zuihou.authority.entity.auth.Role;
 import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.authority.entity.core.Org;
+import com.github.zuihou.authority.service.auth.ResourceService;
 import com.github.zuihou.authority.service.auth.RoleService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.core.OrgService;
@@ -15,6 +16,7 @@ import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.dozer.DozerUtils;
+import com.github.zuihou.exception.BizException;
 import com.github.zuihou.log.annotation.SysLog;
 import com.github.zuihou.user.feign.UserQuery;
 import com.github.zuihou.user.model.SysOrg;
@@ -61,6 +63,9 @@ public class UserController extends BaseController {
     private StationService stationService;
     @Autowired
     private DozerUtils dozer;
+
+    @Autowired
+    private ResourceService resourceService;
 
     /**
      * 分页查询用户
@@ -279,6 +284,22 @@ public class UserController extends BaseController {
 //                .build();
 //        return success(userService.save(user));
         return success();
+    }
+
+
+    @SysLog("清除缓存并重新加载数据")
+    @ApiOperation(value = "清除缓存并重新加载数据", notes = "清除缓存并重新加载数据")
+    @PostMapping(value = "/reload")
+    public R<LoginDTO> reload(@RequestParam Long userId) throws BizException {
+        User user = userService.getById(userId);
+        if (user == null) {
+            return R.fail("用户不存在");
+        }
+
+        List<com.github.zuihou.authority.entity.auth.Resource> resourceList = this.resourceService.findVisibleResource(ResourceQueryDTO.builder().userId(userId).build());
+        List<String> permissionsList = resourceList.stream().map(com.github.zuihou.authority.entity.auth.Resource::getCode).collect(Collectors.toList());
+
+        return this.success(LoginDTO.builder().user(this.dozer.map(user, UserDTO.class)).permissionsList(permissionsList).token(null).build());
     }
 
 }
