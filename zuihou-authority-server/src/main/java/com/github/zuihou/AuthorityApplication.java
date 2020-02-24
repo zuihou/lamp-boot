@@ -1,5 +1,6 @@
 package com.github.zuihou;
 
+import com.github.zuihou.auth.client.EnableAuthClient;
 import com.github.zuihou.auth.server.EnableAuthServer;
 import com.github.zuihou.user.annotation.EnableLoginArgResolver;
 import com.github.zuihou.validator.config.EnableFormValidator;
@@ -26,8 +27,8 @@ import java.net.UnknownHostException;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-//@EnableTransactionManagement
 @EnableAuthServer
+@EnableAuthClient
 @Configuration
 @EnableFeignClients(value = {
         "com.github.zuihou",
