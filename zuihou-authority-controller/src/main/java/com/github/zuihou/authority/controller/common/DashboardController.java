@@ -44,7 +44,7 @@ public class DashboardController extends BaseController {
      * @return
      */
     @GetMapping("/dashboard/visit")
-    public R<Map<String, Object>> index(@ApiIgnore @LoginUser SysUser user) {
+    public R<Map<String, Object>> index(@ApiIgnore @LoginUser(isFull = false) SysUser user) {
         Map<String, Object> data = new HashMap<>();
         // 获取系统访问记录
         data.put("totalVisitCount", loginLogService.findTotalVisitCount());

@@ -5,16 +5,12 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.authority.dto.auth.*;
-import com.github.zuihou.authority.entity.auth.Role;
 import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.authority.entity.core.Org;
-import com.github.zuihou.authority.entity.core.Station;
 import com.github.zuihou.authority.enumeration.auth.Sex;
 import com.github.zuihou.authority.service.auth.ResourceService;
-import com.github.zuihou.authority.service.auth.RoleService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.core.OrgService;
-import com.github.zuihou.authority.service.core.StationService;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.SuperController;
 import com.github.zuihou.base.entity.SuperEntity;
@@ -27,11 +23,7 @@ import com.github.zuihou.exception.BizException;
 import com.github.zuihou.log.annotation.SysLog;
 import com.github.zuihou.model.RemoteData;
 import com.github.zuihou.user.feign.UserQuery;
-import com.github.zuihou.user.model.SysOrg;
-import com.github.zuihou.user.model.SysRole;
-import com.github.zuihou.user.model.SysStation;
 import com.github.zuihou.user.model.SysUser;
-import com.github.zuihou.utils.BeanPlusUtil;
 import com.github.zuihou.utils.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -67,10 +59,6 @@ import java.util.stream.Collectors;
 public class UserController extends SuperController<UserService, Long, User, UserPageDTO, UserSaveDTO, UserUpdateDTO> {
     @Autowired
     private OrgService orgService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private StationService stationService;
     //    @Resource
 //    private SmsApi smsApi;
     @Autowired
@@ -165,33 +153,33 @@ public class UserController extends SuperController<UserService, Long, User, Use
     @ApiOperation(value = "查询用户详细", notes = "查询用户详细")
     @PostMapping(value = "/anno/id/{id}")
     public R<SysUser> getById(@PathVariable Long id, @RequestBody UserQuery query) {
-        User user = baseService.getByIdCache(id);
-        if (user == null) {
-            return success(null);
-        }
-        SysUser sysUser = BeanUtil.toBean(user, SysUser.class);
+//        User user = baseService.getByIdCache(id);
+//        if (user == null) {
+//            return success(null);
+//        }
+//        SysUser sysUser = BeanUtil.toBean(user, SysUser.class);
+//
+//        sysUser.setOrgId(RemoteData.getKey(user.getOrg()));
+//        sysUser.setStationId(RemoteData.getKey(user.getOrg()));
+//
+//        if (query.getFull() || query.getOrg()) {
+//            sysUser.setOrg(BeanUtil.toBean(orgService.getById(user.getOrg()), SysOrg.class));
+//        }
+//        if (query.getFull() || query.getStation()) {
+//            Station station = stationService.getById(user.getStation());
+//            if (station != null) {
+//                SysStation sysStation = BeanUtil.toBean(station, SysStation.class);
+//                sysStation.setOrgId(RemoteData.getKey(station.getOrg()));
+//                sysUser.setStation(sysStation);
+//            }
+//        }
+//
+//        if (query.getFull() || query.getRoles()) {
+//            List<Role> list = roleService.findRoleByUserId(id);
+//            sysUser.setRoles(BeanPlusUtil.toBeanList(list, SysRole.class));
+//        }
 
-        sysUser.setOrgId(RemoteData.getKey(user.getOrg()));
-        sysUser.setStationId(RemoteData.getKey(user.getOrg()));
-
-        if (query.getFull() || query.getOrg()) {
-            sysUser.setOrg(BeanUtil.toBean(orgService.getById(user.getOrg()), SysOrg.class));
-        }
-        if (query.getFull() || query.getStation()) {
-            Station station = stationService.getById(user.getStation());
-            if (station != null) {
-                SysStation sysStation = BeanUtil.toBean(station, SysStation.class);
-                sysStation.setOrgId(RemoteData.getKey(station.getOrg()));
-                sysUser.setStation(sysStation);
-            }
-        }
-
-        if (query.getFull() || query.getRoles()) {
-            List<Role> list = roleService.findRoleByUserId(id);
-            sysUser.setRoles(BeanPlusUtil.toBeanList(list, SysRole.class));
-        }
-
-        return success(sysUser);
+        return baseService.getUserById(id, query);
     }
 
     /**

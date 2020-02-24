@@ -36,6 +36,8 @@ zuihou:
       maximumSize: 1000
       refreshWriteTime: 10
       refreshThreadPoolSize: 1000
+  user:
+    type: SERVICE
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）

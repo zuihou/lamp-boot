@@ -1,5 +1,6 @@
 package com.github.zuihou.authority.service.auth.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -10,13 +11,16 @@ import com.github.zuihou.authority.entity.auth.RoleOrg;
 import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.authority.entity.auth.UserRole;
 import com.github.zuihou.authority.entity.core.Org;
+import com.github.zuihou.authority.entity.core.Station;
 import com.github.zuihou.authority.entity.defaults.Tenant;
 import com.github.zuihou.authority.service.auth.RoleOrgService;
 import com.github.zuihou.authority.service.auth.RoleService;
 import com.github.zuihou.authority.service.auth.UserRoleService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.core.OrgService;
+import com.github.zuihou.authority.service.core.StationService;
 import com.github.zuihou.authority.service.defaults.TenantService;
+import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperServiceCacheImpl;
 import com.github.zuihou.common.constant.BizConstant;
 import com.github.zuihou.common.constant.CacheKey;
@@ -27,6 +31,12 @@ import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.injection.annonation.InjectionResult;
 import com.github.zuihou.model.RemoteData;
+import com.github.zuihou.user.feign.UserQuery;
+import com.github.zuihou.user.model.SysOrg;
+import com.github.zuihou.user.model.SysRole;
+import com.github.zuihou.user.model.SysStation;
+import com.github.zuihou.user.model.SysUser;
+import com.github.zuihou.utils.BeanPlusUtil;
 import com.github.zuihou.utils.BizAssert;
 import com.github.zuihou.utils.MapHelper;
 import com.google.common.collect.ImmutableMap;
@@ -67,6 +77,8 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     private OrgService orgService;
     @Autowired
     private TenantService tenantService;
+    @Autowired
+    private StationService stationService;
 
     public UserServiceImpl() {
         this.classTypeName = this.getClass().getSimpleName();
@@ -294,5 +306,33 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
         return typeMap;
     }
 
+    @Override
+    public R<SysUser> getUserById(Long id, UserQuery query) {
+        User user = currentProxy().getByIdCache(id);
+        if (user == null) {
+            return R.success(null);
+        }
+        SysUser sysUser = BeanUtil.toBean(user, SysUser.class);
 
+        sysUser.setOrgId(RemoteData.getKey(user.getOrg()));
+        sysUser.setStationId(RemoteData.getKey(user.getOrg()));
+
+        if (query.getFull() || query.getOrg()) {
+            sysUser.setOrg(BeanUtil.toBean(orgService.getById(user.getOrg()), SysOrg.class));
+        }
+        if (query.getFull() || query.getStation()) {
+            Station station = stationService.getById(user.getStation());
+            if (station != null) {
+                SysStation sysStation = BeanUtil.toBean(station, SysStation.class);
+                sysStation.setOrgId(RemoteData.getKey(station.getOrg()));
+                sysUser.setStation(sysStation);
+            }
+        }
+
+        if (query.getFull() || query.getRoles()) {
+            List<Role> list = roleService.findRoleByUserId(id);
+            sysUser.setRoles(BeanPlusUtil.toBeanList(list, SysRole.class));
+        }
+        return R.success(sysUser);
+    }
 }

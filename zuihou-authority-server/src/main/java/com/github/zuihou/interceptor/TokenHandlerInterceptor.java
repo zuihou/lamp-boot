@@ -61,7 +61,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
             //添加测试环境的特殊token
             if (isDev() && StrPool.TEST.equalsIgnoreCase(userToken)) {
-                userInfo = new JwtUserInfo(1L, "zuihou", "最后");
+                userInfo = new JwtUserInfo(3L, "zuihou", "最后");
             }
 
             if (!isIgnoreToken(uri) && userInfo == null) {

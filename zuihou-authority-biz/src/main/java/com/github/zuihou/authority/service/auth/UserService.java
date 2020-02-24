@@ -3,8 +3,11 @@ package com.github.zuihou.authority.service.auth;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.authority.dto.auth.UserUpdatePasswordDTO;
 import com.github.zuihou.authority.entity.auth.User;
+import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperService;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
+import com.github.zuihou.user.feign.UserQuery;
+import com.github.zuihou.user.model.SysUser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -143,4 +146,5 @@ public interface UserService extends SuperService<User> {
      */
     Map<Serializable, Object> findUserNameByIds(Set<Long> ids);
 
+    R<SysUser> getUserById(Long id, UserQuery query);
 }

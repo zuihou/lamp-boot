@@ -22,6 +22,10 @@
 
         <dependency>
             <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-user-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-databases</artifactId>
         </dependency>
         <dependency>

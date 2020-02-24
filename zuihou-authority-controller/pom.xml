@@ -20,10 +20,6 @@
             <artifactId>zuihou-authority-biz</artifactId>
             <version>${boot.project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.zuihou</groupId>
-            <artifactId>zuihou-user-starter</artifactId>
-        </dependency>
 
     </dependencies>
 
