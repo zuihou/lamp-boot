@@ -1,11 +1,16 @@
 package com.github.zuihou.authority.config;
 
+import com.github.zuihou.authority.ext.SystemApiScanServiceImpl;
+import com.github.zuihou.authority.ext.UserResolverServiceImpl;
+import com.github.zuihou.authority.service.auth.SystemApiService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.common.OptLogService;
 import com.github.zuihou.boot.config.BaseConfig;
 import com.github.zuihou.interceptor.TokenHandlerInterceptor;
 import com.github.zuihou.log.event.SysLogListener;
+import com.github.zuihou.scan.service.SystemApiScanService;
 import com.github.zuihou.user.feign.UserResolverService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -82,10 +87,16 @@ public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfi
     }
 
     @Bean
-    @ConditionalOnProperty(name = "zuihou.user.type", havingValue = "SERVICE")
+    @ConditionalOnProperty(name = "zuihou.user.type", havingValue = "SERVICE", matchIfMissing = true)
     public UserResolverService getUserResolverServiceImpl(UserService userService) {
         return new UserResolverServiceImpl(userService);
     }
 
+    @Bean("systemApiScanService")
+    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "SERVICE", matchIfMissing = true)
+    @ConditionalOnMissingBean(SystemApiScanService.class)
+    public SystemApiScanService getSystemApiService(SystemApiService systemApiService) {
+        return new SystemApiScanServiceImpl(systemApiService);
+    }
 }
 

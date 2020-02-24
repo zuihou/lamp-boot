@@ -1,4 +1,4 @@
-package com.github.zuihou.authority.config;
+package com.github.zuihou.authority.ext;
 
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.base.R;
