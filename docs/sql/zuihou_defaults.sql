@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 08/01/2020 16:05:17
+ Date: 28/02/2020 15:32:37
 */
 
 SET NAMES utf8mb4;
@@ -140,7 +140,7 @@ CREATE TABLE `XXL_JOB_QRTZ_SCHEDULER_STATE` (
 -- Records of XXL_JOB_QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('DefaultQuartzScheduler', 'tangyhMacBookPro.local1578470491628', 1578470573636, 5000);
+INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('DefaultQuartzScheduler', 'tangyhMacBookPro.local1582684742857', 1582685356142, 5000);
 INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('getSchedulerFactoryBean', 'tangyhMacBookPro.local1553850279059', 1553850304933, 5000);
 COMMIT;
 
@@ -235,6 +235,7 @@ BEGIN;
 INSERT INTO `d_global_user` VALUES (1, 'admin', 'admin', '10086', '超级管理员', '244387066@qq.com', '1fdbcfb7a0a8c138c7eedbd205639853', b'1', '2019-08-29 16:50:35', 1, '2019-08-29 16:50:35', 1);
 INSERT INTO `d_global_user` VALUES (2, 'admin', 'demoAdmin', '10086', '超级管理员[演示]', '244387066@qq.com', 'd9d17d88918aa72834289edaf38f42e2', b'1', '2019-10-30 10:29:21', 1, '2019-10-30 10:29:23', 1);
 INSERT INTO `d_global_user` VALUES (3, '0000', 'zuihou', '10086', '超级管理员', '244387066@qq.com', 'd9d17d88918aa72834289edaf38f42e2', b'0', '2019-10-25 13:53:43', 1, '2019-10-25 13:53:45', 1);
+INSERT INTO `d_global_user` VALUES (664512636892741729, '3333', 'haha', '', '', '', 'd9d17d88918aa72834289edaf38f42e2', b'0', '2020-01-08 16:55:59', 2, '2020-01-08 16:55:59', 2);
 COMMIT;
 
 -- ----------------------------
@@ -269,8 +270,6 @@ CREATE TABLE `d_tenant` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `d_tenant` VALUES (616676078974402977, '0000', '最后的内置企业', 'CREATE', 'NORMAL', b'1', '最后', NULL, NULL, '内置企业，请勿删除', 0, b'0', 10, '0', '2019-08-29 16:50:35', 1, '2019-08-29 16:50:35', 1);
-INSERT INTO `d_tenant` VALUES (654035351169400865, '1111', '1111', 'CREATE', 'NORMAL', b'0', '', NULL, '', '', 0, b'1', 10, '0', '2019-12-10 19:02:59', 2, '2019-12-10 19:02:59', 2);
-INSERT INTO `d_tenant` VALUES (654374302291853345, '2222', '2222', 'CREATE', 'NORMAL', b'0', '', NULL, '', '', 0, b'1', 10, '0', '2019-12-11 17:29:52', 0, '2019-12-11 17:29:52', 0);
 COMMIT;
 
 -- ----------------------------
@@ -289,6 +288,14 @@ CREATE TABLE `m_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='订单(用于测试)';
 
 -- ----------------------------
+-- Records of m_order
+-- ----------------------------
+BEGIN;
+INSERT INTO `m_order` VALUES (667031601850351681, '111', '111', '2020-01-15 15:45:27', 3, '2020-01-15 15:45:27', 3);
+INSERT INTO `m_order` VALUES (667031649082409057, '111', '111', '2020-01-15 15:45:38', 3, '2020-01-15 15:45:38', 3);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for m_product
 -- ----------------------------
 DROP TABLE IF EXISTS `m_product`;
@@ -302,6 +309,34 @@ CREATE TABLE `m_product` (
   `update_user` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品(用于测试)';
+
+-- ----------------------------
+-- Records of m_product
+-- ----------------------------
+BEGIN;
+INSERT INTO `m_product` VALUES (1232913963591663616, NULL, NULL, '2020-02-27 14:22:50', 0, '2020-02-27 14:22:50', 0);
+INSERT INTO `m_product` VALUES (1232914343176175616, NULL, NULL, '2020-02-27 14:24:21', 0, '2020-02-27 14:24:21', 0);
+INSERT INTO `m_product` VALUES (1232914584919080960, NULL, NULL, '2020-02-27 14:25:18', 0, '2020-02-27 14:25:18', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for m_whaha
+-- ----------------------------
+DROP TABLE IF EXISTS `m_whaha`;
+CREATE TABLE `m_whaha` (
+  `uid` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `code` varchar(255) DEFAULT NULL COMMENT '编号',
+  PRIMARY KEY (`uid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='订单(用于测试)';
+
+-- ----------------------------
+-- Records of m_whaha
+-- ----------------------------
+BEGIN;
+INSERT INTO `m_whaha` VALUES (123, '332223', '333');
+INSERT INTO `m_whaha` VALUES (667031106352054817, '332223', '333');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for undo_log
@@ -318,7 +353,7 @@ CREATE TABLE `undo_log` (
   `log_modified` datetime NOT NULL COMMENT 'modify datetime',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='AT transaction mode undo table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='AT transaction mode undo table';
 
 -- ----------------------------
 -- Table structure for xxl_job_qrtz_trigger_group
@@ -339,7 +374,7 @@ CREATE TABLE `xxl_job_qrtz_trigger_group` (
 -- Records of xxl_job_qrtz_trigger_group
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_qrtz_trigger_group` VALUES (1, 'zuihou-jobs-server', 'zuihou执行器', 1, 0, '127.0.0.1:8771');
+INSERT INTO `xxl_job_qrtz_trigger_group` VALUES (1, 'zuihou-jobs-server', 'zuihou执行器', 1, 0, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -372,7 +407,7 @@ CREATE TABLE `xxl_job_qrtz_trigger_info` (
   `interval_seconds` int(11) DEFAULT NULL COMMENT '间隔秒数',
   `repeat_count` int(11) DEFAULT NULL COMMENT '重复次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_info
@@ -380,6 +415,8 @@ CREATE TABLE `xxl_job_qrtz_trigger_info` (
 BEGIN;
 INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (41, 1, NULL, '2019-07-08 21:45:00', NULL, 2, '123', '2019-07-05 10:12:50', '2019-07-08 21:44:36', '最后', '', 'FIRST', 'demo2JobHandler', 'hello', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2019-07-05 10:12:50', '', 0, 0);
 INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (42, 1, '*/10 * * * * ? ', NULL, NULL, 1, '本地执行', '2019-07-07 18:33:16', '2019-07-08 14:49:19', '最后', '', 'FIRST', 'demo2JobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2019-07-07 18:33:16', '', 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (43, 1, '0 0 2 * * ?', NULL, NULL, 1, '重置租户', '2020-01-16 18:08:12', '2020-01-16 18:08:12', '最后', '', 'FIRST', 'restTenantJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-01-16 18:08:12', '', 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (44, 1, '0 0 2 * * ?', NULL, NULL, 1, '重置默认租户数据', '2020-01-16 18:09:53', '2020-01-16 18:09:53', '最后', '', 'FIRST', 'restBase0000JobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-01-16 18:09:53', '', 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -403,7 +440,17 @@ CREATE TABLE `xxl_job_qrtz_trigger_log` (
   `handle_msg` text COMMENT '执行-日志',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `I_trigger_time` (`trigger_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of xxl_job_qrtz_trigger_log
+-- ----------------------------
+BEGIN;
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (1, 1, 43, '127.0.0.1:8771', 'restTenantJobHandler', '', NULL, 0, '2020-01-16 18:08:28', 200, '任务触发类型：手动触发<br>调度机器：192.168.1.34<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-01-16 18:08:52', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (2, 1, 44, '127.0.0.1:8771', 'restBase0000JobHandler', '', NULL, 0, '2020-01-16 18:09:59', 200, '任务触发类型：手动触发<br>调度机器：192.168.1.34<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', NULL, 0, NULL);
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (3, 1, 44, '127.0.0.1:8771', 'restBase0000JobHandler', '', NULL, 0, '2020-01-16 18:22:36', 200, '任务触发类型：手动触发<br>调度机器：192.168.1.34<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-01-16 18:22:42', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (12, 1, 43, '127.0.0.1:8771', 'restTenantJobHandler', '', NULL, 0, '2020-02-24 17:21:35', 200, '任务触发类型：手动触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-02-24 17:21:54', 200, '');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for xxl_job_qrtz_trigger_logglue
@@ -431,13 +478,13 @@ CREATE TABLE `xxl_job_qrtz_trigger_registry` (
   `registry_value` varchar(255) NOT NULL,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_registry
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_qrtz_trigger_registry` VALUES (6, 'EXECUTOR', 'zuihou-jobs-server', '127.0.0.1:8771', '2020-01-08 16:02:31');
+INSERT INTO `xxl_job_qrtz_trigger_registry` VALUES (19, 'EXECUTOR', 'dysc-jobs-server', '127.0.0.1:8771', '2020-02-26 10:49:12');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
