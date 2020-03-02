@@ -177,7 +177,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     }
 
     @Override
-    @CacheEvict(key = "#root.targetClass.typeName + ':'+#p0.id")
+    @CacheEvict(key = "#root.targetClass.simpleName + ':'+#id")
     public void updatePasswordErrorNumById(Long id) {
         baseMapper.incrPasswordErrorNumById(id);
     }
