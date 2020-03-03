@@ -9,7 +9,7 @@
 [![fork](https://gitee.com/zuihou111/zuihou-admin-cloud/badge/fork.svg?theme=white)](https://gitee.com/zuihou111/zuihou-admin-cloud/members)
 
 ## 特别强调：
-本项目编译需要先下载 [![AUR](zuihou-commons)](https://github.com/zuihou/zuihou-commons) 项目编译后，才能正常编译运行！
+本项目编译需要先下载 [zuihou-commons](https://github.com/zuihou/zuihou-commons) 项目编译后，才能正常编译运行！
 
 
 ## 简介：
