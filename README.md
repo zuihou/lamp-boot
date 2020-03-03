@@ -8,6 +8,9 @@
 [![GitHub forks](https://img.shields.io/github/forks/zuihou/zuihou-admin-cloud.svg?style=social&label=Fork)](https://github.com/zuihou/zuihou-admin-cloud/network/members)
 [![fork](https://gitee.com/zuihou111/zuihou-admin-cloud/badge/fork.svg?theme=white)](https://gitee.com/zuihou111/zuihou-admin-cloud/members)
 
+## 特别强调：
+本项目编译需要先下载 [![AUR](zuihou-commons)](https://github.com/zuihou/zuihou-commons) 项目编译后，才能正常编译运行！
+
 
 ## 简介：
 本项目是微服务脚手架 `zuihou-admin-cloud` 的单体架构版， 去除了SpringCloud 的部分，目的是为了简化部署、方便小型项目快速建站，但为了与`zuihou-admin-cloud`项目完美切换，所以保持一致的项目结构。
