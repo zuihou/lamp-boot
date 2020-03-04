@@ -6,6 +6,8 @@ import com.github.zuihou.base.BaseController;
 import com.github.zuihou.base.R;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.user.annotation.LoginUser;
+import com.github.zuihou.user.feign.UserQuery;
+import com.github.zuihou.user.feign.UserResolverService;
 import com.github.zuihou.user.model.SysUser;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,13 +41,27 @@ public class DashboardController extends BaseController {
     @Autowired
     private DatabaseProperties databaseProperties;
 
+    @Resource
+    private UserResolverService userResolverService;
+
+    /**
+     * 生成id
+     *
+     * @return
+     */
+    @GetMapping("/common/generateId")
+    public R<Long> generate() {
+        DatabaseProperties.Id id = databaseProperties.getId();
+        return success(IdUtil.getSnowflake(id.getWorkerId(), id.getDataCenterId()).nextId());
+    }
+
     /**
      * 最近10天访问记录
      *
      * @return
      */
     @GetMapping("/dashboard/visit")
-    public R<Map<String, Object>> index(@ApiIgnore @LoginUser(isFull = false) SysUser user) {
+    public R<Map<String, Object>> index(@ApiIgnore @LoginUser SysUser user) {
         Map<String, Object> data = new HashMap<>();
         // 获取系统访问记录
         data.put("totalVisitCount", loginLogService.findTotalVisitCount());
@@ -60,14 +77,13 @@ public class DashboardController extends BaseController {
         return success(data);
     }
 
-    /**
-     * 生成id
-     *
-     * @return
-     */
-    @GetMapping("/common/generateId")
-    public R<Long> generate() {
-        DatabaseProperties.Id id = databaseProperties.getId();
-        return success(IdUtil.getSnowflake(id.getWorkerId(), id.getDataCenterId()).nextId());
+    @GetMapping("/common/test")
+    public R<Object> test(@ApiIgnore @LoginUser(isFull = true) SysUser user) {
+        return success(user);
+    }
+
+    @GetMapping("/common/test2")
+    public R<SysUser> test2() {
+        return userResolverService.getById(UserQuery.buildFull());
     }
 }
