@@ -1,8 +1,9 @@
 package com.github.zuihou.authority.service.common;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.zuihou.authority.entity.common.LoginLog;
+import com.github.zuihou.base.service.SuperService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,13 @@ import java.util.Map;
  * <p>
  * 业务接口
  * 系统日志
+ *
  * </p>
  *
  * @author zuihou
  * @date 2019-10-20
  */
-public interface LoginLogService extends IService<LoginLog> {
+public interface LoginLogService extends SuperService<LoginLog> {
 
     /**
      * 记录登录日志
@@ -73,4 +75,13 @@ public interface LoginLogService extends IService<LoginLog> {
      * @return
      */
     List<Map<String, Object>> findByOperatingSystem();
+
+    /**
+     * 清理日志
+     *
+     * @param clearBeforeTime 多久之前的
+     * @param clearBeforeNum  多少条
+     * @return
+     */
+    boolean clearLog(LocalDateTime clearBeforeTime, Integer clearBeforeNum);
 }

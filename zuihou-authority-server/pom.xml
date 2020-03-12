@@ -18,22 +18,22 @@
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-authority-controller</artifactId>
-            <version>${boot.project.version}</version>
+            <version>${zuihou-project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-msgs-controller</artifactId>
-            <version>${boot.project.version}</version>
+            <version>${zuihou-project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-sms-controller</artifactId>
-            <version>${boot.project.version}</version>
+            <version>${zuihou-project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-file-controller</artifactId>
-            <version>${boot.project.version}</version>
+            <version>${zuihou-project.version}</version>
         </dependency>
 
         <dependency>

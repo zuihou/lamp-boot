@@ -2,12 +2,9 @@ package com.github.zuihou.authority.controller.common;
 
 import cn.hutool.core.util.IdUtil;
 import com.github.zuihou.authority.service.common.LoginLogService;
-import com.github.zuihou.base.BaseController;
 import com.github.zuihou.base.R;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.user.annotation.LoginUser;
-import com.github.zuihou.user.feign.UserQuery;
-import com.github.zuihou.user.feign.UserResolverService;
 import com.github.zuihou.user.model.SysUser;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,26 +30,12 @@ import java.util.Map;
 @Validated
 @RestController
 @Api(value = "dashboard", tags = "首页")
-public class DashboardController extends BaseController {
+public class DashboardController {
 
     @Autowired
     private LoginLogService loginLogService;
     @Autowired
     private DatabaseProperties databaseProperties;
-
-    @Resource
-    private UserResolverService userResolverService;
-
-    /**
-     * 生成id
-     *
-     * @return
-     */
-    @GetMapping("/common/generateId")
-    public R<Long> generate() {
-        DatabaseProperties.Id id = databaseProperties.getId();
-        return success(IdUtil.getSnowflake(id.getWorkerId(), id.getDataCenterId()).nextId());
-    }
 
     /**
      * 最近10天访问记录
@@ -73,17 +55,17 @@ public class DashboardController extends BaseController {
 
         data.put("browserCount", loginLogService.findByBrowser());
         data.put("operatingSystemCount", loginLogService.findByOperatingSystem());
-
-        return success(data);
+        return R.success(data);
     }
 
-    @GetMapping("/common/test")
-    public R<Object> test(@ApiIgnore @LoginUser(isFull = true) SysUser user) {
-        return success(user);
-    }
-
-    @GetMapping("/common/test2")
-    public R<SysUser> test2() {
-        return userResolverService.getById(UserQuery.buildFull());
+    /**
+     * 生成id
+     *
+     * @return
+     */
+    @GetMapping("/common/generateId")
+    public R<Long> generate() {
+        DatabaseProperties.Id id = databaseProperties.getId();
+        return R.success(IdUtil.getSnowflake(id.getWorkerId(), id.getDataCenterId()).nextId());
     }
 }

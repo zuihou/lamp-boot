@@ -3,7 +3,7 @@ package com.github.zuihou.sms.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.zuihou.base.service.SuperServiceImpl;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
@@ -45,9 +45,7 @@ import static com.github.zuihou.exception.code.ExceptionCode.BASE_VALID_PARAM;
  */
 @Slf4j
 @Service
-public class SmsTaskServiceImpl extends ServiceImpl<SmsTaskMapper, SmsTask> implements SmsTaskService {
-    //    @Resource
-//    private JobsTimingApi jobsTimingApi;
+public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask> implements SmsTaskService {
     @Autowired
     private SmsContext smsContext;
     @Autowired
@@ -182,7 +180,7 @@ public class SmsTaskServiceImpl extends ServiceImpl<SmsTaskMapper, SmsTask> impl
             JSONObject param = new JSONObject();
             param.put("id", smsTask.getId());
             param.put(BaseContextConstants.TENANT, BaseContextHandler.getTenant());
-//            //推送定时任务
+            //推送定时任务
 //            jobsTimingApi.addTimingTask(
 //                    XxlJobInfo.build(BizConstant.DEF_JOB_GROUP_NAME,
 //                            DateUtils.localDateTime2Date(smsTask.getSendTime()),

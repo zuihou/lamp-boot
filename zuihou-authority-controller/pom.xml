@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-authority-biz</artifactId>
-            <version>${boot.project.version}</version>
+            <version>${zuihou-project.version}</version>
         </dependency>
 
     </dependencies>

@@ -1,7 +1,7 @@
 package com.github.zuihou.file.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.zuihou.base.service.SuperService;
 import com.github.zuihou.file.dto.AttachmentDTO;
 import com.github.zuihou.file.dto.AttachmentResultDTO;
 import com.github.zuihou.file.dto.FilePageReqDTO;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author zuihou
  * @date 2019-06-24
  */
-public interface AttachmentService extends IService<Attachment> {
+public interface AttachmentService extends SuperService<Attachment> {
     /**
      * 上传附件
      *
@@ -40,7 +40,7 @@ public interface AttachmentService extends IService<Attachment> {
      *
      * @param ids
      */
-    void remove(Long[] ids);
+    boolean remove(List<Long> ids);
 
     /**
      * 根据业务id和业务类型删除附件
@@ -48,7 +48,7 @@ public interface AttachmentService extends IService<Attachment> {
      * @param bizId
      * @param bizType
      */
-    void removeByBizIdAndBizType(String bizId, String bizType);
+    boolean removeByBizIdAndBizType(String bizId, String bizType);
 
     /**
      * 根据业务类型和业务id查询附件

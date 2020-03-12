@@ -1,15 +1,15 @@
-package com.github.zuihou.authority.service.defaults.impl;
+package com.github.zuihou.authority.service.defaults.strategy;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.authority.dao.defaults.InitDbMapper;
-import com.github.zuihou.authority.service.defaults.InitSystemService;
+import com.github.zuihou.authority.service.defaults.InitSystemStrategy;
+import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,24 +21,27 @@ import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.zuihou.common.constant.BizConstant.BASE_DATABASE;
+
 /**
  * 初始化系统
  *
  * @author zuihou
  * @date 2019/10/25
  */
-@Service
+@Service("SCHEMA")
 @Slf4j
-@RefreshScope
-public class InitSystemServiceImpl implements InitSystemService {
+public class SchemaInitSystemStrategy implements InitSystemStrategy {
     /**
      * 需要初始化的sql文件在classpath中的路径
      */
     private final static String SQL_RESOURCE_PATH = "sqls/%s.sql";
+
     /**
      * 需要初始化的库
+     * 可能不同的服务，会连接不同的库
      */
-    private final static List<String> INIT_DATABASE_LIST = Arrays.asList("zuihou_base");
+    private final static List<String> INIT_DATABASE_LIST = Arrays.asList(BASE_DATABASE);
     @Resource(name = "masterDruidDataSource")
     private DataSource dataSource;
     @Autowired
@@ -46,43 +49,53 @@ public class InitSystemServiceImpl implements InitSystemService {
 
     @Value("${zuihou.mysql.database}")
     private String defaultDatabase;
+    @Autowired
+    private DatabaseProperties databaseProperties;
 
     @Override
-    public void init(String tenant) {
+    public boolean init(String tenant) {
         this.initDatabases(tenant);
         this.initTables(tenant);
+
         this.initData(tenant);
         // 切换为默认数据源
         this.resetDatabase();
+
+        return true;
     }
 
     @Override
-    public void resetDatabase() {
+    public boolean reset(String tenant) {
         ScriptRunner runner = null;
         try {
-            runner = this.getScriptRunner();
-            Reader reader = new StringReader("use " + this.defaultDatabase + ";");
-            runner.runScript(reader);
+            runner = getScriptRunner();
+
+            String bizDatabase = databaseProperties.getBizDatabase();
+
+            useDb(tenant, runner, bizDatabase);
+            String dataScript = bizDatabase + "_" + tenant;
+            runner.runScript(Resources.getResourceAsReader(String.format(SQL_RESOURCE_PATH, dataScript)));
         } catch (Exception e) {
-            log.error("切换为默认数据源失败", e);
-            new BizException(-1, "切换为默认数据源失败");
+            log.error("重置数据失败", e);
+            return false;
         } finally {
             try {
                 if (runner != null) {
                     runner.closeConnection();
                 }
             } catch (Exception e) {
-                new BizException(-1, "切换为默认数据源失败");
+                log.error("关闭失败", e);
             }
+            resetDatabase();
         }
+        return true;
     }
 
-    @Override
+
     public void initDatabases(String tenant) {
         INIT_DATABASE_LIST.forEach((database) -> this.initDbMapper.createDatabase(StrUtil.join(StrUtil.UNDERLINE, database, tenant)));
     }
 
-    @Override
     public void initTables(String tenant) {
         ScriptRunner runner = null;
         try {
@@ -112,7 +125,6 @@ public class InitSystemServiceImpl implements InitSystemService {
      *
      * @param tenant
      */
-    @Override
     public void initData(String tenant) {
         ScriptRunner runner = null;
         try {
@@ -137,7 +149,26 @@ public class InitSystemServiceImpl implements InitSystemService {
         }
     }
 
-    @Override
+    public void resetDatabase() {
+        ScriptRunner runner = null;
+        try {
+            runner = this.getScriptRunner();
+            Reader reader = new StringReader("use " + this.defaultDatabase + ";");
+            runner.runScript(reader);
+        } catch (Exception e) {
+            log.error("切换为默认数据源失败", e);
+            new BizException(-1, "切换为默认数据源失败");
+        } finally {
+            try {
+                if (runner != null) {
+                    runner.closeConnection();
+                }
+            } catch (Exception e) {
+                new BizException(-1, "切换为默认数据源失败");
+            }
+        }
+    }
+
     public String useDb(String tenant, ScriptRunner runner, String database) {
         String db = StrUtil.join(StrUtil.UNDERLINE, database, tenant);
         Reader reader = new StringReader("use " + db + ";");
@@ -145,7 +176,6 @@ public class InitSystemServiceImpl implements InitSystemService {
         return db;
     }
 
-    @Override
     @SuppressWarnings("AlibabaRemoveCommentedCode")
     public ScriptRunner getScriptRunner() {
         try {

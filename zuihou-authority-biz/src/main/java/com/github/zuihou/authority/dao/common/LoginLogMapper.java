@@ -1,11 +1,12 @@
 package com.github.zuihou.authority.dao.common;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.zuihou.authority.entity.common.LoginLog;
+import com.github.zuihou.base.mapper.SuperMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import java.util.Map;
  * @date 2019-10-20
  */
 @Repository
-public interface LoginLogMapper extends BaseMapper<LoginLog> {
+public interface LoginLogMapper extends SuperMapper<LoginLog> {
     /**
      * 获取系统总访问次数
      *
@@ -65,4 +66,13 @@ public interface LoginLogMapper extends BaseMapper<LoginLog> {
      * @return
      */
     List<Map<String, Object>> findByOperatingSystem();
+
+    /**
+     * 清理日志
+     *
+     * @param clearBeforeTime 多久之前的
+     * @param clearBeforeNum  多少条
+     * @return
+     */
+    boolean clearLog(@Param("clearBeforeTime") LocalDateTime clearBeforeTime, @Param("clearBeforeNum") Integer clearBeforeNum);
 }

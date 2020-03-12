@@ -1,10 +1,12 @@
 package com.github.zuihou.authority.service.auth.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.authority.dao.auth.UserMapper;
+import com.github.zuihou.authority.dao.defaults.TenantMapper;
 import com.github.zuihou.authority.dto.auth.UserUpdatePasswordDTO;
 import com.github.zuihou.authority.entity.auth.Role;
 import com.github.zuihou.authority.entity.auth.RoleOrg;
@@ -19,9 +21,7 @@ import com.github.zuihou.authority.service.auth.UserRoleService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.core.OrgService;
 import com.github.zuihou.authority.service.core.StationService;
-import com.github.zuihou.authority.service.defaults.TenantService;
-import com.github.zuihou.base.R;
-import com.github.zuihou.base.service.SuperServiceCacheImpl;
+import com.github.zuihou.base.service.SuperCacheServiceImpl;
 import com.github.zuihou.common.constant.BizConstant;
 import com.github.zuihou.common.constant.CacheKey;
 import com.github.zuihou.context.BaseContextHandler;
@@ -64,8 +64,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @CacheConfig(cacheNames = CacheKey.USER)
-public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> implements UserService {
 
+    @Autowired
+    private StationService stationService;
     @Autowired
     private RoleService roleService;
     @Autowired
@@ -75,25 +77,13 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     @Autowired
     private OrgService orgService;
     @Autowired
-    private TenantService tenantService;
-    @Autowired
-    private StationService stationService;
-
-    private String classSimpleName = "";
-
-    public UserServiceImpl() {
-        this.classSimpleName = this.getClass().getSimpleName();
-    }
+    private TenantMapper tenantMapper;
 
     @Override
     protected String getRegion() {
         return CacheKey.USER;
     }
 
-    @Override
-    protected String getClassSimpleName() {
-        return classSimpleName;
-    }
 
     protected UserService currentProxy() {
         return ((UserService) AopContext.currentProxy());
@@ -178,7 +168,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     }
 
     @Override
-    @CacheEvict(key = "#root.targetClass.simpleName + ':'+#id")
+    @CacheEvict(key = "#id")
     public void updatePasswordErrorNumById(Long id) {
         baseMapper.incrPasswordErrorNumById(id);
     }
@@ -198,7 +188,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
 
     @Override
     public User saveUser(User user) {
-        Tenant tenant = tenantService.getByCode(BaseContextHandler.getTenant());
+        Tenant tenant = tenantMapper.getByCode(BaseContextHandler.getTenant());
         BizAssert.notNull(tenant, "租户不存在，请联系管理员");
 
         // 永不过期
@@ -219,7 +209,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
         if (ids.isEmpty()) {
             return true;
         }
-        Tenant tenant = tenantService.getByCode(BaseContextHandler.getTenant());
+        Tenant tenant = tenantMapper.getByCode(BaseContextHandler.getTenant());
         BizAssert.notNull(tenant, "租户不存在，请联系管理员");
 
         LocalDateTime passwordExpireTime = null;
@@ -243,7 +233,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
 
     @Override
     public User updateUser(User user) {
-        Tenant tenant = tenantService.getByCode(BaseContextHandler.getTenant());
+        Tenant tenant = tenantMapper.getByCode(BaseContextHandler.getTenant());
         BizAssert.notNull(tenant, "租户不存在，请联系管理员");
         // 永不过期
         if (tenant.getPasswordExpire() == null || tenant.getPasswordExpire() <= 0) {
@@ -268,7 +258,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     }
 
     @Override
-    public Map<Serializable, Object> findUserByIds(Set<Long> ids) {
+    public Map<Serializable, Object> findUserByIds(Set<Serializable> ids) {
         List<User> list = findUser(ids);
 
         //key 是 用户id
@@ -276,11 +266,17 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
         return typeMap;
     }
 
-    private List<User> findUser(Set<Long> ids) {
+    private List<User> findUser(Set<Serializable> ids) {
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Long> idList = ids.stream().mapToLong(Convert::toLong).boxed().collect(Collectors.toList());
+
+
         List<User> list = null;
-        if (ids.size() > 100) {
+        if (idList.size() > 100) {
             LbqWrapper<User> query = Wraps.<User>lbQ()
-                    .in(User::getId, ids)
+                    .in(User::getId, idList)
                     .eq(User::getStatus, true);
             list = super.list(query);
 
@@ -292,14 +288,14 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
             }
 
         } else {
-            list = ids.stream().map(currentProxy()::getByIdCache)
+            list = idList.stream().map(currentProxy()::getByIdCache)
                     .filter(Objects::nonNull).collect(Collectors.toList());
         }
         return list;
     }
 
     @Override
-    public Map<Serializable, Object> findUserNameByIds(Set<Long> ids) {
+    public Map<Serializable, Object> findUserNameByIds(Set<Serializable> ids) {
         List<User> list = findUser(ids);
 
         //key 是 用户id
@@ -308,10 +304,10 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
     }
 
     @Override
-    public R<SysUser> getUserById(Long id, UserQuery query) {
+    public SysUser getSysUserById(Long id, UserQuery query) {
         User user = currentProxy().getByIdCache(id);
         if (user == null) {
-            return R.success(null);
+            return null;
         }
         SysUser sysUser = BeanUtil.toBean(user, SysUser.class);
 
@@ -321,6 +317,7 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
         if (query.getFull() || query.getOrg()) {
             sysUser.setOrg(BeanUtil.toBean(orgService.getById(user.getOrg()), SysOrg.class));
         }
+
         if (query.getFull() || query.getStation()) {
             Station station = stationService.getById(user.getStation());
             if (station != null) {
@@ -334,6 +331,12 @@ public class UserServiceImpl extends SuperServiceCacheImpl<UserMapper, User> imp
             List<Role> list = roleService.findRoleByUserId(id);
             sysUser.setRoles(BeanPlusUtil.toBeanList(list, SysRole.class));
         }
-        return R.success(sysUser);
+
+        return sysUser;
+    }
+
+    @Override
+    public List<Long> findAllUserId() {
+        return super.list().stream().mapToLong(User::getId).boxed().collect(Collectors.toList());
     }
 }

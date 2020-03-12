@@ -22,6 +22,6 @@ public class UserResolverServiceImpl implements UserResolverService {
 
     @Override
     public R<SysUser> getById(Long id, UserQuery userQuery) {
-        return userService.getUserById(id, userQuery);
+        return R.success(userService.getSysUserById(id, userQuery));
     }
 }

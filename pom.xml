@@ -37,7 +37,7 @@
 
     <properties>
         <zuihou-commons.version>2.0-SNAPSHOT</zuihou-commons.version>
-        <boot.project.version>b.2.0-SNAPSHOT</boot.project.version>
+        <zuihou-project.version>b.2.0-SNAPSHOT</zuihou-project.version>
 
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

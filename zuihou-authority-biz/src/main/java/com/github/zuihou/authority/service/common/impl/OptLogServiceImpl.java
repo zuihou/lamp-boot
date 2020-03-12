@@ -1,13 +1,15 @@
 package com.github.zuihou.authority.service.common.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.zuihou.authority.dao.common.OptLogMapper;
 import com.github.zuihou.authority.entity.common.OptLog;
 import com.github.zuihou.authority.service.common.OptLogService;
+import com.github.zuihou.base.service.SuperServiceImpl;
 import com.github.zuihou.log.entity.OptLogDTO;
 import com.github.zuihou.utils.BeanPlusUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -20,10 +22,15 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class OptLogServiceImpl extends ServiceImpl<OptLogMapper, OptLog> implements OptLogService {
+public class OptLogServiceImpl extends SuperServiceImpl<OptLogMapper, OptLog> implements OptLogService {
 
     @Override
     public boolean save(OptLogDTO entity) {
         return super.save(BeanPlusUtil.toBean(entity, OptLog.class));
+    }
+
+    @Override
+    public boolean clearLog(LocalDateTime clearBeforeTime, Integer clearBeforeNum) {
+        return baseMapper.clearLog(clearBeforeTime, clearBeforeNum);
     }
 }

@@ -1,22 +1,23 @@
 package com.github.zuihou.authority.service.common.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.hutool.core.util.ArrayUtil;
 import com.github.zuihou.authority.dao.common.DictionaryItemMapper;
 import com.github.zuihou.authority.entity.common.DictionaryItem;
 import com.github.zuihou.authority.service.common.DictionaryItemService;
+import com.github.zuihou.base.service.SuperCacheServiceImpl;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.utils.MapHelper;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import static com.github.zuihou.common.constant.CacheKey.DICTIONARY_ITEM;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -31,17 +32,31 @@ import static java.util.stream.Collectors.toList;
  */
 @Slf4j
 @Service
-public class DictionaryItemServiceImpl extends ServiceImpl<DictionaryItemMapper, DictionaryItem> implements DictionaryItemService {
+@CacheConfig(cacheNames = DICTIONARY_ITEM)
+public class DictionaryItemServiceImpl extends SuperCacheServiceImpl<DictionaryItemMapper, DictionaryItem> implements DictionaryItemService {
+
+    @Override
+    protected String getRegion() {
+        return DICTIONARY_ITEM;
+    }
+
+    protected DictionaryItemService currentProxy() {
+        return ((DictionaryItemService) AopContext.currentProxy());
+    }
+
     @Override
     public Map<String, Map<String, String>> map(String[] codes) {
+        if (ArrayUtil.isEmpty(codes)) {
+            return Collections.emptyMap();
+        }
         LbqWrapper<DictionaryItem> query = Wraps.<DictionaryItem>lbQ()
-                .in(DictionaryItem::getDictionaryCode, codes)
+                .in(DictionaryItem::getDictionaryType, codes)
                 .eq(DictionaryItem::getStatus, true)
                 .orderByAsc(DictionaryItem::getSortValue);
         List<DictionaryItem> list = super.list(query);
 
-        //key 是字典编码
-        Map<String, List<DictionaryItem>> typeMap = list.stream().collect(groupingBy(DictionaryItem::getDictionaryCode, LinkedHashMap::new, toList()));
+        //key 是类型
+        Map<String, List<DictionaryItem>> typeMap = list.stream().collect(groupingBy(DictionaryItem::getDictionaryType, LinkedHashMap::new, toList()));
 
         //需要返回的map
         Map<String, Map<String, String>> typeCodeNameMap = new LinkedHashMap<>(typeMap.size());
@@ -55,13 +70,16 @@ public class DictionaryItemServiceImpl extends ServiceImpl<DictionaryItemMapper,
 
     @Override
     public Map<Serializable, Object> findDictionaryItem(Set<Serializable> codes) {
+        if (codes.isEmpty()) {
+            return Collections.emptyMap();
+        }
         LbqWrapper<DictionaryItem> query = Wraps.<DictionaryItem>lbQ()
                 .in(DictionaryItem::getCode, codes)
                 .eq(DictionaryItem::getStatus, true)
                 .orderByAsc(DictionaryItem::getSortValue);
         List<DictionaryItem> list = super.list(query);
 
-        //key 是字典编码
+        //key 是类型
         ImmutableMap<String, String> typeMap = MapHelper.uniqueIndex(list, DictionaryItem::getCode, DictionaryItem::getName);
 
         //需要返回的map

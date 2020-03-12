@@ -3,7 +3,6 @@ package com.github.zuihou.authority.service.auth;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.authority.dto.auth.UserUpdatePasswordDTO;
 import com.github.zuihou.authority.entity.auth.User;
-import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperCacheService;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.user.feign.UserQuery;
@@ -136,7 +135,7 @@ public interface UserService extends SuperCacheService<User> {
      * @param ids
      * @return
      */
-    Map<Serializable, Object> findUserByIds(Set<Long> ids);
+    Map<Serializable, Object> findUserByIds(Set<Serializable> ids);
 
     /**
      * 根据 id 查询用户名称
@@ -144,7 +143,22 @@ public interface UserService extends SuperCacheService<User> {
      * @param ids
      * @return
      */
-    Map<Serializable, Object> findUserNameByIds(Set<Long> ids);
+    Map<Serializable, Object> findUserNameByIds(Set<Serializable> ids);
 
-    R<SysUser> getUserById(Long id, UserQuery query);
+    /**
+     * 根据id 查询用户详情
+     *
+     * @param id
+     * @param query
+     * @return
+     */
+    SysUser getSysUserById(Long id, UserQuery query);
+
+
+    /**
+     * 查询所有用户ID
+     *
+     * @return
+     */
+    List<Long> findAllUserId();
 }
