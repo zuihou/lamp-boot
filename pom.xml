@@ -197,6 +197,10 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
                         <encoding>UTF-8</encoding>
                         <!-- 后缀为pem、pfx的证书文件 -->
                         <nonFilteredFileExtensions>
