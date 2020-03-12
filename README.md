@@ -15,7 +15,7 @@
 ## 简介：
 本项目是微服务脚手架 `zuihou-admin-cloud` 的单体架构版， 去除了SpringCloud 的部分，目的是为了简化部署、方便小型项目快速建站，但为了与`zuihou-admin-cloud`项目完美切换，所以保持一致的项目结构。
 
-基于`SpringBoot(2.2.2.RELEASE)` 的 SaaS型微服务脚手架，具备用户管理、资源权限管理、网关统一鉴权、Xss防跨站攻击、自动代码生成、多存储系统、分布式事务、分布式定时任务等多个模块，支持多业务系统并行开发，
+基于`SpringBoot(2.2.5.RELEASE)` 的 SaaS型微服务脚手架，具备用户管理、资源权限管理、网关统一鉴权、Xss防跨站攻击、自动代码生成、多存储系统、分布式事务、分布式定时任务等多个模块，支持多业务系统并行开发，
 支持多服务并行开发，可以作为后端服务的开发脚手架。代码简洁，架构清晰，非常适合学习使用。核心技术采用SpringBoot、Mybatis、JWT Token、Redis、RibbitMQ、FastDFS等主要框架和中间件。
 
 希望能努力打造一套从 `SaaS基础框架` - `单体架构` - `持续集成` - `自动化部署` - `系统监测` 的解决方案。`本项目旨在实现基础能力，不涉及具体业务。`
@@ -169,13 +169,13 @@ B公司和C公司分别拿着账号， 在 zuihou-ui(租户后台) 上试用， 
     - 消息队列：RibbitMQ
     - 缓存：Redis
     - 缓存框架：J2Cache
-    - 数据库： MySQL 5.7.9 (驱动6.0.6)
+    - 数据库： MySQL 5.7.9 或者 MySQL 8.0.19
     - 定时器：采用xxl-jobs项目进行二次改造
     - 前端：vue
     - 持久层框架： Mybatis-plus
-    - 代码生成器：基于Mybatis-plus-generator自定义  [https://github.com/zuihou/zuihou-generator.git]
-    - 项目构建：Maven 3.3
-    - 监控： spring-boot-admin 2.x
+    - 代码生成器：基于Mybatis-plus-generator自定义
+    - 项目构建：Maven 3.5
+    - 监控： spring-boot-admin 2.2.0
     - 文件服务器：FastDFS 5.0.5/阿里云OSS/本地存储
     - Nginx
 - 部署方面：
@@ -196,13 +196,6 @@ PS: Lombok版本过低会导致枚举类型的参数无法正确获取参数，�
 | ![SBA监控.png](docs/image/项目相关/开发%26运营后台预览.png) | ![SBA监控.png](docs/image/项目相关/租户后台预览.png)        |
 | ![swagger.png](docs/image/项目相关/swagger获取token.jpg)    | ![admin-api.png](docs/image/项目相关/admin-api.png)         |
 | ![SBA监控.png](docs/image/1000star.png)                     | ![定时任务.png](docs/image/项目相关/zuihou-jobs-server.png) |
-
-
-## 如何贡献代码
-    0.大致了解项目后（熟练的启动项目），并基于此项目，任意创建一张表完成CRUD  （有疑问的地方可以咨询作者）
-    1.尝试找到项目的任意bug并修复,或者联系作者看看有什么新需求可做
-    2.Fork & 提交PR
-    3.等待合并，合并超过5次的朋友，直接拉为项目开发者
 
 
 ## 感谢：
