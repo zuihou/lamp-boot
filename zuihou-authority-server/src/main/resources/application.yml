@@ -22,7 +22,8 @@ zuihou:
     password: root
   database:
     bizDatabase: zuihou_base
-    isMultiTenant: true   # 是否启用多租户
+    multiTenantType: SCHEMA
+    isNotWrite: false
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
     worker-id: 0
     data-center-id: 0
@@ -40,6 +41,9 @@ zuihou:
     type: SERVICE
   scan:
     type: SERVICE
+  log:
+    enabled: true
+    type: DB
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
