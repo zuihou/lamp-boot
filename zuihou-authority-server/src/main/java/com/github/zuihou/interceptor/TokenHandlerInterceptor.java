@@ -9,6 +9,8 @@ import com.github.zuihou.common.constant.CacheKey;
 import com.github.zuihou.common.properties.IgnoreTokenProperties;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
+import com.github.zuihou.database.properties.DatabaseProperties;
+import com.github.zuihou.database.properties.MultiTenantType;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.jwt.TokenUtil;
 import com.github.zuihou.jwt.model.AuthInfo;
@@ -49,14 +51,16 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     @Value("${spring.profiles.active:dev}")
     protected String profiles;
     private final IgnoreTokenProperties ignoreTokenProperties;
+    private final DatabaseProperties databaseProperties;
 
     @Autowired
     private CacheChannel channel;
     @Autowired
     private TokenUtil tokenUtil;
 
-    public TokenHandlerInterceptor(IgnoreTokenProperties ignoreTokenProperties) {
+    public TokenHandlerInterceptor(IgnoreTokenProperties ignoreTokenProperties, DatabaseProperties databaseProperties) {
         this.ignoreTokenProperties = ignoreTokenProperties;
+        this.databaseProperties = databaseProperties;
     }
 
     @Override
@@ -73,11 +77,13 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
         AuthInfo authInfo = null;
         try {
             //1, 解码 请求头中的租户信息
-            String base64Tenant = getHeader(JWT_KEY_TENANT, request);
-            if (StrUtil.isNotEmpty(base64Tenant)) {
-                String tenant = JwtUtil.base64Decoder(base64Tenant);
-                BaseContextHandler.setTenant(tenant);
-                MDC.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
+            if (!MultiTenantType.NONE.eq(databaseProperties.getMultiTenantType())) {
+                String base64Tenant = getHeader(JWT_KEY_TENANT, request);
+                if (StrUtil.isNotEmpty(base64Tenant)) {
+                    String tenant = JwtUtil.base64Decoder(base64Tenant);
+                    BaseContextHandler.setTenant(tenant);
+                    MDC.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
+                }
             }
 
             // 2,解码 Authorization 后面完善

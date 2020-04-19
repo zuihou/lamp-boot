@@ -7,6 +7,7 @@ import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.common.OptLogService;
 import com.github.zuihou.boot.config.BaseConfig;
 import com.github.zuihou.common.properties.IgnoreTokenProperties;
+import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.interceptor.TokenHandlerInterceptor;
 import com.github.zuihou.log.event.SysLogListener;
 import com.github.zuihou.scan.properties.ScanProperties;
@@ -34,10 +35,12 @@ public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfi
 
     @Autowired
     private IgnoreTokenProperties ignoreTokenProperties;
+    @Autowired
+    private DatabaseProperties databaseProperties;
 
     @Bean
     public HandlerInterceptor getTokenHandlerInterceptor() {
-        return new TokenHandlerInterceptor(ignoreTokenProperties);
+        return new TokenHandlerInterceptor(ignoreTokenProperties, databaseProperties);
     }
 
     /**
