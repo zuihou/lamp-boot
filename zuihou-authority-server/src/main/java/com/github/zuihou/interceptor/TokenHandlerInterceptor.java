@@ -1,15 +1,23 @@
 package com.github.zuihou.interceptor;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import com.github.zuihou.auth.client.properties.AuthClientProperties;
-import com.github.zuihou.auth.client.utils.JwtTokenClientUtils;
-import com.github.zuihou.auth.utils.JwtUserInfo;
 import com.github.zuihou.base.R;
-import com.github.zuihou.common.adapter.IgnoreTokenConfig;
+import com.github.zuihou.common.constant.BizConstant;
+import com.github.zuihou.common.constant.CacheKey;
+import com.github.zuihou.common.properties.IgnoreTokenProperties;
+import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.exception.BizException;
+import com.github.zuihou.jwt.TokenUtil;
+import com.github.zuihou.jwt.model.AuthInfo;
+import com.github.zuihou.jwt.utils.JwtUtil;
 import com.github.zuihou.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
+import net.oschina.j2cache.CacheChannel;
+import net.oschina.j2cache.CacheObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
@@ -18,6 +26,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.github.zuihou.context.BaseContextConstants.*;
+import static com.github.zuihou.exception.code.ExceptionCode.JWT_OFFLINE;
 
 /**
  * 网关：
@@ -37,57 +48,90 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
     @Value("${spring.profiles.active:dev}")
     protected String profiles;
-    @Autowired
-    private AuthClientProperties authClientProperties;
-    @Autowired
-    private JwtTokenClientUtils jwtTokenClientUtils;
+    private final IgnoreTokenProperties ignoreTokenProperties;
 
+    @Autowired
+    private CacheChannel channel;
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    public TokenHandlerInterceptor(IgnoreTokenProperties ignoreTokenProperties) {
+        this.ignoreTokenProperties = ignoreTokenProperties;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (!(handler instanceof HandlerMethod)) {
+            log.info("not exec!!! url={}", request.getRequestURL());
+            return super.preHandle(request, response, handler);
+        }
+        BaseContextHandler.setBoot(true);
+        String traceId = IdUtil.fastSimpleUUID();
+        MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
+
+        String uri = request.getRequestURI();
+        AuthInfo authInfo = null;
         try {
-            if (!(handler instanceof HandlerMethod)) {
-                log.info("not exec!!! url={}", request.getRequestURL());
+            //1, 解码 请求头中的租户信息
+            String base64Tenant = getHeader(JWT_KEY_TENANT, request);
+            if (StrUtil.isNotEmpty(base64Tenant)) {
+                String tenant = JwtUtil.base64Decoder(base64Tenant);
+                BaseContextHandler.setTenant(tenant);
+                MDC.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
+            }
+
+            // 2,解码 Authorization 后面完善
+            String base64Authorization = getHeader(BASIC_HEADER_KEY, request);
+            if (StrUtil.isNotEmpty(base64Authorization)) {
+                String[] client = JwtUtil.getClient(base64Authorization);
+                BaseContextHandler.setClientId(client[0]);
+            }
+
+            // 忽略 token 认证的接口
+            if (isIgnoreToken(uri)) {
+                log.debug("access filter not execute");
                 return super.preHandle(request, response, handler);
             }
 
-            String uri = request.getRequestURI();
             //获取token， 解析，然后想信息放入 heade
-            //1, 获取token
-            String userToken = getHeader(request, authClientProperties.getUser().getHeaderName());
-
-            //2, 解析token
-            JwtUserInfo userInfo = null;
+            //3, 获取token
+            String token = getHeader(BEARER_HEADER_KEY, request);
 
             //添加测试环境的特殊token
-            if (isDev() && StrPool.TEST.equalsIgnoreCase(userToken)) {
-                userInfo = new JwtUserInfo(3L, "zuihou", "最后");
+            if (isDev() && StrPool.TEST.equalsIgnoreCase(token)) {
+                authInfo = new AuthInfo().setAccount("zuihou").setUserId(1L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
+            }
+            // 4, 解析 并 验证 token
+            if (authInfo == null) {
+                authInfo = tokenUtil.getAuthInfo(token);
             }
 
-            if (!isIgnoreToken(uri) && userInfo == null) {
-                userInfo = jwtTokenClientUtils.getUserInfo(userToken);
+            // 5，验证 是否在其他设备登录或被挤下线
+            String newToken = JwtUtil.getToken(token);
+            String tokenKey = CacheKey.buildKey(newToken);
+            CacheObject tokenCache = channel.get(CacheKey.TOKEN_USER_ID, tokenKey);
+            if (tokenCache.getValue() == null) {
+                // 为空就认为是没登录或者被T会有bug，该 bug 取决于登录成功后，异步调用UserTokenService.save 方法的延迟
+            } else if (StrUtil.equals(BizConstant.LOGIN_STATUS, (String) tokenCache.getValue())) {
+                throw BizException.wrap(JWT_OFFLINE);
             }
-
-            BaseContextHandler.setBoot(true);
-
-            //3, 将信息放入header
-            if (userInfo != null) {
-                BaseContextHandler.setUserId(userInfo.getUserId());
-                BaseContextHandler.setAccount(userInfo.getAccount());
-                BaseContextHandler.setName(userInfo.getName());
-            }
-
         } catch (BizException e) {
-            log.error("解析token失败", e);
-            throw e;
+            throw BizException.wrap(e.getCode(), e.getMessage());
         } catch (Exception e) {
-            log.error("解析token失败", e);
-            throw BizException.wrap(R.FAIL_CODE, "解析用户身份失败");
+            throw BizException.wrap(R.FAIL_CODE, "验证token出错");
+        }
+
+        //6, 转换，将 token 解析出来的用户身份 和 解码后的tenant、Authorization 重新封装到请求头
+        if (authInfo != null) {
+            BaseContextHandler.setUserId(authInfo.getUserId());
+            BaseContextHandler.setAccount(authInfo.getAccount());
+            BaseContextHandler.setName(authInfo.getName());
+            MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(authInfo.getUserId()));
         }
         return super.preHandle(request, response, handler);
     }
 
-    private String getHeader(HttpServletRequest request, String name) {
+    private String getHeader(String name, HttpServletRequest request) {
         String value = request.getHeader(name);
         if (StringUtils.isEmpty(value)) {
             return null;
@@ -106,7 +150,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
      * @return
      */
     protected boolean isIgnoreToken(String uri) {
-        return IgnoreTokenConfig.isIgnoreToken(uri);
+        return ignoreTokenProperties.isIgnoreToken(uri);
     }
 
     @Override

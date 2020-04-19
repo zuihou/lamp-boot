@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.zuihou.base.service.SuperServiceImpl;
+import com.github.zuihou.common.constant.BizConstant;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.exception.BizException;
+import com.github.zuihou.jobs.api.JobsTimingApi;
+import com.github.zuihou.jobs.dto.XxlJobInfo;
 import com.github.zuihou.sms.dao.SmsTaskMapper;
 import com.github.zuihou.sms.entity.SmsTask;
 import com.github.zuihou.sms.entity.SmsTemplate;
@@ -19,11 +22,14 @@ import com.github.zuihou.sms.service.SmsTemplateService;
 import com.github.zuihou.sms.strategy.SmsContext;
 import com.github.zuihou.sms.util.PhoneUtils;
 import com.github.zuihou.utils.BizAssert;
+import com.github.zuihou.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.function.Function;
@@ -45,7 +51,10 @@ import static com.github.zuihou.exception.code.ExceptionCode.BASE_VALID_PARAM;
  */
 @Slf4j
 @Service
+
 public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask> implements SmsTaskService {
+    @Resource
+    private JobsTimingApi jobsTimingApi;
     @Autowired
     private SmsContext smsContext;
     @Autowired
@@ -83,6 +92,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveTask(SmsTask smsTask, TemplateCodeType type) {
         validAndInit(smsTask, null);
 
@@ -137,6 +147,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(SmsTask smsTask) {
         validAndInit(smsTask, null);
 
@@ -179,13 +190,13 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
         } else {
             JSONObject param = new JSONObject();
             param.put("id", smsTask.getId());
-            param.put(BaseContextConstants.TENANT, BaseContextHandler.getTenant());
+            param.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
             //推送定时任务
-//            jobsTimingApi.addTimingTask(
-//                    XxlJobInfo.build(BizConstant.DEF_JOB_GROUP_NAME,
-//                            DateUtils.localDateTime2Date(smsTask.getSendTime()),
-//                            BizConstant.SMS_SEND_JOB_HANDLER,
-//                            param.toString()));
+            jobsTimingApi.addTimingTask(
+                    XxlJobInfo.build(BizConstant.DEF_JOB_GROUP_NAME,
+                            DateUtils.localDateTime2Date(smsTask.getSendTime()),
+                            BizConstant.SMS_SEND_JOB_HANDLER,
+                            param.toString()));
         }
         return smsTask;
     }

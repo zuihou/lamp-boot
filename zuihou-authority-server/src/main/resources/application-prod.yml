@@ -21,7 +21,6 @@ zuihou:
     username: zuihou
     password: zuihou
   database:
-    isMultiTenant: true   # 是否启用多租户
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
   file:
     type: LOCAL # FAST_DFS LOCAL

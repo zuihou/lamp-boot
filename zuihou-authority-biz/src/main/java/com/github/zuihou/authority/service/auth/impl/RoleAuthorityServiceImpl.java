@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+
 public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
 
     @Autowired
@@ -115,5 +116,10 @@ public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapp
         cache.evict(CacheKey.ROLE_RESOURCE, String.valueOf(dto.getRoleId()));
         cache.evict(CacheKey.ROLE_MENU, String.valueOf(dto.getRoleId()));
         return true;
+    }
+
+    @Override
+    public boolean removeByAuthorityId(List<Long> ids) {
+        return remove(Wraps.<RoleAuthority>lbQ().eq(RoleAuthority::getAuthorityId, ids));
     }
 }

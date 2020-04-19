@@ -22,6 +22,7 @@ import com.github.zuihou.msgs.dto.MsgsCenterInfoSaveDTO;
 import com.github.zuihou.msgs.entity.MsgsCenterInfo;
 import com.github.zuihou.msgs.enumeration.MsgsCenterType;
 import com.github.zuihou.msgs.service.MsgsCenterInfoService;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,7 @@ import java.util.Map;
 @RequestMapping("/msgsCenterInfo")
 @Api(value = "MsgsCenterInfo", tags = "消息中心")
 @Validated
+@PreAuth(replace = "msgs:")
 public class MsgsCenterInfoController {
 
     @Autowired
@@ -197,6 +199,7 @@ public class MsgsCenterInfoController {
     @ApiOperation(value = "新增消息中心", notes = "新增消息中心不为空的字段")
     @PostMapping
     @SysLog("新增消息中心")
+    @PreAuth("hasPermit('{}add')")
     public R<MsgsCenterInfo> save(@RequestBody @Validated MsgsCenterInfoSaveDTO data) {
         if (CollectionUtil.isEmpty(data.getUserIdList()) && CollectionUtil.isNotEmpty(data.getRoleCodeList())) {
             List<Long> result = roleService.findUserIdByCode(data.getRoleCodeList().stream().toArray(String[]::new));

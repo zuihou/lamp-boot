@@ -5,16 +5,22 @@ import com.github.zuihou.authority.enumeration.auth.ApplicationAppTypeEnum;
 import com.github.zuihou.authority.enumeration.auth.AuthorizeType;
 import com.github.zuihou.authority.enumeration.auth.Sex;
 import com.github.zuihou.authority.enumeration.common.LogType;
-import com.github.zuihou.authority.enumeration.defaults.TenantStatusEnum;
-import com.github.zuihou.authority.enumeration.defaults.TenantTypeEnum;
 import com.github.zuihou.base.BaseEnum;
 import com.github.zuihou.base.R;
 import com.github.zuihou.common.enums.HttpMethod;
 import com.github.zuihou.database.mybatis.auth.DataScopeType;
+import com.github.zuihou.file.enumeration.DataType;
+import com.github.zuihou.msgs.enumeration.MsgsBizType;
+import com.github.zuihou.msgs.enumeration.MsgsCenterType;
+import com.github.zuihou.sms.enumeration.ProviderType;
+import com.github.zuihou.sms.enumeration.SendStatus;
+import com.github.zuihou.sms.enumeration.SourceType;
+import com.github.zuihou.sms.enumeration.TaskStatus;
+import com.github.zuihou.tenant.enumeration.TenantStatusEnum;
+import com.github.zuihou.tenant.enumeration.TenantTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +45,7 @@ public class AuthorityGeneralController {
     private final static Map<String, Map<String, String>> ENUM_MAP = new HashMap<>(8);
 
     static {
+        // 权限服务
         ENUM_MAP.put(HttpMethod.class.getSimpleName(), BaseEnum.getMap(HttpMethod.values()));
         ENUM_MAP.put(DataScopeType.class.getSimpleName(), BaseEnum.getMap(DataScopeType.values()));
         ENUM_MAP.put(LogType.class.getSimpleName(), BaseEnum.getMap(LogType.values()));
@@ -47,10 +54,16 @@ public class AuthorityGeneralController {
         ENUM_MAP.put(TenantTypeEnum.class.getSimpleName(), BaseEnum.getMap(TenantTypeEnum.values()));
         ENUM_MAP.put(TenantStatusEnum.class.getSimpleName(), BaseEnum.getMap(TenantStatusEnum.values()));
         ENUM_MAP.put(ApplicationAppTypeEnum.class.getSimpleName(), BaseEnum.getMap(ApplicationAppTypeEnum.values()));
+        // 文件服务
+        ENUM_MAP.put(DataType.class.getSimpleName(), BaseEnum.getMap(HttpMethod.values()));
+        //消息服务
+        ENUM_MAP.put(MsgsCenterType.class.getSimpleName(), BaseEnum.getMap(MsgsCenterType.values()));
+        ENUM_MAP.put(MsgsBizType.class.getSimpleName(), BaseEnum.getMap(MsgsBizType.values()));
+        ENUM_MAP.put(ProviderType.class.getSimpleName(), BaseEnum.getMap(ProviderType.values()));
+        ENUM_MAP.put(SourceType.class.getSimpleName(), BaseEnum.getMap(SourceType.values()));
+        ENUM_MAP.put(SendStatus.class.getSimpleName(), BaseEnum.getMap(SendStatus.values()));
+        ENUM_MAP.put(TaskStatus.class.getSimpleName(), BaseEnum.getMap(TaskStatus.values()));
     }
-
-    @Value("${zuihou.database.isNotWrite:false}")
-    private Boolean isNotWrite;
 
     @ApiOperation(value = "获取当前系统指定枚举", notes = "获取当前系统指定枚举")
     @GetMapping("/enums")
@@ -67,11 +80,6 @@ public class AuthorityGeneralController {
             }
         }
         return R.success(map);
-    }
-
-    @GetMapping("/aaaa")
-    public R<Object> test() {
-        return R.success(isNotWrite);
     }
 
 }

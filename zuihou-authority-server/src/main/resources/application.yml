@@ -20,13 +20,15 @@ zuihou:
     database: zuihou_defaults
     username: root
     password: root
+    url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
   database:
-    bizDatabase: zuihou_base
-    multiTenantType: SCHEMA
+    tenantDatabasePrefix: zuihou_base
+    multiTenantType: DATASOURCE
     isNotWrite: false
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
     worker-id: 0
     data-center-id: 0
+    isSeata: false
   injection:
     # 是否启用 远程数据 手动注入
     enabled: true
@@ -37,13 +39,19 @@ zuihou:
       maximumSize: 1000
       refreshWriteTime: 10
       refreshThreadPoolSize: 1000
-  user:
+  security:
+    # 是否开启URI权限校验
+    enabled: true
     type: SERVICE
   scan:
     type: SERVICE
   log:
     enabled: true
     type: DB
+  context:
+    # 上下文拦截器
+    pathPatterns: '/**'
+    order: -20
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
@@ -60,18 +68,34 @@ zuihou:
       access-key-id: test
       access-key-secret: test
   swagger:
-    enabled: true
+    license: Powered By zuihou
+    licenseUrl: https://github.com/zuihou
+    termsOfServiceUrl: https://github.com/zuihou
+    version: 2.2
+    apiKeys:
+      - name: 令牌
+        keyname: token
+        passAs: header
     global-operation-parameters:
+      - name: Authorization
+        description: 客户端信息
+        modelRef: String
+        parameterType: header
+        required: true
+        defaultValue: "Basic enVpaG91X3VpOnp1aWhvdV91aV9zZWNyZXQ="
       - name: tenant
         description: 租户编码
         modelRef: String
         parameterType: header
         required: true
-        defaultValue: "0000"
+        defaultValue: "MDAwMA=="
     docket:
       general:
         title: 通用模块
         base-package: com.github.zuihou.general.controller
+      oauth:
+        title: 认证模块
+        base-package: com.github.zuihou.oauth.controller
       auth:
         title: 权限模块
         base-package: com.github.zuihou.authority.controller.auth
@@ -98,11 +122,8 @@ zuihou:
         base-package: com.github.zuihou.file.controller
 
 authentication:
-  user:
-    header-name: token
-    expire: 43200               # 外部token有效期为12小时
-    pri-key: client/pri.key    # 加密
-    pub-key: client/pub.key    # 解密
+  expire: 28800               # token有效期为8小时
+  refreshExpire: 86400        # 刷新token有效期为24小时
 
 server:
   port: 8764
@@ -126,7 +147,6 @@ management:
     health:
       show-details: ALWAYS
       enabled: true
-
 
 spring:
   http:
@@ -154,7 +174,40 @@ spring:
   cache:
     type: GENERIC
   datasource:
+    # 从这里开始(dynamic)，中间的这段配置用于 zuihou.database.multiTenantType == DATASOURCE 时
+    dynamic:
+      enabled: false  # 这里一定要写成false， 是否开启根据 zuihou.database.multiTenantType 来决定
+      p6spy: true
+      seata: ${zuihou.database.isSeata:false}
+      druid:
+        initialSize: 10
+        minIdle: 10
+        maxActive: 500
+        max-wait: 60000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        validation-query: SELECT 'x'
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
+        filters: stat,wall
+        wall:
+          comment-allow: true
+          multiStatementAllow: true
+          noneBaseStatementAllow: true
+      datasource:
+        master:       # 默认的数据源
+          username: ${zuihou.mysql.username}
+          password: ${zuihou.mysql.password}
+          driver-class-name: ${zuihou.mysql.driverClassName}
+          url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+          db-type: mysql
+    # 从这里结束(dynamic)，中间的这段配置用于 zuihou.database.multiTenantType == DATASOURCE 时
     druid:
+      enable: true
+      # 从这里开始(druid)，中间的这段配置用于 zuihou.database.multiTenantType != DATASOURCE 时
       username: ${zuihou.mysql.username}
       password: ${zuihou.mysql.password}
       driver-class-name: ${zuihou.mysql.driverClassName}
@@ -180,6 +233,9 @@ spring:
             commentAllow: true
             multiStatementAllow: true
             noneBaseStatementAllow: true
+      # 从这里结束(druid)，中间的这段配置用于 zuihou.database.multiTenantType != DATASOURCE 时
+
+      # 以下的2段配置，同时适用于所有模式
       web-stat-filter:  # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
         enabled: true
         url-pattern: /*
@@ -193,7 +249,6 @@ spring:
         reset-enable: true    #允许清空统计数据
         login-username: zuihou
         login-password: zuihou
-
 
 mybatis-plus:
   mapper-locations:
@@ -213,7 +268,6 @@ mybatis-plus:
     cache-enabled: false
     #配置JdbcTypeForNull, oracle数据库必须配置
     jdbc-type-for-null: 'null'
-
 
 j2cache:
   #  config-location: /j2cache.properties

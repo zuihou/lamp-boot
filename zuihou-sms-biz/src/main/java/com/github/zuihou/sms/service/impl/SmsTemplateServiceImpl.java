@@ -13,6 +13,7 @@ import com.github.zuihou.utils.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ import static com.github.zuihou.exception.code.ExceptionCode.BASE_VALID_PARAM;
  */
 @Slf4j
 @Service
+
 public class SmsTemplateServiceImpl extends SuperServiceImpl<SmsTemplateMapper, SmsTemplate> implements SmsTemplateService {
 
     @Autowired
@@ -63,6 +65,7 @@ public class SmsTemplateServiceImpl extends SuperServiceImpl<SmsTemplateMapper, 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveTemplate(SmsTemplate smsTemplate) {
         buildParams(smsTemplate);
         int count = super.count(Wrappers.<SmsTemplate>lambdaQuery().eq(SmsTemplate::getCustomCode, smsTemplate.getCustomCode()));
@@ -73,6 +76,7 @@ public class SmsTemplateServiceImpl extends SuperServiceImpl<SmsTemplateMapper, 
         super.save(smsTemplate);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateTemplate(SmsTemplate smsTemplate) {
         buildParams(smsTemplate);

@@ -74,5 +74,4 @@ public interface RoleService extends SuperCacheService<Role> {
      * @return 存在返回真
      */
     Boolean check(String code);
-
 }

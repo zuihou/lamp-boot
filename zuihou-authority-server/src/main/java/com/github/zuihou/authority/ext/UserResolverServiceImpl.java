@@ -2,9 +2,9 @@ package com.github.zuihou.authority.ext;
 
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.base.R;
-import com.github.zuihou.user.feign.UserQuery;
-import com.github.zuihou.user.feign.UserResolverService;
-import com.github.zuihou.user.model.SysUser;
+import com.github.zuihou.security.feign.UserQuery;
+import com.github.zuihou.security.feign.UserResolverService;
+import com.github.zuihou.security.model.SysUser;
 
 /**
  * 本地 实现

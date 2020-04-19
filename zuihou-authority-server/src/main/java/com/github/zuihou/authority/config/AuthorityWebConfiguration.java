@@ -6,12 +6,18 @@ import com.github.zuihou.authority.service.auth.SystemApiService;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.common.OptLogService;
 import com.github.zuihou.boot.config.BaseConfig;
+import com.github.zuihou.common.properties.IgnoreTokenProperties;
 import com.github.zuihou.interceptor.TokenHandlerInterceptor;
 import com.github.zuihou.log.event.SysLogListener;
+import com.github.zuihou.scan.properties.ScanProperties;
 import com.github.zuihou.scan.service.SystemApiScanService;
-import com.github.zuihou.user.feign.UserResolverService;
+import com.github.zuihou.security.feign.UserResolverService;
+import com.github.zuihou.security.properties.UserProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,11 +29,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @createTime 2017-12-15 14:42
  */
 @Configuration
+@EnableConfigurationProperties({IgnoreTokenProperties.class})
 public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private IgnoreTokenProperties ignoreTokenProperties;
 
     @Bean
     public HandlerInterceptor getTokenHandlerInterceptor() {
-        return new TokenHandlerInterceptor();
+        return new TokenHandlerInterceptor(ignoreTokenProperties);
     }
 
     /**
@@ -82,18 +92,19 @@ public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfi
     }
 
     @Bean
+    @ConditionalOnExpression("${zuihou.log.enabled:true} && 'DB'.equals('${zuihou.log.type:LOGGER}')")
     public SysLogListener sysLogListener(OptLogService optLogService) {
         return new SysLogListener((log) -> optLogService.save(log));
     }
 
     @Bean
-    @ConditionalOnProperty(name = "zuihou.user.type", havingValue = "SERVICE", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = UserProperties.PREFIX, name = "type", havingValue = "SERVICE", matchIfMissing = true)
     public UserResolverService getUserResolverServiceImpl(UserService userService) {
         return new UserResolverServiceImpl(userService);
     }
 
     @Bean("systemApiScanService")
-    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "SERVICE", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = ScanProperties.PREFIX, name = "type", havingValue = "SERVICE", matchIfMissing = true)
     @ConditionalOnMissingBean(SystemApiScanService.class)
     public SystemApiScanService getSystemApiService(SystemApiService systemApiService) {
         return new SystemApiScanServiceImpl(systemApiService);

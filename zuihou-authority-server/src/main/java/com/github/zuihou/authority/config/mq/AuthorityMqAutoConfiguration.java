@@ -5,6 +5,7 @@ import com.github.zuihou.authority.dto.auth.SystemApiScanSaveDTO;
 import com.github.zuihou.authority.service.auth.SystemApiService;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.mq.constant.QueueConstants;
+import com.github.zuihou.mq.properties.MqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,7 +23,7 @@ import org.springframework.messaging.handler.annotation.Payload;
  */
 @Configuration
 @Slf4j
-@ConditionalOnProperty(prefix = "zuihou.rabbitmq", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = MqProperties.PREFIX, name = "enabled", havingValue = "true")
 public class AuthorityMqAutoConfiguration {
     @Autowired
     private SystemApiService systemApiService;

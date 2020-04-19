@@ -1,5 +1,6 @@
 package com.github.zuihou.sms.strategy.impl;
 
+
 import com.github.zuihou.base.R;
 import com.github.zuihou.sms.dao.SmsTaskMapper;
 import com.github.zuihou.sms.entity.SmsSendStatus;
@@ -13,6 +14,7 @@ import com.github.zuihou.sms.strategy.domain.SmsResult;
 import com.github.zuihou.sms.util.PhoneUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -25,16 +27,16 @@ import java.util.stream.Collectors;
  * @date 2018/12/20
  */
 @Slf4j
-public abstract class AbstractSmsStrategy implements SmsStrategy {
 
+public abstract class AbstractSmsStrategy implements SmsStrategy {
 
     @Autowired
     private SmsTaskMapper smsTaskMapper;
     @Autowired
     private SmsSendStatusService smsSendStatusService;
 
-
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public R<String> sendSms(SmsTask task, SmsTemplate template) {
         String appId = template.getAppId();
         String appSecret = template.getAppSecret();

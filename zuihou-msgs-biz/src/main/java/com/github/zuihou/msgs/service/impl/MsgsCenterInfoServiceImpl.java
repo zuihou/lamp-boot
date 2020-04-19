@@ -17,6 +17,7 @@ import com.github.zuihou.utils.BeanPlusUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +37,7 @@ import static com.github.zuihou.utils.StrHelper.getOrDef;
  */
 @Slf4j
 @Service
+
 public class MsgsCenterInfoServiceImpl extends SuperServiceImpl<MsgsCenterInfoMapper, MsgsCenterInfo> implements MsgsCenterInfoService {
     @Autowired
     private MsgsCenterInfoReceiveService msgsCenterInfoReceiveService;
@@ -46,6 +48,7 @@ public class MsgsCenterInfoServiceImpl extends SuperServiceImpl<MsgsCenterInfoMa
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public MsgsCenterInfo saveMsgs(MsgsCenterInfoSaveDTO data) {
         MsgsCenterInfo info = BeanPlusUtil.toBean(data.getMsgsCenterInfoDTO(), MsgsCenterInfo.class);
         info.setTitle(getOrDef(info.getTitle(), info.getContent()));
@@ -66,6 +69,7 @@ public class MsgsCenterInfoServiceImpl extends SuperServiceImpl<MsgsCenterInfoMa
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(List<Long> ids, Long userId) {
         msgsCenterInfoReceiveService.remove(Wraps.<MsgsCenterInfoReceive>lbQ()
                 .eq(MsgsCenterInfoReceive::getUserId, userId)
@@ -93,6 +97,7 @@ public class MsgsCenterInfoServiceImpl extends SuperServiceImpl<MsgsCenterInfoMa
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean mark(List<Long> msgCenterIds, Long userId) {
         if (CollectionUtil.isEmpty(msgCenterIds) || userId == null) {
             return true;

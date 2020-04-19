@@ -5,7 +5,7 @@
     <parent>
         <artifactId>zuihou-admin-boot</artifactId>
         <groupId>com.github.zuihou</groupId>
-        <version>b.2.0-SNAPSHOT</version>
+        <version>b.2.2-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -17,7 +17,17 @@
     <dependencies>
         <dependency>
             <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-oauth-controller</artifactId>
+            <version>${zuihou-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-authority-controller</artifactId>
+            <version>${zuihou-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-tenant-controller</artifactId>
             <version>${zuihou-project.version}</version>
         </dependency>
         <dependency>
@@ -33,6 +43,12 @@
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-file-controller</artifactId>
+            <version>${zuihou-project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-tenant-entity</artifactId>
             <version>${zuihou-project.version}</version>
         </dependency>
 

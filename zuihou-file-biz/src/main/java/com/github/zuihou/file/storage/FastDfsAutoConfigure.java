@@ -1,5 +1,6 @@
 package com.github.zuihou.file.storage;
 
+
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.AppendFileStorageClient;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "zuihou.file.type", havingValue = "FAST_DFS")
 public class FastDfsAutoConfigure {
     @Service
+
     public class FastDfsServiceImpl extends AbstractFileStrategy {
         @Autowired
         private FastFileStorageClient storageClient;
