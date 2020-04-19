@@ -19,11 +19,6 @@
             <artifactId>zuihou-tenant-entity</artifactId>
             <version>${zuihou-project.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.zuihou</groupId>-->
-        <!--            <artifactId>zuihou-tenant-datasource</artifactId>-->
-        <!--            <version>${zuihou-project.version}</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-authority-biz</artifactId>
