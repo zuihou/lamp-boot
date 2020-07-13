@@ -5,7 +5,7 @@
     <parent>
         <artifactId>zuihou-admin-boot</artifactId>
         <groupId>com.github.zuihou</groupId>
-        <version>b.2.3-SNAPSHOT</version>
+        <version>b.2.4-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
@@ -20,6 +20,7 @@
             <artifactId>zuihou-msgs-entity</artifactId>
             <version>${zuihou-project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-jobs-api</artifactId>

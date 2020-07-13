@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 05/04/2020 23:19:49
+ Date: 12/07/2020 23:46:10
 */
 
 SET NAMES utf8mb4;
@@ -56,13 +56,6 @@ CREATE TABLE `XXL_JOB_QRTZ_CRON_TRIGGERS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of XXL_JOB_QRTZ_CRON_TRIGGERS
--- ----------------------------
-BEGIN;
-INSERT INTO `XXL_JOB_QRTZ_CRON_TRIGGERS` VALUES ('DefaultQuartzScheduler', '45', '1', '0 0 0/2 * * ?', 'Asia/Shanghai');
-COMMIT;
-
--- ----------------------------
 -- Table structure for XXL_JOB_QRTZ_FIRED_TRIGGERS
 -- ----------------------------
 DROP TABLE IF EXISTS `XXL_JOB_QRTZ_FIRED_TRIGGERS`;
@@ -100,13 +93,6 @@ CREATE TABLE `XXL_JOB_QRTZ_JOB_DETAILS` (
   `JOB_DATA` blob,
   PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of XXL_JOB_QRTZ_JOB_DETAILS
--- ----------------------------
-BEGIN;
-INSERT INTO `XXL_JOB_QRTZ_JOB_DETAILS` VALUES ('DefaultQuartzScheduler', '45', '1', NULL, 'com.xxl.job.admin.core.jobbean.RemoteHttpJobBean', '0', '0', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F40000000000010770800000010000000007800);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for XXL_JOB_QRTZ_LOCKS
@@ -154,7 +140,7 @@ CREATE TABLE `XXL_JOB_QRTZ_SCHEDULER_STATE` (
 -- Records of XXL_JOB_QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('DefaultQuartzScheduler', 'tangyhMacBookPro.local1585883934756', 1585884575973, 5000);
+INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('DefaultQuartzScheduler', 'tangyhMacBookPro.lan1591893018694', 1591893706916, 5000);
 INSERT INTO `XXL_JOB_QRTZ_SCHEDULER_STATE` VALUES ('getSchedulerFactoryBean', 'tangyhMacBookPro.local1553850279059', 1553850304933, 5000);
 COMMIT;
 
@@ -223,13 +209,6 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGERS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of XXL_JOB_QRTZ_TRIGGERS
--- ----------------------------
-BEGIN;
-INSERT INTO `XXL_JOB_QRTZ_TRIGGERS` VALUES ('DefaultQuartzScheduler', '45', '1', '45', '1', NULL, 1585886400000, -1, 5, 'WAITING', 'CRON', 1585884568000, 0, NULL, 2, '');
-COMMIT;
-
--- ----------------------------
 -- Table structure for d_global_user
 -- ----------------------------
 DROP TABLE IF EXISTS `d_global_user`;
@@ -285,8 +264,38 @@ CREATE TABLE `d_tenant` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `d_tenant` VALUES (616676078974402977, '0000', '最后的内置企业', 'CREATE', 'NORMAL', b'1', '最后', NULL, NULL, '内置企业，请勿删除', '2019-08-29 16:50:35', 1, '2019-08-29 16:50:35', 1);
-INSERT INTO `d_tenant` VALUES (1239021102701740032, '1111', '内置测试', 'CREATE', 'NORMAL', b'0', '111', NULL, '', '', '2020-03-15 10:50:25', NULL, '2020-04-04 22:40:24', 2);
 COMMIT;
+
+-- ----------------------------
+-- Table structure for f_attachment
+-- ----------------------------
+DROP TABLE IF EXISTS `f_attachment`;
+CREATE TABLE `f_attachment` (
+  `id` bigint(20) NOT NULL COMMENT 'ID',
+  `biz_id` varchar(64) DEFAULT NULL COMMENT '业务ID',
+  `biz_type` varchar(255) DEFAULT NULL COMMENT '业务类型\n#AttachmentType',
+  `data_type` varchar(255) DEFAULT 'IMAGE' COMMENT '数据类型\n#DataType{DIR:目录;IMAGE:图片;VIDEO:视频;AUDIO:音频;DOC:文档;OTHER:其他}',
+  `submitted_file_name` varchar(255) DEFAULT '' COMMENT '原始文件名',
+  `group_` varchar(255) DEFAULT '' COMMENT 'FastDFS返回的组\n用于FastDFS',
+  `path` varchar(255) DEFAULT '' COMMENT 'FastDFS的远程文件名\n用于FastDFS',
+  `relative_path` varchar(255) DEFAULT '' COMMENT '文件相对路径',
+  `url` varchar(255) DEFAULT '' COMMENT '文件访问链接\n需要通过nginx配置路由，才能访问',
+  `file_md5` varchar(255) DEFAULT NULL COMMENT '文件md5值',
+  `context_type` varchar(255) DEFAULT '' COMMENT '文件上传类型\n取上传文件的值',
+  `filename` varchar(255) DEFAULT '' COMMENT '唯一文件名',
+  `ext` varchar(64) DEFAULT '' COMMENT '后缀\n (没有.)',
+  `size` bigint(20) DEFAULT '0' COMMENT '大小',
+  `org_id` bigint(20) DEFAULT NULL COMMENT '组织ID\n#c_core_org',
+  `icon` varchar(64) DEFAULT '' COMMENT '图标',
+  `create_month` varchar(10) DEFAULT NULL COMMENT '创建年月\n格式：yyyy-MM 用于统计',
+  `create_week` varchar(10) DEFAULT NULL COMMENT '创建时处于当年的第几周\nyyyy-ww 用于统计',
+  `create_day` varchar(12) DEFAULT NULL COMMENT '创建年月日\n格式： yyyy-MM-dd 用于统计',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `update_user` bigint(11) DEFAULT NULL COMMENT '最后修改人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='附件';
 
 -- ----------------------------
 -- Table structure for undo_log
@@ -303,7 +312,7 @@ CREATE TABLE `undo_log` (
   `log_modified` datetime NOT NULL COMMENT 'modify datetime',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='AT transaction mode undo table';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='AT transaction mode undo table';
 
 -- ----------------------------
 -- Table structure for xxl_job_qrtz_trigger_group
@@ -318,13 +327,14 @@ CREATE TABLE `xxl_job_qrtz_trigger_group` (
   `address_list` varchar(512) DEFAULT NULL COMMENT '执行器地址列表，多地址逗号分隔',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `UN_APP_NAME` (`app_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT=' 任务组';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT=' 任务组';
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_group
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_qrtz_trigger_group` VALUES (1, 'zuihou-jobs-server', 'zuihou执行器', 1, 0, '127.0.0.1:8771');
+INSERT INTO `xxl_job_qrtz_trigger_group` VALUES (1, 'zuihou-jobs-server', '单机执行器', 1, 0, NULL);
+INSERT INTO `xxl_job_qrtz_trigger_group` VALUES (2, 'zuihou-executor-server', '分布式执行器', 2, 0, '127.0.0.1:8775');
 COMMIT;
 
 -- ----------------------------
@@ -357,7 +367,7 @@ CREATE TABLE `xxl_job_qrtz_trigger_info` (
   `interval_seconds` int(11) DEFAULT NULL COMMENT '间隔秒数',
   `repeat_count` int(11) DEFAULT NULL COMMENT '重复次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_info
@@ -368,6 +378,12 @@ INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (42, 1, '*/10 * * * * ? ', NULL, 
 INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (43, 1, '0 0 2 * * ?', NULL, NULL, 1, '重置租户', '2020-01-16 18:08:12', '2020-01-16 18:08:12', '最后', '', 'FIRST', 'restTenantJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-01-16 18:08:12', '', 0, 0);
 INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (44, 1, '0 0 2 * * ?', NULL, NULL, 1, '重置默认租户数据', '2020-01-16 18:09:53', '2020-01-16 18:09:53', '最后', '', 'FIRST', 'restBase0000JobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-01-16 18:09:53', '', 0, 0);
 INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (45, 1, '0 0 0/2 * * ?', NULL, NULL, 1, '删除过期在线用户', '2020-04-03 10:44:29', '2020-04-03 10:44:29', '最后', '', 'FIRST', 'userTokenRestJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-04-03 10:44:29', '', 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (46, 2, '*/10 * * * * ?', NULL, NULL, 1, '演示分布式', '2020-04-11 13:32:34', '2020-04-11 13:32:34', '最后', '', 'FIRST', 'demo2JobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-04-11 13:32:34', '', 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (47, 1, NULL, '2020-04-18 00:19:00', NULL, 2, '任务描述', '2020-04-18 00:15:00', '2020-04-18 00:15:00', 'admin', NULL, 'FIRST', 'smsSendJobHandler', '{\"id\":1251182376256536576,\"tenant\":\"1111\"}', 'SERIAL_EXECUTION', 0, 0, 'BEAN', NULL, NULL, '2020-04-18 00:15:00', NULL, 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (48, 1, NULL, '2020-04-18 10:28:00', NULL, 2, '任务描述', '2020-04-18 10:23:41', '2020-04-18 10:23:41', 'admin', NULL, 'FIRST', 'smsSendJobHandler', '{\"id\":1251335539450183680,\"tenant\":\"1111\"}', 'SERIAL_EXECUTION', 0, 0, 'BEAN', NULL, NULL, '2020-04-18 10:23:41', NULL, 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (49, 1, '*/10 * * * * ?', NULL, NULL, 1, 'test', '2020-06-11 23:46:22', '2020-06-11 23:47:45', '最后', '', 'FIRST', 'demo2JobHandler', '12345', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-06-11 23:46:22', '', 0, 0);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (50, 1, NULL, '2020-06-11 23:54:30', NULL, 2, 'test2', '2020-06-11 23:50:14', '2020-06-11 23:50:14', '最后', '', 'FIRST', 'demo2JobHandler', '213', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-06-11 23:50:14', '', NULL, NULL);
+INSERT INTO `xxl_job_qrtz_trigger_info` VALUES (51, 2, '*/5 * * * * ?', NULL, NULL, 1, 'test3', '2020-06-12 00:38:44', '2020-06-12 00:38:44', '最后', '', 'FIRST', 'demo2JobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2020-06-12 00:38:44', '', 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -391,13 +407,28 @@ CREATE TABLE `xxl_job_qrtz_trigger_log` (
   `handle_msg` text COMMENT '执行-日志',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `I_trigger_time` (`trigger_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_log
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (10, 1, 45, '127.0.0.1:8771', 'userTokenRestJobHandler', '', NULL, 0, '2020-04-03 11:29:11', 200, '任务触发类型：手动触发<br>调度机器：192.168.1.18<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-04-03 11:29:11', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (1, 2, 46, NULL, 'demo2JobHandler', '1', NULL, 0, '2020-05-25 21:39:23', 500, '任务触发类型：手动触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：null<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>调度失败：执行器地址为空<br><br>', NULL, 0, NULL);
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (2, 2, 46, NULL, 'demo2JobHandler', '2', NULL, 0, '2020-05-25 21:39:57', 500, '任务触发类型：手动触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：null<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>调度失败：执行器地址为空<br><br>', NULL, 0, NULL);
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (3, 1, 42, '127.0.0.1:8771', 'demo2JobHandler', '23', NULL, 0, '2020-05-25 21:41:04', 200, '任务触发类型：手动触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-05-25 21:41:05', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (4, 1, 49, '127.0.0.1:8771', 'demo2JobHandler', '12345', NULL, 0, '2020-06-11 23:46:54', 500, '任务触发类型：手动触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：500<br>msg：com.xxl.rpc.util.XxlRpcException: xxl-rpc, request timeout at:1591890438211, request:XxlRpcRequest{requestId=\'9e4c26fb-cdbc-4ee5-a0bd-9b86ec4600b2\', createMillisTime=1591890414403, accessToken=\'\', className=\'com.xxl.job.core.biz.ExecutorBiz\', methodName=\'run\', parameterTypes=[class com.xxl.job.core.biz.model.TriggerParam], parameters=[TriggerParam{jobId=49, executorHandler=\'demo2JobHandler\', executorParams=\'12345\', executorBlockStrategy=\'SERIAL_EXECUTION\', executorTimeout=0, logId=4, logDateTim=1591890414398, glueType=\'BEAN\', glueSource=\'\', glueUpdatetime=1591890382000, broadcastIndex=0, broadcastTotal=1}], version=\'null\'}\n	at com.xxl.rpc.remoting.net.params.XxlRpcFutureResponse.get(XxlRpcFutureResponse.java:105)\n	at com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean$1.invoke(XxlRpcReferenceBean.java:159)\n	at com.sun.proxy.$Proxy266.run(Unknown Source)\n	at com.xxl.job.admin.core.trigger.XxlJobTrigger.runExecutor(XxlJobTrigger.java:203)\n	at com.xxl.job.admin.core.trigger.XxlJobTrigger.processTrigger(XxlJobTrigger.java:153)\n	at com.xxl.job.admin.core.trigger.XxlJobTrigger.trigger(XxlJobTrigger.java:84)\n	at com.xxl.job.admin.core.thread.JobTriggerPoolHelper$1.run(JobTriggerPoolHelper.java:55)\n	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n	at java.lang.Thread.run(Thread.java:748)\n', '2020-06-11 23:47:25', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (5, 1, 49, '127.0.0.1:8771', 'demo2JobHandler', '12345', NULL, 0, '2020-06-11 23:47:50', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-06-11 23:47:52', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (6, 1, 49, '127.0.0.1:8771', 'demo2JobHandler', '12345', NULL, 0, '2020-06-11 23:48:00', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-06-11 23:48:03', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (7, 1, 49, '127.0.0.1:8771', 'demo2JobHandler', '12345', NULL, 0, '2020-06-11 23:48:10', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-06-11 23:48:12', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (8, 1, 50, '127.0.0.1:8771', 'demo2JobHandler', '213', NULL, 0, '2020-06-11 23:54:30', 200, '任务触发类型：定时触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8771]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8771<br>code：200<br>msg：null', '2020-06-11 23:54:40', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (9, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:38:50', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:38:50', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (10, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:38:55', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:38:55', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (11, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:00', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:00', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (12, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:05', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:05', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (13, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:10', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:12', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (14, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:15', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:16', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (15, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:20', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:21', 200, '');
+INSERT INTO `xxl_job_qrtz_trigger_log` VALUES (16, 2, 51, '127.0.0.1:8775', 'demo2JobHandler', '', NULL, 0, '2020-06-12 00:39:25', 200, '任务触发类型：Cron触发<br>调度机器：192.168.2.178<br>执行器-注册方式：自动注册<br>执行器-地址列表：[127.0.0.1:8775]<br>路由策略：第一个<br>阻塞处理策略：单机串行<br>任务超时时间：0<br>失败重试次数：0<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>触发调度：<br>address：127.0.0.1:8775<br>code：200<br>msg：null', '2020-06-12 00:39:25', 200, '');
 COMMIT;
 
 -- ----------------------------
@@ -426,13 +457,13 @@ CREATE TABLE `xxl_job_qrtz_trigger_registry` (
   `registry_value` varchar(255) NOT NULL,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xxl_job_qrtz_trigger_registry
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_qrtz_trigger_registry` VALUES (3, 'EXECUTOR', 'zuihou-jobs-server', '127.0.0.1:8771', '2020-04-03 11:29:19');
+INSERT INTO `xxl_job_qrtz_trigger_registry` VALUES (21, 'EXECUTOR', 'zuihou-executor-server', '127.0.0.1:8775', '2020-06-12 00:41:37');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

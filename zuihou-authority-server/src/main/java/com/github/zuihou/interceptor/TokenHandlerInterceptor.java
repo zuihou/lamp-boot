@@ -29,7 +29,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.github.zuihou.context.BaseContextConstants.*;
+import static com.github.zuihou.context.BaseContextConstants.BASIC_HEADER_KEY;
+import static com.github.zuihou.context.BaseContextConstants.BEARER_HEADER_KEY;
+import static com.github.zuihou.context.BaseContextConstants.JWT_KEY_TENANT;
 import static com.github.zuihou.exception.code.ExceptionCode.JWT_OFFLINE;
 
 /**

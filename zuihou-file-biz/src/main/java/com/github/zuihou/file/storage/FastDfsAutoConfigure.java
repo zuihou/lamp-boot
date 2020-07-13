@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @EnableConfigurationProperties(FileServerProperties.class)
 @Configuration
 @Slf4j
-@ConditionalOnProperty(name = "zuihou.file.type", havingValue = "FAST_DFS")
+@ConditionalOnProperty(prefix = FileServerProperties.PREFIX, name = "type", havingValue = "FAST_DFS")
 public class FastDfsAutoConfigure {
     @Service
 

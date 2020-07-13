@@ -1,27 +1,45 @@
 zuihou:
   nginx:
-    ip: 42.202.130.216
+    ip: tangyh.top
     port: 10000
   redis:
-    ip: 192.168.0.9
+    ip: 127.0.0.1
     port: 16379
     password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
     database: 0
+  rabbitmq:
+    enabled: true
+    ip: 127.0.0.1
+    port: 5672
+    username: zuihou
+    password: zuihou
   mysql:
-    ip: 192.168.0.9
+    ip: 127.0.0.1
     port: 3218
     driverClassName: com.mysql.cj.jdbc.Driver
     database: zuihou_defaults
     username: root
-    password: root
-  rabbitmq:
-    enabled: false
-    ip: 192.168.0.9
-    port: 5672
-    username: zuihou
-    password: zuihou
+    password: ZHadmin123.
   database:
-    isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
-  file:
-    type: LOCAL # FAST_DFS LOCAL
-    storage-path: D:/data/projects/uploadfile/file/
+    isNotWrite: true
+  swagger:
+    # 正式环境用nginx代理，为了保持和cloud版本一致的URL，特意调整
+    docket:
+      general:
+        base-path: /api/oauth
+      oauth:
+        base-path: /api/oauth
+      auth:
+        base-path: /api/authority
+      common:
+        base-path: /api/authority
+      core:
+        base-path: /api/authority
+      tenant:
+        base-path: /api/authority
+      sms:
+        base-path: /api/msgs
+      msgs:
+        base-path: /api/msgs
+      file:
+        base-path: /api/file

@@ -94,7 +94,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveTask(SmsTask smsTask, TemplateCodeType type) {
-        validAndInit(smsTask, null);
+        validAndInit(smsTask, type);
 
         send(smsTask, (task) -> save(task));
     }

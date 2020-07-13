@@ -143,7 +143,7 @@ public class NoBootTest {
             field.setAccessible(true);
 
             String api = anno.api();
-            Class<?> feign = anno.feign();
+            Class<?> feign = anno.apiClass();
 
             if (StrUtil.isEmpty(api) && Object.class.equals(feign)) {
                 log.warn("忽略注入字段: {}.{}", field.getType(), field.getName());

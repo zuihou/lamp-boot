@@ -27,15 +27,15 @@ public class TestModel {
 
     @ApiModelProperty(value = "组织ID")
     @TableField("org_id")
-//    @InjectionField(feign = OrgApi.class, method = ORG_ID_METHOD)
+//    @InjectionField(apiClass = OrgApi.class, method = ORG_ID_METHOD)
     private RemoteData<Long, Org> org;
 
 
-    //    @InjectionField(api = "orgApi", method = "findOrgNameByIds")
+    //    @InjectionField(apiClass = "orgApi", method = "findOrgNameByIds")
     private RemoteData<Long, String> org2;
 
 
-    @InjectionField(feign = Object.class, method = "findOrgNameByIds")
+    @InjectionField(apiClass = Object.class, method = "findOrgNameByIds")
     private RemoteData<Long, String> error;
 
     @InjectionField(api = "stationServiceImpl", method = STATION_ID_METHOD)

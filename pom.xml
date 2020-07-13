@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <version>b.2.3-SNAPSHOT</version>
+    <version>b.2.4-SNAPSHOT</version>
     <groupId>com.github.zuihou</groupId>
     <artifactId>zuihou-admin-boot</artifactId>
     <name>${project.artifactId}</name>
@@ -32,18 +32,18 @@
         <module>zuihou-msgs-controller</module>
         <module>zuihou-sms-biz</module>
         <module>zuihou-sms-controller</module>
+        <module>zuihou-oauth-biz</module>
+        <module>zuihou-oauth-controller</module>
         <module>zuihou-tenant-entity</module>
         <module>zuihou-tenant-biz</module>
         <module>zuihou-tenant-controller</module>
-        <module>zuihou-oauth-biz</module>
-        <module>zuihou-oauth-controller</module>
-        <module>zuihou-jobs</module>
         <module>zuihou-authority-server</module>
+        <module>zuihou-jobs</module>
     </modules>
 
     <properties>
-        <zuihou-commons.version>2.3</zuihou-commons.version>
-        <zuihou-project.version>b.2.3-SNAPSHOT</zuihou-project.version>
+        <zuihou-commons.version>2.4</zuihou-commons.version>
+        <zuihou-project.version>b.2.4-SNAPSHOT</zuihou-project.version>
 
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -117,11 +117,6 @@
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-mq-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-scan-starter</artifactId>
                 <version>${zuihou-commons.version}</version>
             </dependency>
             <dependency>

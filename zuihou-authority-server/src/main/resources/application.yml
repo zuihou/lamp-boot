@@ -43,8 +43,6 @@ zuihou:
     # 是否开启URI权限校验
     enabled: true
     type: SERVICE
-  scan:
-    type: SERVICE
   log:
     enabled: true
     type: DB
