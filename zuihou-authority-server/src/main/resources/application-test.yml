@@ -1,0 +1,27 @@
+zuihou:
+  nginx:
+    ip: 42.202.130.216
+    port: 10000
+  redis:
+    ip: 192.168.0.9
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
+  mysql:
+    ip: 192.168.0.9
+    port: 3218
+    driverClassName: com.mysql.cj.jdbc.Driver
+    database: zuihou_defaults
+    username: root
+    password: root
+  rabbitmq:
+    enabled: true
+    ip: 192.168.0.9
+    port: 5672
+    username: zuihou
+    password: zuihou
+  database:
+    isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
+  file:
+    type: LOCAL # FAST_DFS LOCAL
+    storage-path: D:/data/projects/uploadfile/file/
