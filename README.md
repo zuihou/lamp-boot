@@ -13,7 +13,7 @@
 
 
 ## 简介：
-本项目是基于`SpringBoot(2.2.5.RELEASE)` 的 SaaS型前后端分离脚手架，具备用户管理、资源权限管理、Xss防跨站攻击、代码自动生成、多存储系统、分布式定时任务等多个模块，支持多业务系统并行开发，可以作为后端服务的开发脚手架。
+本项目是基于`SpringBoot(2.2.7.RELEASE)` 的 SaaS型前后端分离脚手架，具备用户管理、资源权限管理、Xss防跨站攻击、代码自动生成、多存储系统、分布式定时任务等多个模块，支持多业务系统并行开发，可以作为后端服务的开发脚手架。
 代码简洁，架构清晰，非常适合学习和企业中使用。核心技术采用SpringBoot、Mybatis、JWT Token、Redis、RibbitMQ、FastDFS等主要框架和中间件。
 
 希望能努力打造一套从 `SaaS基础框架` - `单体架构` - `持续集成` - `自动化部署` - `系统监测` 的解决方案。`本项目旨在实现基础能力，不涉及具体业务。`
@@ -44,19 +44,11 @@
 | zuihou-admin-ui | https://gitee.com/zuihou111/zuihou-admin-ui | https://github.com/zuihou/zuihou-admin-ui | 开发&运营后台：内部使用 |
 | zuihou-generator  | https://gitee.com/zuihou111/zuihou-generator | https://github.com/zuihou/zuihou-generator | 代码生成器：开发使用 |
 
-## zuihou-admin-cloud 演示地址 
-
-| 项目 | 演示地址 | 管理员账号 | 普通账号 |
-|---|---|---|---|
-| 租户后台 | http://42.202.130.216:10000/zuihou-ui | zuihou/zuihou | test/zuiou |
-| 开发&运营后台 | http://42.202.130.216:10000/zuihou-admin-ui | demoAdmin/zuihou | 无 |
-
-## zuihou-admin-boot 演示地址 
+## 全功能演示地址 
 | 项目 | 演示地址 | 管理员账号 | 普通账号 |
 |---|---|---|---|
 | 租户后台 | http://tangyh.top:10000/zuihou-ui/ | zuihou/zuihou | test/zuiou |
 | 开发&运营后台 | http://tangyh.top:180/zuihou-admin-ui/ | demoAdmin/zuihou | 无 |
-| 定时任务 | http://tangyh.top:10000/zuihou-jobs-server | zuihou/zuihou | 无  |
 
 
 > 演示环境中内置租户没有写入权限，若要在演示环境测试增删改，请到`开发&运营后台`自行创建租户后测试
