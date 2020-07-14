@@ -132,7 +132,7 @@ B公司和C公司分别拿着账号， 在 zuihou-ui(租户后台) 上试用， 
     - 持久层框架： Mybatis-plus
     - 代码生成器：基于Mybatis-plus-generator自定义
     - 项目构建：Maven 3.5
-    - 监控： spring-boot-admin 2.2.0
+    - 监控： spring-boot-admin 2.2.7
     - 文件服务器：FastDFS 5.0.5/阿里云OSS/本地存储
     - Nginx
 - 部署方面：
@@ -141,7 +141,7 @@ B公司和C公司分别拿着账号， 在 zuihou-ui(租户后台) 上试用， 
     - Docker 18.09
     - Kubernetes 1.12
 
-本代码采用 Intellij IDEA(2018.1 EAP) 来编写，但源码与具体的 IDE 无关。
+本代码采用 Intellij IDEA 来编写，但源码与具体的 IDE 无关。
 
 PS: Lombok版本过低会导致枚举类型的参数无法正确获取参数，经过调试发现因为版本多低后，导致EnumDeserializer的 Object obj = p.getCurrentValue();取的值为空。
 
