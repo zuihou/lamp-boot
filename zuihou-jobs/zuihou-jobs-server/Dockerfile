@@ -1,5 +1,5 @@
 FROM openjdk:8-jre
-MAINTAINER zuihou 244387066@qq.com
+MAINTAINER zuihou 306479353@qq.com
 
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone

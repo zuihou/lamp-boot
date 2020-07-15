@@ -69,12 +69,15 @@ zuihou:
     license: Powered By zuihou
     licenseUrl: https://github.com/zuihou
     termsOfServiceUrl: https://github.com/zuihou
-    version: 2.2
-    apiKeys:
-      - name: 令牌
-        keyname: token
-        passAs: header
+    version: 2.4
     global-operation-parameters:
+      - name: token
+        description: 用户身份token
+        modelRef: String
+        parameterType: header
+        required: true
+        # 默认值只是方便本地开发时，少填参数，生产环境请禁用swagger或者禁用默认参数
+        defaultValue: "Bearer test"
       - name: Authorization
         description: 客户端信息
         modelRef: String
@@ -105,7 +108,7 @@ zuihou:
         base-package: com.github.zuihou.authority.controller.core
       tenant:
         title: 租户模块
-        base-package: com.github.zuihou.authority.controller.defaults
+        base-package: com.github.zuihou.tenant.controller
       sms:
         title: 短信模块
         base-package: com.github.zuihou.sms.controller
