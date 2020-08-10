@@ -106,8 +106,8 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             String token = getHeader(BEARER_HEADER_KEY, request);
 
             //添加测试环境的特殊token
-            if (isDev() && StrPool.TEST.equalsIgnoreCase(token)) {
-                authInfo = new AuthInfo().setAccount("zuihou").setUserId(1L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
+            if (isDev() && (StrPool.TEST_TOKEN.equalsIgnoreCase(token) || StrPool.TEST.equalsIgnoreCase(token))) {
+                authInfo = new AuthInfo().setAccount("zuihou").setUserId(3L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
             }
             // 4, 解析 并 验证 token
             if (authInfo == null) {
