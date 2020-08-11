@@ -164,14 +164,14 @@ public class UserController extends SuperCacheController<UserService, Long, User
     /**
      * 重置密码
      *
-     * @param ids 用户ID
+     * @param data
      * @return
      */
     @ApiOperation(value = "重置密码", notes = "重置密码")
     @GetMapping("/reset")
-    @SysLog("'重置密码:' + #ids")
-    public R<Boolean> resetTx(@RequestParam("ids[]") List<Long> ids) {
-        baseService.reset(ids);
+    @SysLog("'重置密码:' + #data.id")
+    public R<Boolean> reset(@RequestBody @Validated(SuperEntity.Update.class) UserUpdatePasswordDTO data) {
+        baseService.reset(data);
         return success();
     }
 
