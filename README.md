@@ -8,10 +8,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/zuihou/zuihou-admin-cloud.svg?style=social&label=Fork)](https://github.com/zuihou/zuihou-admin-cloud/network/members)
 [![fork](https://gitee.com/zuihou111/zuihou-admin-cloud/badge/fork.svg?theme=white)](https://gitee.com/zuihou111/zuihou-admin-cloud/members)
 
-## 特别强调：
-本项目编译需要先下载 [zuihou-commons](https://github.com/zuihou/zuihou-commons) 项目编译后，才能正常编译运行！
-
-
 ## 简介：
 本项目是基于`SpringBoot(2.2.9.RELEASE)` 的 SaaS型前后端分离脚手架，具备用户管理、资源权限管理、Xss防跨站攻击、代码自动生成、多存储系统、分布式定时任务等多个模块，支持多业务系统并行开发，可以作为后端服务的开发脚手架。
 代码简洁，架构清晰，非常适合学习和企业中使用。核心技术采用SpringBoot、Mybatis、JWT Token、Redis、RibbitMQ、FastDFS等主要框架和中间件。
@@ -154,6 +150,22 @@ PS: Lombok版本过低会导致枚举类型的参数无法正确获取参数，�
 | ![swagger.png](docs/image/项目相关/swagger获取token.jpg)    | ![admin-api.png](docs/image/项目相关/admin-api.png)         |
 | ![SBA监控.png](docs/image/1000star.png)                     | ![定时任务.png](docs/image/项目相关/zuihou-jobs-server.png) |
 
+
+## 友情链接 & 特别鸣谢
+* SaaS型微服务快速开发平台：[https://github.com/zuihou/zuihou-admin-cloud](https://github.com/zuihou/zuihou-admin-cloud)
+* SaaS型单体快速开发平台：[https://github.com/zuihou/zuihou-admin-boot](https://github.com/zuihou/zuihou-admin-boot)
+* MyBatis-Plus：[https://mybatis.plus/](https://mybatis.plus/)
+* knife4j：[http://doc.xiaominfo.com/](http://doc.xiaominfo.com/)
+* hutool：[https://hutool.cn/](https://hutool.cn/)
+* xxl-job：[http://www.xuxueli.com/xxl-job/](http://www.xuxueli.com/xxl-job/)
+* kkfileview：[https://kkfileview.keking.cn](https://kkfileview.keking.cn)
+* j2cache：[https://gitee.com/ld/J2Cache](https://gitee.com/ld/J2Cache)
+* FEBS Cloud Web： [https://gitee.com/mrbirdd/FEBS-Cloud-Web](https://gitee.com/mrbirdd/FEBS-Cloud-Web)
+    zuihou-ui 和 zuihou-admin-ui 基于本项目改造
+* Cloud-Platform： [https://gitee.com/geek_qi/cloud-platform](https://gitee.com/geek_qi/cloud-platform)
+    作者学习时接触到的第一个微服务项目
+    
+    
 ## 写在最后：
     本项目正在开发阶段，由于码主白天要上班，只有晚上、周末能挤点时间来敲敲代码，所以进度可能比较慢，文档、注释也不齐全。 
     各位大侠就将就着看，但随着时间的推移。文档，注释，启动说明等码主我一定会补全的（对自己负责，也是对大家负责）。   
