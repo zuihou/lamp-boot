@@ -18,12 +18,13 @@
         <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime"/>
         <result column="logo" jdbcType="VARCHAR" property="logo"/>
         <result column="describe_" jdbcType="VARCHAR" property="describe"/>
+        <result column="connect_type" jdbcType="VARCHAR" property="connectType"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, create_time, create_user, update_time, update_user,
-        code, name, type, status, readonly, duty, expiration_time, logo, describe_
+        code, name, type, status, readonly, duty, expiration_time, logo, describe_, connect_type
     </sql>
 
 </mapper>

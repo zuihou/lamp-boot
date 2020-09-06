@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : 127.0.0.1:3306
- Source Schema         : zuihou_base_0000
+ Source Schema         : zuihou_boot_0000
 
  Target Server Type    : MySQL
  Target Server Version : 50722

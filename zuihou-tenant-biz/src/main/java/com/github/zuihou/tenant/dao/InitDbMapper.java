@@ -1,6 +1,6 @@
 package com.github.zuihou.tenant.dao;
 
-import com.baomidou.mybatisplus.annotation.SqlParser;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * @date 2019/09/02
  */
 @Repository
-@SqlParser(filter = true)
+@InterceptorIgnore(tenantLine = "true", dynamicTableName = "true")
 public interface InitDbMapper {
     /**
      * 创建数据库

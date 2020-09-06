@@ -4,11 +4,17 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.zuihou.base.entity.Entity;
+import com.github.zuihou.tenant.enumeration.TenantConnectTypeEnum;
 import com.github.zuihou.tenant.enumeration.TenantStatusEnum;
 import com.github.zuihou.tenant.enumeration.TenantTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
@@ -65,13 +71,18 @@ public class Tenant extends Entity<Long> {
     @Excel(name = "类型", width = 20, replace = {"注册_REGISTER", "创建_CREATE", "_null"})
     private TenantTypeEnum type;
 
+    @TableField("connect_type")
+    @ApiModelProperty(value = "连接类型", example = "LOCAL,REMOTE")
+    @Excel(name = "连接类型", width = 20, replace = {"本地_LOCAL", "远程_REMOTE", "_null"})
+    private TenantConnectTypeEnum connectType;
+
     /**
      * 状态
      * #{NORMAL:正常;FORBIDDEN:禁用;WAITING:待审核;REFUSE:拒绝}
      */
     @ApiModelProperty(value = "状态")
     @TableField("status")
-    @Excel(name = "状态", width = 20, replace = {"正常_NORMAL", "禁用_FORBIDDEN", "待审核_WAITING", "拒绝_REFUSE", "DELETE_已删除", "_null"})
+    @Excel(name = "状态", width = 20, replace = {"正常_NORMAL", "待初始化_WAIT_INIT", "禁用_FORBIDDEN", "待审核_WAITING", "拒绝_REFUSE", "DELETE_已删除", "_null"})
     private TenantStatusEnum status;
 
     @ApiModelProperty(value = "只读")
@@ -117,7 +128,7 @@ public class Tenant extends Entity<Long> {
     @Builder
     public Tenant(Long id, LocalDateTime createTime, Long createUser, LocalDateTime updateTime, Long updateUser,
                   String code, String name, TenantTypeEnum type, TenantStatusEnum status, String duty,
-                  LocalDateTime expirationTime, Boolean readonly, String logo, String describe) {
+                  LocalDateTime expirationTime, Boolean readonly, String logo, String describe, TenantConnectTypeEnum connectType) {
         this.id = id;
         this.createTime = createTime;
         this.createUser = createUser;
@@ -132,6 +143,7 @@ public class Tenant extends Entity<Long> {
         this.expirationTime = expirationTime;
         this.logo = logo;
         this.describe = describe;
+        this.connectType = connectType;
     }
 
 }

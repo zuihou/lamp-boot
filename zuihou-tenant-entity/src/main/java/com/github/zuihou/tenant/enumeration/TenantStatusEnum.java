@@ -29,6 +29,10 @@ public enum TenantStatusEnum implements BaseEnum {
      */
     NORMAL("正常"),
     /**
+     * WAIT_INIT="待初始化"
+     */
+    WAIT_INIT("待初始化"),
+    /**
      * FORBIDDEN="禁用"
      */
     FORBIDDEN("禁用"),

@@ -1,5 +1,7 @@
 package com.github.zuihou.tenant.strategy;
 
+import com.github.zuihou.tenant.dto.TenantConnectDTO;
+
 import java.util.List;
 
 /**
@@ -10,25 +12,37 @@ import java.util.List;
  * @date 2019/10/25
  */
 public interface InitSystemStrategy {
+//    /**
+//     * 初始化系统
+//     *
+//     * @param tenant 租户编码
+//     * @return 是否成功
+//     */
+//    @Deprecated
+//    boolean init(String tenant);
+
     /**
-     * 初始化系统
+     * 初始化 服务链接
      *
-     * @param tenant
+     * @param tenantConnect 链接信息
+     * @return 是否成功
      */
-    boolean init(String tenant);
+    boolean initConnect(TenantConnectDTO tenantConnect);
 
     /**
      * 重置系统
      *
-     * @param tenant
+     * @param tenant 租户编码
+     * @return 是否成功
      */
     boolean reset(String tenant);
 
     /**
      * 删除租户数据
      *
-     * @param tenantCodeList
-     * @return
+     * @param ids            租户id
+     * @param tenantCodeList 租户编码
+     * @return 是否成功
      */
-    boolean delete(List<String> tenantCodeList);
+    boolean delete(List<Long> ids, List<String> tenantCodeList);
 }

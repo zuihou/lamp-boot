@@ -1,6 +1,6 @@
 package com.github.zuihou.tenant.dao;
 
-import com.baomidou.mybatisplus.annotation.SqlParser;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.github.zuihou.base.mapper.SuperMapper;
 import com.github.zuihou.tenant.entity.GlobalUser;
 import org.springframework.stereotype.Repository;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * @date 2019-10-25
  */
 @Repository
-@SqlParser(filter = true)
+@InterceptorIgnore(tenantLine = "true", dynamicTableName = "true")
 public interface GlobalUserMapper extends SuperMapper<GlobalUser> {
 
 }

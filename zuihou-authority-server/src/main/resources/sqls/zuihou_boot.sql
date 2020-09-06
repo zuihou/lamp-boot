@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : 127.0.0.1:3306
- Source Schema         : zuihou_base_0000
+ Source Schema         : zuihou_boot_0000
 
  Target Server Type    : MySQL
  Target Server Version : 50722
@@ -139,6 +139,7 @@ CREATE TABLE `c_auth_user` (
   `name` varchar(50) NOT NULL COMMENT '姓名',
   `org_id` bigint(20) DEFAULT NULL COMMENT '组织ID\n#c_core_org\n@InjectionField(api = ORG_ID_CLASS, method = ORG_ID_METHOD, beanClass = Org.class) RemoteData<Long, com.github.zuihou.authority.entity.core.Org>',
   `station_id` bigint(20) DEFAULT NULL COMMENT '岗位ID\n#c_core_station\n@InjectionField(api = STATION_ID_CLASS, method = STATION_ID_NAME_METHOD) RemoteData<Long, String>',
+  `readonly` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否内置',
   `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
   `mobile` varchar(20) DEFAULT '' COMMENT '手机',
   `sex` varchar(1) DEFAULT 'N' COMMENT '性别\n#Sex{W:女;M:男;N:未知}',
@@ -339,6 +340,7 @@ CREATE TABLE `c_core_org` (
   `id` bigint(20) NOT NULL COMMENT 'ID',
   `label` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
   `abbreviation` varchar(255) DEFAULT '' COMMENT '简称',
+  `type_` char(2) DEFAULT '01' COMMENT '类型\n@InjectionField(api = DICTIONARY_ITEM_CLASS, method = DICTIONARY_ITEM_METHOD, dictType = DictionaryType.ORG_TYPE)',
   `parent_id` bigint(20) DEFAULT '0' COMMENT '父ID',
   `tree_path` varchar(255) DEFAULT ',' COMMENT '树结构',
   `sort_value` int(11) DEFAULT '1' COMMENT '排序',

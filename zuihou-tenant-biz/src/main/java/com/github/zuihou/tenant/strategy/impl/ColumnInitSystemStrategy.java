@@ -7,16 +7,19 @@ import com.github.zuihou.authority.entity.auth.Menu;
 import com.github.zuihou.authority.entity.auth.Resource;
 import com.github.zuihou.authority.entity.auth.Role;
 import com.github.zuihou.authority.entity.auth.RoleAuthority;
+import com.github.zuihou.authority.entity.auth.User;
 import com.github.zuihou.authority.entity.common.Dictionary;
 import com.github.zuihou.authority.entity.common.DictionaryItem;
 import com.github.zuihou.authority.entity.common.Parameter;
 import com.github.zuihou.authority.enumeration.auth.ApplicationAppTypeEnum;
 import com.github.zuihou.authority.enumeration.auth.AuthorizeType;
+import com.github.zuihou.authority.enumeration.auth.Sex;
 import com.github.zuihou.authority.service.auth.ApplicationService;
 import com.github.zuihou.authority.service.auth.MenuService;
 import com.github.zuihou.authority.service.auth.ResourceService;
 import com.github.zuihou.authority.service.auth.RoleAuthorityService;
 import com.github.zuihou.authority.service.auth.RoleService;
+import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.common.DictionaryItemService;
 import com.github.zuihou.authority.service.common.DictionaryService;
 import com.github.zuihou.authority.service.common.ParameterService;
@@ -24,6 +27,7 @@ import com.github.zuihou.common.constant.ParameterKey;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.mybatis.auth.DataScopeType;
 import com.github.zuihou.database.properties.DatabaseProperties;
+import com.github.zuihou.tenant.dto.TenantConnectDTO;
 import com.github.zuihou.tenant.strategy.InitSystemStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +83,8 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     private ParameterService parameterService;
     @Autowired
     private DatabaseProperties databaseProperties;
+    @Autowired
+    private UserService userService;
 
     /**
      * 我*，这种方式太脑残了，但想不出更好的方式初始化数据，希望各位大神有好的初始化方法记得跟我说声！！！
@@ -86,11 +92,12 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
      * <p>
      * 不能用 SCHEMA 模式的初始化脚本方法： 因为id 会重复，租户编码会重复！
      *
-     * @param tenant 待初始化租户编码
+     * @param tenantConnect 待初始化租户编码
      * @return
      */
     @Override
-    public boolean init(String tenant) {
+    public boolean initConnect(TenantConnectDTO tenantConnect) {
+        String tenant = tenantConnect.getTenant();
         // 初始化数据
         //1, 生成并关联 ID TENANT
         DatabaseProperties.Id id = databaseProperties.getId();
@@ -121,6 +128,9 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
 
         initApplication();
 
+        // 内置超级管理员
+        initUser();
+
         return menuFlag && resourceFlag && roleFlag && roleAuthorityFlag;
     }
 
@@ -129,6 +139,14 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
         list.add(Application.builder().clientId("zuihou_ui").clientSecret("zuihou_ui_secret").website("http://tangyh.top:10000/zuihou-ui/").name("SaaS微服务管理后台").appType(ApplicationAppTypeEnum.PC).status(true).build());
         list.add(Application.builder().clientId("zuihou_admin_ui").clientSecret("zuihou_admin_ui_secret").website("http://tangyh.top:180/zuihou-admin-ui/").name("SaaS微服务管理后台").appType(ApplicationAppTypeEnum.PC).status(true).build());
         return applicationService.saveBatch(list);
+    }
+
+    private boolean initUser() {
+        User user = User.builder()
+                .account("admin").name("内置超级管理员").password("admin")
+                .readonly(true).sex(Sex.M).avatar("cnrhVkzwxjPwAaCfPbdc.png")
+                .build();
+        return userService.initUser(user);
     }
 
     private boolean initParameter() {
@@ -555,11 +573,11 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     }
 
     @Override
-    public boolean delete(List<String> tenantCodeList) {
+    public boolean delete(List<Long> ids, List<String> tenantCodeList) {
         // 清空所有表中当前租户的数据
         //TODO 待实现
-        //1,查询系统中的所有表
-        //删除该租户的所有数据
+        // 1,查询系统中的所有表
+        // 删除该租户的所有数据
         return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.zuihou.tenant.strategy;
 
 import com.github.zuihou.database.properties.DatabaseProperties;
+import com.github.zuihou.tenant.dto.TenantConnectDTO;
 import com.github.zuihou.utils.BizAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,15 +28,15 @@ public class InitSystemContext {
     }
 
     /**
-     * 初始化系统
+     * 初始化链接
      *
-     * @param tenant
+     * @param tenantConnect
      */
-    public boolean init(String tenant) {
+    public boolean initConnect(TenantConnectDTO tenantConnect) {
         InitSystemStrategy initSystemStrategy = initSystemStrategyMap.get(databaseProperties.getMultiTenantType().name());
         BizAssert.notNull(initSystemStrategy, String.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
 
-        return initSystemStrategy.init(tenant);
+        return initSystemStrategy.initConnect(tenantConnect);
     }
 
     /**
@@ -54,10 +55,10 @@ public class InitSystemContext {
      *
      * @param tenantCodeList
      */
-    public boolean delete(List<String> tenantCodeList) {
+    public boolean delete(List<Long> ids, List<String> tenantCodeList) {
         InitSystemStrategy initSystemStrategy = initSystemStrategyMap.get(databaseProperties.getMultiTenantType().name());
         BizAssert.notNull(initSystemStrategy, String.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
 
-        return initSystemStrategy.delete(tenantCodeList);
+        return initSystemStrategy.delete(ids, tenantCodeList);
     }
 }

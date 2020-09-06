@@ -1,12 +1,12 @@
-package com.github.zuihou.authority.event.listener;
+package com.github.zuihou.oauth.event.listener;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.zuihou.authority.event.LoginEvent;
-import com.github.zuihou.authority.event.model.LoginStatusDTO;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.auth.UserTokenService;
 import com.github.zuihou.authority.service.common.LoginLogService;
 import com.github.zuihou.context.BaseContextHandler;
+import com.github.zuihou.oauth.event.LoginEvent;
+import com.github.zuihou.oauth.event.model.LoginStatusDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -51,4 +51,5 @@ public class LoginListener {
         }
         loginLogService.save(loginStatus.getId(), loginStatus.getAccount(), loginStatus.getUa(), loginStatus.getIp(), loginStatus.getLocation(), loginStatus.getDescription());
     }
+
 }

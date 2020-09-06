@@ -72,9 +72,14 @@ public interface CacheKey {
 
     /**
      * 用户 前缀
-     * 完整key: user:classTypeName:{USER_ID} -> [ROLE_ID, ...]
+     * 完整key: user:{USER_ID} -> obj
      */
     String USER = "user";
+    /**
+     * 用户 前缀
+     * 完整key: user_account:{account} -> id
+     */
+    String USER_ACCOUNT = "user_account";
 
     /**
      * 用户拥有那些角色 前缀
@@ -153,6 +158,16 @@ public interface CacheKey {
      * 完整key: parameter:{id} -> obj
      */
     String PARAMETER = "parameter";
+    /**
+     * 应用 前缀
+     * 完整key: application:{id} -> obj
+     */
+    String APPLICATION = "application";
+    /**
+     * 应用 前缀
+     * 完整key: application:{clientId}:{clientSecret} -> id
+     */
+    String APPLICATION_CLIENT = "application_client";
 //    /**
 //     * 用户登录的客户端 前缀： 用于记录用户在那几个设备上登录了
 //     * 完整key: user_login_client:{userid} -> [client, client, ...] (Set)
@@ -183,6 +198,11 @@ public interface CacheKey {
      * 完整key: tenant:{id} -> obj
      */
     String TENANT = "tenant";
+    /**
+     * 租户 前缀
+     * 完整key: tenant_name:{name} -> id
+     */
+    String TENANT_NAME = "tenant_name";
     // 权限系统缓存 end
 
 
@@ -193,6 +213,18 @@ public interface CacheKey {
      */
     String REGISTER_USER = "register";
     // 消息服务缓存 end
+
+
+    /**
+     * 阻止列表
+     */
+    String BLOCKLIST_ID = "gateway:blocklist:id";
+    String BLOCKLIST = "gateway:blocklist";
+    /**
+     * 限流
+     */
+    String RATE_LIMITER_ID = "gateway:ratelimiter:id";
+    String RATE_LIMITER = "gateway:ratelimiter";
 
     /**
      * 构建key

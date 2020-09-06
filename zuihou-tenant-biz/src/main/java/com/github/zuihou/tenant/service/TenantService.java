@@ -1,6 +1,7 @@
 package com.github.zuihou.tenant.service;
 
 import com.github.zuihou.base.service.SuperCacheService;
+import com.github.zuihou.tenant.dto.TenantConnectDTO;
 import com.github.zuihou.tenant.dto.TenantSaveDTO;
 import com.github.zuihou.tenant.entity.Tenant;
 
@@ -25,14 +26,6 @@ public interface TenantService extends SuperCacheService<Tenant> {
     boolean check(String tenantCode);
 
     /**
-     * 初始化
-     *
-     * @param data
-     * @return
-     */
-//    Tenant saveInit(TenantSaveInitDTO data);
-
-    /**
      * 保存
      *
      * @param data
@@ -55,4 +48,12 @@ public interface TenantService extends SuperCacheService<Tenant> {
      * @return
      */
     Boolean delete(List<Long> ids);
+
+    /**
+     * 通知所有服务链接数据源
+     *
+     * @param tenantConnect 链接信息
+     * @return
+     */
+    Boolean connect(TenantConnectDTO tenantConnect);
 }

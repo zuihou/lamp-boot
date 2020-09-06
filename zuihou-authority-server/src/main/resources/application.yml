@@ -22,7 +22,7 @@ zuihou:
     password: root
     url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
   database:
-    tenantDatabasePrefix: zuihou_base
+    tenantDatabasePrefix: zuihou_boot
     multiTenantType: SCHEMA
     isNotWrite: false
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
@@ -69,7 +69,7 @@ zuihou:
     license: Powered By zuihou
     licenseUrl: https://github.com/zuihou
     termsOfServiceUrl: https://github.com/zuihou
-    version: 2.5.0
+    version: 2.5.1
     global-operation-parameters:
       - name: token
         description: 用户身份token

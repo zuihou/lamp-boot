@@ -88,6 +88,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
     @Override
     public R<User> handlerSave(UserSaveDTO data) {
         User user = BeanUtil.toBean(data, User.class);
+        user.setReadonly(false);
         baseService.saveUser(user);
         return success(user);
     }
@@ -191,7 +192,6 @@ public class UserController extends SuperCacheController<UserService, Long, User
     }
 
 
-
     @ApiOperation(value = "查询所有用户", notes = "查询所有用户")
     @GetMapping("/find")
     @SysLog("查询所有用户")
@@ -270,6 +270,7 @@ public class UserController extends SuperCacheController<UserService, Long, User
         }
         wrapper.like(User::getName, userPage.getName())
                 .like(User::getAccount, userPage.getAccount())
+                .eq(User::getReadonly, false)
                 .like(User::getEmail, userPage.getEmail())
                 .like(User::getMobile, userPage.getMobile())
                 .eq(User::getStation, userPage.getStation())

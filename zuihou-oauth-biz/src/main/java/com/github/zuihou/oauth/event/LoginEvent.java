@@ -1,6 +1,6 @@
-package com.github.zuihou.authority.event;
+package com.github.zuihou.oauth.event;
 
-import com.github.zuihou.authority.event.model.LoginStatusDTO;
+import com.github.zuihou.oauth.event.model.LoginStatusDTO;
 import org.springframework.context.ApplicationEvent;
 
 /**

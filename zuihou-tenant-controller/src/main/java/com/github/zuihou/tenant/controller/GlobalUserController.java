@@ -20,8 +20,12 @@ import com.github.zuihou.tenant.dto.GlobalUserPageDTO;
 import com.github.zuihou.tenant.dto.GlobalUserSaveDTO;
 import com.github.zuihou.tenant.dto.GlobalUserUpdateDTO;
 import com.github.zuihou.tenant.entity.GlobalUser;
+import com.github.zuihou.tenant.entity.Tenant;
+import com.github.zuihou.tenant.enumeration.TenantStatusEnum;
 import com.github.zuihou.tenant.service.GlobalUserService;
+import com.github.zuihou.tenant.service.TenantService;
 import com.github.zuihou.utils.BeanPlusUtil;
+import com.github.zuihou.utils.BizAssert;
 import com.github.zuihou.utils.DateUtils;
 import com.github.zuihou.utils.StrHelper;
 import io.swagger.annotations.Api;
@@ -61,12 +65,18 @@ public class GlobalUserController extends SuperController<GlobalUserService, Lon
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private TenantService tenantService;
 
     @Override
     public R<GlobalUser> handlerSave(GlobalUserSaveDTO model) {
         if (StrUtil.isEmpty(model.getTenantCode()) || BizConstant.SUPER_TENANT.equals(model.getTenantCode())) {
             return success(baseService.save(model));
         } else {
+            Tenant tenant = tenantService.getByCode(model.getTenantCode());
+            BizAssert.notNull(tenant, "租户不能为空");
+            BizAssert.isTrue(TenantStatusEnum.NORMAL.eq(tenant.getStatus()), StrUtil.format("租户[{}]不可用", tenant.getName()));
+
             BaseContextHandler.setTenant(model.getTenantCode());
             User user = BeanPlusUtil.toBean(model, User.class);
             user.setName(StrHelper.getOrDef(model.getName(), model.getAccount()));

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+
 public class MsgsCenterInfoReceiveServiceImpl extends SuperServiceImpl<MsgsCenterInfoReceiveMapper, MsgsCenterInfoReceive> implements MsgsCenterInfoReceiveService {
 
 }

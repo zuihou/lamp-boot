@@ -1,11 +1,17 @@
-package com.github.zuihou.authority.event.model;
+package com.github.zuihou.oauth.event.model;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.zuihou.authority.entity.auth.UserToken;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.log.util.AddressUtil;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -106,12 +112,12 @@ public class LoginStatusDTO implements Serializable {
         if (request == null) {
             return this;
         }
-        String ua = StrUtil.sub(request.getHeader("user-agent"), 0, 500);
-        String ip = ServletUtil.getClientIP(request);
-        String location = AddressUtil.getRegion(ip);
-        this.ua = ua;
-        this.ip = ip;
-        this.location = location;
+        String tempUa = StrUtil.sub(request.getHeader("user-agent"), 0, 500);
+        String tempIp = ServletUtil.getClientIP(request);
+        String tempLocation = AddressUtil.getRegion(tempIp);
+        this.ua = tempUa;
+        this.ip = tempIp;
+        this.location = tempLocation;
         return this;
     }
 

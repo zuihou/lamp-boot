@@ -23,8 +23,12 @@ public class DictionaryType {
      * 行政区级
      */
     public static final String AREA_LEVEL = "AREA_LEVEL";
+    /**
+     * 机构类型
+     */
+    public static final String ORG_TYPE = "ORG_TYPE";
     public static final String[] ALL = new String[]{
-            EDUCATION, NATION, POSITION_STATUS, AREA_LEVEL
+            EDUCATION, NATION, POSITION_STATUS, AREA_LEVEL, ORG_TYPE
     };
 
     private DictionaryType() {

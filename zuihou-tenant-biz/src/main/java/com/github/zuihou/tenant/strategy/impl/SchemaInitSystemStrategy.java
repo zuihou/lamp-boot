@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.tenant.dao.InitDbMapper;
+import com.github.zuihou.tenant.dto.TenantConnectDTO;
 import com.github.zuihou.tenant.strategy.InitSystemStrategy;
 import com.github.zuihou.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.sql.Connection;
@@ -28,8 +28,8 @@ import static com.github.zuihou.common.constant.BizConstant.BASE_DATABASE;
  * <p>
  * 初始化规则：
  * zuihou-authority-server/src/main/resources/sql 路径存放8个sql文件 (每个库对应一个文件)
- * zuihou_base.sql            # 基础库：权限、消息，短信，邮件，文件等
- * data_zuihou_base.sql       # 基础库数据： 如初始用户，初始角色，初始菜单
+ * zuihou_boot.sql            # 基础库：权限、消息，短信，邮件，文件等
+ * data_zuihou_boot.sql       # 基础库数据： 如初始用户，初始角色，初始菜单
  *
  * @author zuihou
  * @date 2019/10/25
@@ -47,6 +47,7 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
      * 可能不同的服务，会连接不同的库
      */
     private final static List<String> INIT_DATABASE_LIST = Arrays.asList(BASE_DATABASE);
+
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -57,14 +58,16 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
     @Autowired
     private DatabaseProperties databaseProperties;
 
-    @Override
-    public boolean init(String tenant) {
-        this.initDatabases(tenant);
-        this.initTables(tenant);
 
-        this.initData(tenant);
+    @Override
+    public boolean initConnect(TenantConnectDTO tenantConnect) {
+        String tenant = tenantConnect.getTenant();
+        this.initDatabases(tenant);
+        ScriptRunner runner = this.getScriptRunner();
+        this.initTables(runner, tenant);
+        this.initData(runner, tenant);
         // 切换为默认数据源
-        this.resetDatabase();
+        this.resetDatabase(runner);
 
         return true;
     }
@@ -83,15 +86,6 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
         } catch (Exception e) {
             log.error("重置数据失败", e);
             return false;
-        } finally {
-            try {
-                if (runner != null) {
-                    runner.closeConnection();
-                }
-            } catch (Exception e) {
-                log.error("关闭失败", e);
-            }
-            resetDatabase();
         }
         return true;
     }
@@ -101,10 +95,8 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
         INIT_DATABASE_LIST.forEach((database) -> this.initDbMapper.createDatabase(StrUtil.join(StrUtil.UNDERLINE, database, tenant)));
     }
 
-    public void initTables(String tenant) {
-        ScriptRunner runner = null;
+    public void initTables(ScriptRunner runner, String tenant) {
         try {
-            runner = this.getScriptRunner();
             for (String database : INIT_DATABASE_LIST) {
                 this.useDb(tenant, runner, database);
                 runner.runScript(Resources.getResourceAsReader(String.format(SQL_RESOURCE_PATH, database)));
@@ -112,14 +104,6 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
         } catch (Exception e) {
             log.error("初始化表失败", e);
             throw new BizException(-1, "初始化表失败");
-        } finally {
-            try {
-                if (runner != null) {
-                    runner.closeConnection();
-                }
-            } catch (Exception e) {
-                throw new BizException(-1, "提交失败");
-            }
         }
     }
 
@@ -130,11 +114,8 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
      *
      * @param tenant
      */
-    public void initData(String tenant) {
-        ScriptRunner runner = null;
+    public void initData(ScriptRunner runner, String tenant) {
         try {
-            runner = this.getScriptRunner();
-
             for (String database : INIT_DATABASE_LIST) {
                 this.useDb(tenant, runner, database);
                 String dataScript = database + "_data";
@@ -143,41 +124,21 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
         } catch (Exception e) {
             log.error("初始化数据失败", e);
             throw new BizException(-1, "初始化数据失败");
-        } finally {
-            try {
-                if (runner != null) {
-                    runner.closeConnection();
-                }
-            } catch (Exception e) {
-                throw new BizException(-1, "提交失败");
-            }
         }
     }
 
-    public void resetDatabase() {
-        ScriptRunner runner = null;
+    public void resetDatabase(ScriptRunner runner) {
         try {
-            runner = this.getScriptRunner();
-            Reader reader = new StringReader("use " + this.defaultDatabase + ";");
-            runner.runScript(reader);
+            runner.runScript(new StringReader(StrUtil.format("use {};", this.defaultDatabase)));
         } catch (Exception e) {
             log.error("切换为默认数据源失败", e);
             throw new BizException(-1, "切换为默认数据源失败");
-        } finally {
-            try {
-                if (runner != null) {
-                    runner.closeConnection();
-                }
-            } catch (Exception e) {
-                throw new BizException(-1, "切换为默认数据源失败");
-            }
         }
     }
 
     public String useDb(String tenant, ScriptRunner runner, String database) {
         String db = StrUtil.join(StrUtil.UNDERLINE, database, tenant);
-        Reader reader = new StringReader("use " + db + ";");
-        runner.runScript(reader);
+        runner.runScript(new StringReader(StrUtil.format("use {};", db)));
         return db;
     }
 
@@ -208,15 +169,18 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
 
 
     @Override
-    public boolean delete(List<String> tenantCodeList) {
+    public boolean delete(List<Long> ids, List<String> tenantCodeList) {
         if (tenantCodeList.isEmpty()) {
             return true;
         }
-        tenantCodeList.forEach((tenant) -> {
-            String databasePrefix = databaseProperties.getTenantDatabasePrefix();
-            String database = new StringBuilder().append(databasePrefix).append(StrPool.UNDERSCORE).append(tenant).toString();
-            initDbMapper.dropDatabase(database);
+
+        INIT_DATABASE_LIST.forEach((prefix) -> {
+            tenantCodeList.forEach((tenant) -> {
+                String database = new StringBuilder().append(prefix).append(StrPool.UNDERSCORE).append(tenant).toString();
+                initDbMapper.dropDatabase(database);
+            });
         });
+
         return true;
     }
 }
