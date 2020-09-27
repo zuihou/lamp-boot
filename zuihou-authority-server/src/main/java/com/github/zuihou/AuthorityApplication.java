@@ -5,7 +5,6 @@ import com.github.zuihou.validator.annotation.EnableFormValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -28,7 +27,7 @@ import java.net.UnknownHostException;
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @EnableFormValidator
 @EnableLoginArgResolver
-@EnableFeignClients("com.github.zuihou")
+//@EnableFeignClients("com.github.zuihou")
 public class AuthorityApplication {
     public static void main(String[] args) throws UnknownHostException {
         ConfigurableApplicationContext application = SpringApplication.run(AuthorityApplication.class, args);
