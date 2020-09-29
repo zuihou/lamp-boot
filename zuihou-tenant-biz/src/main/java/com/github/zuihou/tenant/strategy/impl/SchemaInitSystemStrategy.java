@@ -13,6 +13,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.io.StringReader;
@@ -60,6 +61,7 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean initConnect(TenantConnectDTO tenantConnect) {
         String tenant = tenantConnect.getTenant();
         this.initDatabases(tenant);
@@ -68,7 +70,6 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
         this.initData(runner, tenant);
         // 切换为默认数据源
         this.resetDatabase(runner);
-
         return true;
     }
 
