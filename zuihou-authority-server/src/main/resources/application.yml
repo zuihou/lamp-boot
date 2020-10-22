@@ -20,7 +20,7 @@ zuihou:
     database: zuihou_defaults
     username: root
     password: root
-    url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
     tenantDatabasePrefix: zuihou_boot
     multiTenantType: SCHEMA
@@ -182,35 +182,7 @@ spring:
     type: GENERIC
   datasource:
     # 从这里开始(dynamic)，中间的这段配置用于 zuihou.database.multiTenantType == DATASOURCE 时
-    dynamic:
-      enabled: false  # 这里一定要写成false， 是否开启根据 zuihou.database.multiTenantType 来决定
-      p6spy: true
-      seata: ${zuihou.database.isSeata:false}
-      druid:
-        initialSize: 10
-        minIdle: 10
-        maxActive: 200
-        max-wait: 60000
-        pool-prepared-statements: true
-        max-pool-prepared-statement-per-connection-size: 20
-        validation-query: SELECT 'x'
-        test-on-borrow: false
-        test-on-return: false
-        test-while-idle: true
-        time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-        min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
-        filters: stat,wall
-        wall:
-          comment-allow: true
-          multiStatementAllow: true
-          noneBaseStatementAllow: true
-      datasource:
-        master:       # 默认的数据源
-          username: ${zuihou.mysql.username}
-          password: ${zuihou.mysql.password}
-          driver-class-name: ${zuihou.mysql.driverClassName}
-          url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-          db-type: mysql
+    # 联系作者 购买太懂
     # 从这里结束(dynamic)，中间的这段配置用于 zuihou.database.multiTenantType == DATASOURCE 时
     druid:
       enable: true
@@ -218,7 +190,7 @@ spring:
       username: ${zuihou.mysql.username}
       password: ${zuihou.mysql.password}
       driver-class-name: ${zuihou.mysql.driverClassName}
-      url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      url: jdbc:mysql://${zuihou.mysql.ip}:${zuihou.mysql.port}/${zuihou.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
       db-type: mysql
       initialSize: 10
       minIdle: 10

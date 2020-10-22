@@ -1,10 +1,12 @@
-package com.github.zuihou.general.controller;
+package com.github.zuihou.oauth.controller;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.github.zuihou.authority.enumeration.auth.ApplicationAppTypeEnum;
 import com.github.zuihou.authority.enumeration.auth.AuthorizeType;
 import com.github.zuihou.authority.enumeration.auth.Sex;
 import com.github.zuihou.authority.enumeration.common.LogType;
+import com.github.zuihou.authority.service.common.DictionaryItemService;
+import com.github.zuihou.authority.service.common.ParameterService;
 import com.github.zuihou.base.BaseEnum;
 import com.github.zuihou.base.R;
 import com.github.zuihou.common.enums.HttpMethod;
@@ -20,8 +22,8 @@ import com.github.zuihou.tenant.enumeration.TenantStatusEnum;
 import com.github.zuihou.tenant.enumeration.TenantTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,10 +39,11 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RefreshScope
 @Api(value = "Common", tags = "通用Controller")
-public class AuthorityGeneralController {
-
+@AllArgsConstructor
+public class OauthGeneralController {
+    private final DictionaryItemService dictionaryItemService;
+    private final ParameterService parameterService;
 
     private final static Map<String, Map<String, String>> ENUM_MAP = new HashMap<>(8);
 
@@ -82,5 +85,16 @@ public class AuthorityGeneralController {
         return R.success(map);
     }
 
+
+    @ApiOperation(value = "根据类型编码查询字典项", notes = "根据类型编码查询字典项")
+    @GetMapping("/dictionaryItem/codes")
+    public R<Map<String, Map<String, String>>> list(@RequestParam("codes[]") String[] types) {
+        return R.success(this.dictionaryItemService.map(types));
+    }
+
+    @GetMapping("/parameter/value")
+    public R<String> getValue(@RequestParam(value = "key") String key, @RequestParam(value = "defVal") String defVal) {
+        return R.success(parameterService.getValue(key, defVal));
+    }
 }
 

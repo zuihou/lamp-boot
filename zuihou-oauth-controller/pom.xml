@@ -36,6 +36,19 @@
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-jwt-starter</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-file-entity</artifactId>
+            <version>${zuihou-project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zuihou</groupId>
+            <artifactId>zuihou-msgs-entity</artifactId>
+            <version>${zuihou-project.version}</version>
+        </dependency>
+
     </dependencies>
 
 

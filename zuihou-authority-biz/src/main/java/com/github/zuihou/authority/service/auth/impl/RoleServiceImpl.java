@@ -100,8 +100,8 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
         userRoleService.remove(Wraps.<UserRole>lbQ().in(UserRole::getRoleId, ids));
 
         ids.forEach((id) -> {
-            cacheChannel.evict(CacheKey.ROLE_MENU, String.valueOf(id));
-            cacheChannel.evict(CacheKey.ROLE_RESOURCE, String.valueOf(id));
+            cacheChannel.evict(CacheKey.ROLE_MENU, key(id));
+            cacheChannel.evict(CacheKey.ROLE_RESOURCE, key(id));
         });
 
         if (!userIds.isEmpty()) {
@@ -114,6 +114,14 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
         return removeFlag;
     }
 
+    /**
+     * 1、根据 {tenant}:USER_ROLE:{userId} 查询用户拥有的角色ID集合
+     * 2、缓存中有，则根据角色ID集合查询 角色集合
+     * 3、缓存中有查不到，则从DB查询，并写入缓存， 立即返回
+     *
+     * @param userId 用户id
+     * @return
+     */
     @Override
     public List<Role> findRoleByUserId(Long userId) {
         String key = key(userId);
@@ -163,7 +171,7 @@ public class RoleServiceImpl extends SuperCacheServiceImpl<RoleMapper, Role> imp
 
         saveRoleOrg(userId, role, data.getOrgList());
 
-        cacheChannel.set(CacheKey.ROLE, String.valueOf(role.getId()), role);
+        cacheChannel.set(CacheKey.ROLE, key(role.getId()), role);
     }
 
     @Override

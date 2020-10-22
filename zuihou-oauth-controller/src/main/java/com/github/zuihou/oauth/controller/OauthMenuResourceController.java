@@ -1,10 +1,17 @@
 package com.github.zuihou.oauth.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import com.github.zuihou.authority.dto.auth.ResourceQueryDTO;
 import com.github.zuihou.authority.dto.auth.RouterMeta;
 import com.github.zuihou.authority.dto.auth.VueRouter;
 import com.github.zuihou.authority.entity.auth.Menu;
+import com.github.zuihou.authority.entity.auth.Resource;
+import com.github.zuihou.authority.entity.auth.Role;
 import com.github.zuihou.authority.service.auth.MenuService;
+import com.github.zuihou.authority.service.auth.ResourceService;
+import com.github.zuihou.authority.service.auth.RoleService;
 import com.github.zuihou.base.R;
+import com.github.zuihou.common.constant.BizConstant;
 import com.github.zuihou.dozer.DozerUtils;
 import com.github.zuihou.security.annotation.LoginUser;
 import com.github.zuihou.security.model.SysUser;
@@ -13,39 +20,71 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.github.zuihou.utils.StrPool.DEF_PARENT_ID;
 
 
 /**
  * <p>
  * 前端控制器
- * 菜单
+ * 资源 角色 菜单
  * </p>
  *
  * @author zuihou
  * @date 2019-07-22
  */
 @Slf4j
-@Validated
 @RestController
-@RequestMapping("/menu")
-@Api(value = "Menu", tags = "菜单")
-public class OauthMenuController {
+@AllArgsConstructor
+@Api(value = "OauthMenuResource", tags = "资源")
+public class OauthMenuResourceController {
+    private final DozerUtils dozer;
+    private final ResourceService resourceService;
+    private final MenuService menuService;
+    private final RoleService roleService;
 
-    @Autowired
-    private DozerUtils dozer;
-    @Autowired
-    private MenuService menuService;
+    /**
+     * 查询用户可用的所有资源
+     *
+     * @param resource <br>
+     *                 menuId 菜单 <br>
+     *                 userId 当前登录人id
+     * @return
+     */
+    @ApiOperation(value = "查询用户可用的所有资源", notes = "查询用户可用的所有资源")
+    @GetMapping("/resource/visible")
+    public R<Collection<String>> visible(ResourceQueryDTO resource, @ApiIgnore @LoginUser SysUser sysUser) {
+        if (resource == null) {
+            resource = new ResourceQueryDTO();
+        }
+
+        if (resource.getUserId() == null) {
+            resource.setUserId(sysUser.getId());
+        }
+        List<Resource> resourceList = resourceService.findVisibleResource(resource);
+        List<Role> roleList = roleService.findRoleByUserId(resource.getUserId());
+        Collection<String> list = CollUtil.union(
+                resourceList.stream().filter(Objects::nonNull).map(Resource::getCode).collect(Collectors.toSet()),
+                roleList.stream().filter(Objects::nonNull).map(this::splicing).collect(Collectors.toSet())
+        );
+        return R.success(list);
+    }
+
+    private String splicing(Role role) {
+        return BizConstant.ROLE_PREFIX + role.getCode();
+    }
 
     /**
      * 查询用户可用的所有资源
@@ -59,7 +98,7 @@ public class OauthMenuController {
             @ApiImplicitParam(name = "userId", value = "用户id", dataType = "long", paramType = "query"),
     })
     @ApiOperation(value = "查询用户可用的所有菜单", notes = "查询用户可用的所有菜单")
-    @GetMapping("/menus")
+    @GetMapping("/menu/menus")
     public R<List<Menu>> myMenus(@RequestParam(value = "group", required = false) String group,
                                  @RequestParam(value = "userId", required = false) Long userId,
                                  @ApiIgnore @LoginUser SysUser sysUser) {
@@ -76,7 +115,7 @@ public class OauthMenuController {
             @ApiImplicitParam(name = "userId", value = "用户id", dataType = "long", paramType = "query"),
     })
     @ApiOperation(value = "查询用户可用的所有菜单路由树", notes = "查询用户可用的所有菜单路由树")
-    @GetMapping("/router")
+    @GetMapping("/menu/router")
     public R<List<VueRouter>> myRouter(@RequestParam(value = "group", required = false) String group,
                                        @RequestParam(value = "userId", required = false) Long userId,
                                        @ApiIgnore @LoginUser SysUser sysUser) {
@@ -94,7 +133,7 @@ public class OauthMenuController {
      * @return
      */
     @ApiOperation(value = "查询超管菜单路由树", notes = "查询超管菜单路由树")
-    @GetMapping("/admin/router")
+    @GetMapping("/menu/admin/router")
     public R<List<VueRouter>> adminRouter() {
         return R.success(buildSuperAdminRouter());
     }
@@ -102,18 +141,6 @@ public class OauthMenuController {
     private List<VueRouter> buildSuperAdminRouter() {
         List<VueRouter> tree = new ArrayList<>();
         List<VueRouter> children = new ArrayList<>();
-
-        VueRouter datasourceConfig = new VueRouter();
-        datasourceConfig.setPath("/defaults/datasourceconfig");
-        datasourceConfig.setComponent("zuihou/defaults/datasourceconfig/Index");
-        datasourceConfig.setName("数据源(联系zuihou开通)");
-        datasourceConfig.setHidden(false);
-        datasourceConfig.setMeta(RouterMeta.builder()
-                .title("数据源(联系zuihou开通)").breadcrumb(true).icon("")
-                .build());
-        datasourceConfig.setId(-4L);
-        datasourceConfig.setParentId(-1L);
-        children.add(datasourceConfig);
 
         VueRouter tenant = new VueRouter();
         tenant.setPath("/defaults/tenant");
@@ -129,7 +156,7 @@ public class OauthMenuController {
                 .title("租户管理").breadcrumb(true).icon("")
                 .build());
         tenant.setId(-2L);
-        tenant.setParentId(-1L);
+        tenant.setParentId(DEF_PARENT_ID);
         children.add(tenant);
 
         VueRouter globalUser = new VueRouter();
@@ -141,7 +168,7 @@ public class OauthMenuController {
                 .title("运营用户").breadcrumb(true).icon("")
                 .build());
         globalUser.setId(-3L);
-        globalUser.setParentId(-1L);
+        globalUser.setParentId(DEF_PARENT_ID);
         children.add(globalUser);
 
         VueRouter defaults = new VueRouter();

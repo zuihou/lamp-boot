@@ -21,6 +21,10 @@ public interface BizConstant {
      */
     Long DEMO_ORG_ID = 101L;
     /**
+     * 角色前缀
+     */
+    String ROLE_PREFIX = "ROLE_";
+    /**
      * 演示用的岗位ID
      */
     Long DEMO_STATION_ID = 101L;
@@ -46,7 +50,11 @@ public interface BizConstant {
     /**
      * 基础库
      */
-    String BASE_DATABASE = "zuihou_boot";
+    String BASE_DATABASE = "zuihou_base";
+    /**
+     * 扩展库
+     */
+    String EXTEND_DATABASE = "zuihou_extend";
 
     /**
      * 被T

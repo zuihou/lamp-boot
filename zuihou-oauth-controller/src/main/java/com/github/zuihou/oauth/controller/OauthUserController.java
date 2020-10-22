@@ -6,14 +6,17 @@ import com.github.zuihou.security.feign.UserQuery;
 import com.github.zuihou.security.model.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * <p>
@@ -29,9 +32,9 @@ import java.util.Set;
 @RestController
 @RequestMapping("/user")
 @Api(value = "User", tags = "用户")
+@AllArgsConstructor
 public class OauthUserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     /**
      * 单体查询用户
@@ -55,44 +58,6 @@ public class OauthUserController {
     @GetMapping(value = "/ds/{id}")
     public Map<String, Object> getDataScopeById(@PathVariable("id") Long id) {
         return userService.getDataScopeById(id);
-    }
-
-    /**
-     * 调用方传递的参数类型是 Set<Serializable> ，但接收方必须指定为Long类型（实体的主键类型），否则在调用mp提供的方法时，会使得mysql出现类型隐式转换问题。
-     * 问题如下: select * from org where id in ('100');
-     * <p>
-     * 强制转换成Long后，sql就能正常执行: select * from org where id in (100);
-     *
-     * <p>
-     * 接口和实现类的类型不一致，但也能调用，归功于 SpingBoot 的自动转换功能
-     * {@link com.github.zuihou.oauth.api.UserApi#findUserByIds} 方法的实现类
-     *
-     * @param ids id
-     * @return
-     */
-    @ApiOperation(value = "根据id查询用户", notes = "根据id查询用户")
-    @GetMapping("/findUserByIds")
-    public Map<Serializable, Object> findUserByIds(@RequestParam(value = "ids") Set<Serializable> ids) {
-        return userService.findUserByIds(ids);
-    }
-
-    /**
-     * 调用方传递的参数类型是 Set<Serializable> ，但接收方必须指定为Long类型（实体的主键类型），否则在调用mp提供的方法时，会使得mysql出现类型隐式转换问题。
-     * 问题如下: select * from org where id in ('100');
-     * <p>
-     * 强制转换成Long后，sql就能正常执行: select * from org where id in (100);
-     *
-     * <p>
-     * 接口和实现类的类型不一致，但也能调用，归功于 SpingBoot 的自动转换功能
-     * {@link com.github.zuihou.oauth.api.UserApi#findUserNameByIds} 方法的实现类
-     *
-     * @param ids id
-     * @return
-     */
-    @ApiOperation(value = "根据id查询用户名称", notes = "根据id查询用户名称")
-    @GetMapping("/findUserNameByIds")
-    public Map<Serializable, Object> findUserNameByIds(@RequestParam(value = "ids") Set<Serializable> ids) {
-        return userService.findUserNameByIds(ids);
     }
 
 }
