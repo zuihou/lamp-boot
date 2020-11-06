@@ -60,17 +60,6 @@ public class TenantServiceImpl extends SuperCacheServiceImpl<TenantMapper, Tenan
      */
     @Override
     public Tenant getByCode(String tenant) {
-        // 优化前
-        /*String key = buildKey(tenant);
-        CacheObject cacheObject = cacheChannel.get(TENANT_NAME, key, (k) -> {
-            Tenant one = super.getOne(Wraps.<Tenant>lbQ().eq(Tenant::getCode, tenant));
-            return one != null ? one.getId() : null;
-        });
-        if (cacheObject.getValue() == null) {
-            return null;
-        }
-        Long id = (Long) cacheObject.getValue();
-        return getByIdCache(id);*/
 
         // 优化后
         String key = buildKey(tenant);

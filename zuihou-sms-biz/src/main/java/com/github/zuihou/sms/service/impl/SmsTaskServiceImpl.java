@@ -1,5 +1,6 @@
 package com.github.zuihou.sms.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -24,7 +25,6 @@ import com.github.zuihou.sms.util.PhoneUtils;
 import com.github.zuihou.utils.BizAssert;
 import com.github.zuihou.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +62,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
 
     private static String content(ProviderType providerType, String templateContent, String templateParams) {
         try {
-            if (StringUtils.isNotEmpty(templateParams)) {
+            if (StrUtil.isNotEmpty(templateParams)) {
                 JSONObject param = JSONObject.parseObject(templateParams, Feature.OrderedField);
                 return processTemplate(templateContent, providerType.getRegex(), param);
             }
@@ -114,7 +114,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
 
             smsTask.setTemplateId(template.getId());
 
-            if (StringUtils.isEmpty(smsTask.getTopic())) {
+            if (StrUtil.isEmpty(smsTask.getTopic())) {
                 smsTask.setTopic(template.getSignName());
             }
         } else {
@@ -132,7 +132,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
             BizAssert.isTrue(flag, BASE_VALID_PARAM.build("定时发送时间至少在当前时间的5分钟之后"));
         }
 
-        if (StringUtils.isNotEmpty(smsTask.getContent()) && smsTask.getContent().length() > 450) {
+        if (StrUtil.isNotEmpty(smsTask.getContent()) && smsTask.getContent().length() > 450) {
             throw new BizException(BASE_VALID_PARAM.getCode(), "发送内容不能超过500字");
         }
 
@@ -140,7 +140,7 @@ public class SmsTaskServiceImpl extends SuperServiceImpl<SmsTaskMapper, SmsTask>
         JSONObject obj = JSONObject.parseObject(templateParams, Feature.OrderedField);
         BizAssert.notNull(obj, BASE_VALID_PARAM.build("短信参数格式必须为严格的json字符串"));
 
-        if (StringUtils.isEmpty(smsTask.getContent())) {
+        if (StrUtil.isEmpty(smsTask.getContent())) {
             smsTask.setContent(content(template.getProviderType(), template.getContent(), smsTask.getTemplateParams()));
         }
 

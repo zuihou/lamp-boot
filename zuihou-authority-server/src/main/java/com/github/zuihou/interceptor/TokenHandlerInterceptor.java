@@ -6,7 +6,7 @@ import cn.hutool.core.util.URLUtil;
 import com.github.zuihou.base.R;
 import com.github.zuihou.common.constant.BizConstant;
 import com.github.zuihou.common.constant.CacheKey;
-import com.github.zuihou.common.properties.IgnoreTokenProperties;
+import com.github.zuihou.common.properties.IgnoreProperties;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.properties.DatabaseProperties;
@@ -52,7 +52,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
     @Value("${spring.profiles.active:dev}")
     protected String profiles;
-    private final IgnoreTokenProperties ignoreTokenProperties;
+    private final IgnoreProperties ignoreTokenProperties;
     private final DatabaseProperties databaseProperties;
 
     @Autowired
@@ -60,7 +60,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private TokenUtil tokenUtil;
 
-    public TokenHandlerInterceptor(IgnoreTokenProperties ignoreTokenProperties, DatabaseProperties databaseProperties) {
+    public TokenHandlerInterceptor(IgnoreProperties ignoreTokenProperties, DatabaseProperties databaseProperties) {
         this.ignoreTokenProperties = ignoreTokenProperties;
         this.databaseProperties = databaseProperties;
     }
@@ -74,45 +74,42 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
         BaseContextHandler.setBoot(true);
         String traceId = IdUtil.fastSimpleUUID();
         MDC.put(BaseContextConstants.LOG_TRACE_ID, traceId);
-
-        String uri = request.getRequestURI();
-        AuthInfo authInfo = null;
         try {
             //1, 解码 请求头中的租户信息
-            if (!MultiTenantType.NONE.eq(databaseProperties.getMultiTenantType())) {
-                String base64Tenant = getHeader(JWT_KEY_TENANT, request);
-                if (StrUtil.isNotEmpty(base64Tenant)) {
-                    String tenant = JwtUtil.base64Decoder(base64Tenant);
-                    BaseContextHandler.setTenant(tenant);
-                    MDC.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
-                }
-            }
+            parseTenant(request);
 
             // 2,解码 Authorization 后面完善
-            String base64Authorization = getHeader(BASIC_HEADER_KEY, request);
-            if (StrUtil.isNotEmpty(base64Authorization)) {
-                String[] client = JwtUtil.getClient(base64Authorization);
-                BaseContextHandler.setClientId(client[0]);
-            }
+            parseClient(request);
 
-            // 忽略 token 认证的接口
-            if (isIgnoreToken(uri)) {
-                log.debug("access filter not execute");
-                return super.preHandle(request, response, handler);
-            }
+            // 3，解析token
+            parseToken(request);
+        } catch (BizException e) {
+            throw BizException.wrap(e.getCode(), e.getMessage());
+        } catch (Exception e) {
+            throw BizException.wrap(R.FAIL_CODE, "验证token出错");
+        }
 
-            //获取token， 解析，然后想信息放入 heade
-            //3, 获取token
-            String token = getHeader(BEARER_HEADER_KEY, request);
+        return super.preHandle(request, response, handler);
+    }
 
-            //添加测试环境的特殊token
-            if (isDev() && (StrPool.TEST_TOKEN.equalsIgnoreCase(token) || StrPool.TEST.equalsIgnoreCase(token))) {
-                authInfo = new AuthInfo().setAccount("zuihou").setUserId(3L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
-            }
-            // 4, 解析 并 验证 token
-            if (authInfo == null) {
-                authInfo = tokenUtil.getAuthInfo(token);
-            }
+    private boolean parseToken(HttpServletRequest request) throws Exception {
+        String uri = request.getRequestURI();
+        // 忽略 token 认证的接口
+        if (isIgnoreToken(uri)) {
+            log.debug("access filter not execute");
+            return true;
+        }
+
+        //获取token， 解析，然后想信息放入 heade
+        //3, 获取token
+        String token = getHeader(BEARER_HEADER_KEY, request);
+
+        AuthInfo authInfo;
+        //添加测试环境的特殊token
+        if (isDev(token)) {
+            authInfo = new AuthInfo().setAccount("zuihou").setUserId(3L).setTokenType(BEARER_HEADER_KEY).setName("平台管理员");
+        } else {
+            authInfo = tokenUtil.getAuthInfo(token);
 
             // 5，验证 是否在其他设备登录或被挤下线
             String newToken = JwtUtil.getToken(token);
@@ -123,11 +120,8 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             } else if (StrUtil.equals(BizConstant.LOGIN_STATUS, (String) tokenCache.getValue())) {
                 throw BizException.wrap(JWT_OFFLINE);
             }
-        } catch (BizException e) {
-            throw BizException.wrap(e.getCode(), e.getMessage());
-        } catch (Exception e) {
-            throw BizException.wrap(R.FAIL_CODE, "验证token出错");
         }
+
 
         //6, 转换，将 token 解析出来的用户身份 和 解码后的tenant、Authorization 重新封装到请求头
         if (authInfo != null) {
@@ -136,11 +130,43 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             BaseContextHandler.setName(authInfo.getName());
             MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(authInfo.getUserId()));
         }
-        return super.preHandle(request, response, handler);
+        return false;
+    }
+
+    private void parseClient(HttpServletRequest request) {
+        String base64Authorization = getHeader(BASIC_HEADER_KEY, request);
+        if (StrUtil.isNotEmpty(base64Authorization)) {
+            String[] client = JwtUtil.getClient(base64Authorization);
+            BaseContextHandler.setClientId(client[0]);
+        }
+    }
+
+    /**
+     * 忽略 租户编码
+     *
+     * @return
+     */
+    protected boolean isIgnoreTenant(String path) {
+        return MultiTenantType.NONE.eq(databaseProperties.getMultiTenantType()) || ignoreTokenProperties.isIgnoreTenant(path);
+    }
+
+    private void parseTenant(HttpServletRequest request) {
+        if (isIgnoreTenant(request.getRequestURI())) {
+            return;
+        }
+        String base64Tenant = getHeader(JWT_KEY_TENANT, request);
+        if (StrUtil.isNotEmpty(base64Tenant)) {
+            String tenant = JwtUtil.base64Decoder(base64Tenant);
+            BaseContextHandler.setTenant(tenant);
+            MDC.put(BaseContextConstants.JWT_KEY_TENANT, BaseContextHandler.getTenant());
+        }
     }
 
     private String getHeader(String name, HttpServletRequest request) {
         String value = request.getHeader(name);
+        if (StringUtils.isEmpty(value)) {
+            value = request.getParameter(name);
+        }
         if (StringUtils.isEmpty(value)) {
             return null;
         }
@@ -148,8 +174,8 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     }
 
 
-    protected boolean isDev() {
-        return !StrPool.PROD.equalsIgnoreCase(profiles);
+    protected boolean isDev(String token) {
+        return !StrPool.PROD.equalsIgnoreCase(profiles) && (StrPool.TEST_TOKEN.equalsIgnoreCase(token) || StrPool.TEST.equalsIgnoreCase(token));
     }
 
     /**

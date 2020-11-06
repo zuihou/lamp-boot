@@ -4,13 +4,13 @@ import com.github.zuihou.authority.ext.UserResolverServiceImpl;
 import com.github.zuihou.authority.service.auth.UserService;
 import com.github.zuihou.authority.service.common.OptLogService;
 import com.github.zuihou.boot.config.BaseConfig;
-import com.github.zuihou.common.properties.IgnoreTokenProperties;
+import com.github.zuihou.common.properties.IgnoreProperties;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.interceptor.TokenHandlerInterceptor;
 import com.github.zuihou.log.event.SysLogListener;
 import com.github.zuihou.security.feign.UserResolverService;
 import com.github.zuihou.security.properties.SecurityProperties;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,13 +25,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @createTime 2017-12-15 14:42
  */
 @Configuration
-@EnableConfigurationProperties({IgnoreTokenProperties.class})
+@EnableConfigurationProperties({IgnoreProperties.class})
+@AllArgsConstructor
 public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private IgnoreTokenProperties ignoreTokenProperties;
-    @Autowired
-    private DatabaseProperties databaseProperties;
+    private final IgnoreProperties ignoreTokenProperties;
+    private final DatabaseProperties databaseProperties;
 
     @Bean
     public HandlerInterceptor getTokenHandlerInterceptor() {
