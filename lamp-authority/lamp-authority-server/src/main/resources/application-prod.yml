@@ -1,0 +1,43 @@
+lamp:
+  nginx:
+    ip: tangyh.top
+    port: 10000
+  redis:
+    ip: 127.0.0.1
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
+  rabbitmq:
+    enabled: false
+    ip: 127.0.0.1
+    port: 5672
+    username: zuihou
+    password: zuihou
+  mysql:
+    ip: 127.0.0.1
+    port: 3218
+    driverClassName: com.mysql.cj.jdbc.Driver
+    database: lamp_boot_column
+    username: root
+    password: ZHadmin123.
+  database:
+    isNotWrite: true
+  swagger:
+    # 正式环境用nginx代理，为了保持和cloud版本一致的URL，特意调整
+    docket:
+      general:
+        base-path: /api/oauth
+      oauth:
+        base-path: /api/oauth
+      auth:
+        base-path: /api/authority
+      common:
+        base-path: /api/authority
+      core:
+        base-path: /api/authority
+      tenant:
+        base-path: /api/tenant
+      msg:
+        base-path: /api/msg
+      file:
+        base-path: /api/file

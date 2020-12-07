@@ -3,48 +3,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <version>b.2.7.0-SNAPSHOT</version>
-    <groupId>com.github.zuihou</groupId>
-    <artifactId>zuihou-admin-boot</artifactId>
-    <name>${project.artifactId}</name>
-    <description>zuihou-admin-boot</description>
+    <groupId>com.tangyh.lamp</groupId>
+    <artifactId>lamp-boot</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
+    <url>https://gitee.com/zuihou111/lamp-boot</url>
+    <name>${project.artifactId}</name>
+    <description>lamp-boot-plus</description>
+    <developers>
+        <developer>
+            <name>zuihou</name>
+            <email>306479353@qq.com</email>
+        </developer>
+    </developers>
 
     <modules>
-        <module>zuihou-public/zuihou-common</module>
-        <module>zuihou-authority-entity</module>
-        <module>zuihou-msgs-entity</module>
-        <module>zuihou-file-entity</module>
-        <module>zuihou-authority-biz</module>
-        <module>zuihou-authority-controller</module>
-        <module>zuihou-file-biz</module>
-        <module>zuihou-file-controller</module>
-        <module>zuihou-msgs-biz</module>
-        <module>zuihou-msgs-controller</module>
-        <module>zuihou-sms-biz</module>
-        <module>zuihou-sms-controller</module>
-        <module>zuihou-oauth-biz</module>
-        <module>zuihou-oauth-controller</module>
-        <module>zuihou-tenant-entity</module>
-        <module>zuihou-tenant-biz</module>
-        <module>zuihou-tenant-controller</module>
-        <module>zuihou-authority-server</module>
-        <module>zuihou-jobs</module>
+        <module>lamp-public/lamp-common</module>
+        <module>lamp-oauth</module>
+        <module>lamp-authority</module>
+        <module>lamp-tenant</module>
+        <module>lamp-msg</module>
+        <module>lamp-file</module>
+        <module>lamp-gateway</module>
     </modules>
 
     <properties>
-        <zuihou-commons.version>2.7.0</zuihou-commons.version>
-        <zuihou-project.version>b.2.7.0-SNAPSHOT</zuihou-project.version>
-
+        <lamp-util.version>3.0.0</lamp-util.version>
+        <lamp-project.version>3.0.0-SNAPSHOT</lamp-project.version>
+        <seata.version>1.3.0</seata.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -52,92 +38,106 @@
         <docker.image.prefix>zuihou</docker.image.prefix>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
-        <spring-boot-maven-plugin.version>2.2.9.RELEASE</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>2.3.6.RELEASE</spring-boot-maven-plugin.version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-dependencies</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-dependencies</artifactId>
+                <version>${lamp-util.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-boot</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-annotation</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-cache-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-boot</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-core</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-cache-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-databases</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-security-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-dozer-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-core</artifactId>
+                <version>${lamp-util.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-databases</artifactId>
+                <version>${lamp-util.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-dozer-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-injection-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-injection-starter</artifactId>
+                <version>${lamp-util.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-jwt-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-j2cache-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-log-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-jwt-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-mq-starter</artifactId>
+                <version>${lamp-util.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-swagger2-starter</artifactId>
+                <version>${lamp-util.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-validator-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-log-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-xss-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-mq-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>com.tangyh.basic</groupId>
+                <artifactId>lamp-zipkin-client-starter</artifactId>
+                <version>${lamp-util.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-swagger2-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-security-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-validator-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.zuihou</groupId>
-                <artifactId>zuihou-xss-starter</artifactId>
-                <version>${zuihou-commons.version}</version>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>${seata.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -170,14 +170,8 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
+
         <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -185,7 +179,15 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
         </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
