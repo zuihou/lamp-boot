@@ -61,7 +61,7 @@
             </dependency>
             <dependency>
                 <groupId>com.tangyh.basic</groupId>
-                <artifactId>lamp-boot</artifactId>
+            <artifactId>lamp-boot-util</artifactId>
                 <version>${lamp-util.version}</version>
             </dependency>
             <dependency>
