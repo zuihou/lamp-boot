@@ -24,7 +24,6 @@
         <module>lamp-tenant</module>
         <module>lamp-msg</module>
         <module>lamp-file</module>
-        <module>lamp-gateway</module>
     </modules>
 
     <properties>
