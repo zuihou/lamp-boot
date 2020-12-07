@@ -45,12 +45,6 @@
             <artifactId>lamp-tenant-controller</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.tangyh.lamp</groupId>
-            <artifactId>lamp-gateway-biz</artifactId>
-            <version>${lamp-project.version}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>com.tangyh.basic</groupId>
