@@ -26,7 +26,7 @@
 | 单体版 | https://gitee.com/zuihou111/lamp-boot | https://github.com/zuihou/lamp-boot | SpringBoot 版(和lamp-cloud功能基本一致)|
 | 租户后台 | https://gitee.com/zuihou111/lamp-web | https://github.com/zuihou/lamp-web | PC端管理系统 |
 | 代码生成器 | https://gitee.com/zuihou111/lamp-generator | https://github.com/zuihou/lamp-generator | 给开发人员使用 |
-| 定时调度器 | https://gitee.com/zuihou111/lamp-jobs | https://github.com/zuihou/lamp-jobs | 尚未开发 |
+| 定时调度器 | https://gitee.com/zuihou111/lamp-job | https://github.com/zuihou/lamp-job | 尚未开发 |
 
 # lamp-boot 简介
 `lamp-boot`的前身是`zuihou-admin-boot`，从3.0.0版本开始，改名为lamp-boot，它是`lamp`项目的其中一员。
@@ -53,7 +53,7 @@
 | SCHEMA(独立schema) | 每个租户独立一个 数据库(schema)，执行sql时，动态在表名前增加schema | 简单、开发无感知、数据隔离性好 | 配置文件中必须配置数据库的root账号、不支持复杂sql和 sql嵌套自定义函数 | 
 | DATASOURCE(独立数据源) | 每个租户独立一个 数据库(数据源)，执行代码时，动态切换数据源 | 可独立部署数据库，数据隔离性好、扩展性高、故障影响小 | 相对复杂、开发需要注意切换数据源时的事务问题、需要较多的数据库 |
 
-## lamp 会员版项目演示地址 (服务器没法备案，只能加上端口~~~)
+## lamp 会员版项目演示地址
 - 地址： http://tangyh.top:10000/lamp-web/
 - 以下内置账号仅限于内置的0000租户 
 - 平台管理员： lamp_pt/lamp (内置给公司内部运营人员使用)
