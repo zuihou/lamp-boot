@@ -38,6 +38,12 @@
 核心技术采用SpringBoot、Mybatis、Redis、RabbitMQ、FastDFS/MinIO、SkyWalking等主要框架和中间件。
 希望能努力打造一套从 `JavaWeb基础框架` - `单体架构` - `持续集成` - `系统监测` 的解决方案。`本项目旨在实现基础能力，不涉及具体业务。`
 
+**切记:使用本项目之前，先下载并编译 [lamp-util](https://github.com/zuihou/lamp-util)**
+
+**切记:使用本项目之前，先下载并编译 [lamp-util](https://github.com/zuihou/lamp-util)**
+
+**切记:使用本项目之前，先下载并编译 [lamp-util](https://github.com/zuihou/lamp-util)**
+
 ## 分支介绍
 1. master 分支为最新的稳定版本，每次提交都会升级一个版本号
 2. dev 分支为作者的开发分支，作者开发的最新功能会实时提交上来，喜欢尝鲜的可以切换为dev。 但可能有报错、漏提等，对项目不是很熟的朋友千万别尝试。
