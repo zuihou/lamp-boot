@@ -24,7 +24,7 @@ lamp:
     password: root
     url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
-    tenantDatabasePrefix: lamp_boot
+    tenantDatabasePrefix: lamp_base
     multiTenantType: COLUMN
     isNotWrite: false
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
