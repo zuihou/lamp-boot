@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.tangyh.lamp.common.constant.BizConstant.BASE_DATABASE;
-import static com.tangyh.lamp.common.constant.BizConstant.EXTEND_DATABASE;
 
 /**
  * 初始化系统
@@ -49,7 +48,7 @@ public class SchemaInitSystemStrategy implements InitSystemStrategy {
      * 需要初始化的库
      * 可能不同的服务，会连接不同的库
      */
-    private static final List<String> INIT_DATABASE_LIST = Arrays.asList(BASE_DATABASE, EXTEND_DATABASE);
+    private static final List<String> INIT_DATABASE_LIST = Arrays.asList(BASE_DATABASE);
 
     private final DataSource dataSource;
     private final InitDbMapper initDbMapper;
