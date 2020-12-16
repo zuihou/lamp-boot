@@ -54,13 +54,16 @@ lamp:
     # 是否开启URI权限校验
     enabled: true
     type: SERVICE
+    caseSensitive: false
+  authentication:
+    expire: 28800               # token有效期为8小时
+    refreshExpire: 86400        # 刷新token有效期为24小时
   log:
     enabled: true
     type: DB
-  context:
-    # 上下文拦截器
-    pathPatterns: '/**'
-    order: -20
+  xss:
+    enabled: true
+    requestBodyEnabled: false
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
@@ -80,7 +83,7 @@ lamp:
     license: Powered By zuihou
     licenseUrl: https://github.com/zuihou
     termsOfServiceUrl: https://github.com/zuihou
-    version: @project.version@
+    version: '@project.version@'
     global-operation-parameters:
       - name: token
         description: 用户身份token
@@ -138,11 +141,9 @@ setting:
   path:
     uploadPath: /data/projects/uploadfile/temp/
 
-authentication:
-  expire: 28800               # token有效期为8小时
-  refreshExpire: 86400        # 刷新token有效期为24小时
 
 server:
+  shutdown: GRACEFUL
   servlet:
     encoding:
       enabled: true
@@ -172,6 +173,9 @@ management:
       enabled: true
 
 spring:
+  lifecycle:
+    # 优雅停机宽限期时间
+    timeout-per-shutdown-phase: 30s
   freemarker:
     suffix: .ftl
     cache: false

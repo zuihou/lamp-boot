@@ -20,7 +20,7 @@ then
     PROFILES="prod"
 fi
 
-JAVA_OPT="-server -Xms256M -Xmx256M -Xss512k -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128M -XX:+UseG1GC"
+JAVA_OPT="-server -Xms2G -Xmx2G -Xss512k -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=512M -XX:+UseG1GC"
 JAVA_OPT=$JAVA_OPT" -Dspring.profiles.active=$PROFILES"
 echo $JAVA_OPT
 
@@ -32,7 +32,7 @@ function start()
 		echo "$MODULER is running..."
 	else
 		echo "Start $MODULER success..."
-		nohup java -jar $JAVA_OPT $MODULER.jar $MODULER > /dev/null 2>&1 &
+		JENKINS_NODE_COOKIE=dontKillMe nohup java -jar $JAVA_OPT $MODULER.jar $MODULER > /dev/null 2>&1 &
 	fi
 }
 
@@ -47,8 +47,8 @@ function stop()
     	count=`ps -ef | grep java | grep $MODULER | grep -v grep | wc -l`
 
       pid=`ps -ef | grep java | grep $MODULER | grep -v grep | awk '{print $2}'`
-      kill -9 $pid
 
+      kill -2 $pid
       echo "Stop $MODULER Success"
 	fi
 }

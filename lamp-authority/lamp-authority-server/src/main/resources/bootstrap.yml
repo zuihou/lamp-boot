@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: @project.artifactId@
+    name: '@project.artifactId@'
   profiles:
     active: dev
 logging:
