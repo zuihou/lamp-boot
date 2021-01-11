@@ -20,7 +20,11 @@
             <artifactId>lamp-msg-entity</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.tangyh.lamp</groupId>
+            <artifactId>lamp-common-api</artifactId>
+            <version>${lamp-project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>

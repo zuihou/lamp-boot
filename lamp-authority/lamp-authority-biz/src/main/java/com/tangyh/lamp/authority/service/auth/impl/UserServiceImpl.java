@@ -5,13 +5,13 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tangyh.basic.base.request.PageParams;
 import com.tangyh.basic.base.request.PageUtil;
 import com.tangyh.basic.base.service.SuperCacheServiceImpl;
 import com.tangyh.basic.cache.model.CacheKey;
 import com.tangyh.basic.cache.model.CacheKeyBuilder;
+import com.tangyh.basic.context.ContextUtil;
 import com.tangyh.basic.database.mybatis.auth.DataScope;
 import com.tangyh.basic.database.mybatis.auth.DataScopeType;
 import com.tangyh.basic.database.mybatis.conditions.Wraps;
@@ -81,7 +81,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> implements UserService {
@@ -110,12 +109,12 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
         return baseMapper.findPage(page, wrapper, new DataScope());
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updatePassword(UserUpdatePasswordDTO data) {
         User user = getById(data.getId());
         BizAssert.notNull(user, "用户不存在");
+        BizAssert.isTrue(user.getId().equals(ContextUtil.getUserId()), "只能修改自己的密码");
         String oldPassword = SecureUtil.sha256(data.getOldPassword() + user.getSalt());
         BizAssert.equals(user.getPassword(), oldPassword, "旧密码错误");
 
@@ -195,7 +194,8 @@ public class UserServiceImpl extends SuperCacheServiceImpl<UserMapper, User> imp
 
     @Override
     public boolean check(String account) {
-        return getByAccount(account) != null;
+        //这里不能用缓存，否则会导致用户无法登录
+        return count(Wraps.<User>lbQ().eq(User::getAccount, account)) > 0;
     }
 
     @Override
