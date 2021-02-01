@@ -11,6 +11,8 @@ import com.tangyh.basic.context.ContextUtil;
 import com.tangyh.basic.database.properties.DatabaseProperties;
 import com.tangyh.basic.database.properties.MultiTenantType;
 import com.tangyh.basic.exception.BizException;
+import com.tangyh.basic.exception.ForbiddenException;
+import com.tangyh.basic.exception.UnauthorizedException;
 import com.tangyh.basic.jwt.TokenUtil;
 import com.tangyh.basic.jwt.model.AuthInfo;
 import com.tangyh.basic.jwt.utils.JwtUtil;
@@ -77,8 +79,10 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
             // 3，解析token
             parseToken(request);
+        } catch (UnauthorizedException | ForbiddenException e) {
+            throw e;
         } catch (BizException e) {
-            throw BizException.wrap(e.getCode(), e.getMessage());
+            throw UnauthorizedException.wrap(e.getMessage());
         } catch (Exception e) {
             throw BizException.wrap(R.FAIL_CODE, "验证token出错");
         }
@@ -111,12 +115,11 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             String tokenCache = cacheOps.get(cacheKey);
 
             if (StrUtil.isEmpty(tokenCache)) {
-                throw BizException.wrap(JWT_NOT_LOGIN);
+                throw UnauthorizedException.wrap(JWT_NOT_LOGIN.getMsg());
             } else if (StrUtil.equals(BizConstant.LOGIN_STATUS, tokenCache)) {
-                throw BizException.wrap(JWT_OFFLINE);
+                throw UnauthorizedException.wrap(JWT_OFFLINE.getMsg());
             }
         }
-
 
         //6, 转换，将 token 解析出来的用户身份 和 解码后的tenant、Authorization 重新封装到请求头
         if (authInfo != null) {
