@@ -2,7 +2,7 @@
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/zuihou/lamp-cloud/blob/master/LICENSE)
 [![](https://img.shields.io/badge/作者-zuihou-orange.svg)](https://github.com/zuihou)
-[![](https://img.shields.io/badge/版本-3.0.2-brightgreen.svg)](https://github.com/zuihou/lamp-cloud)
+[![](https://img.shields.io/badge/版本-3.1.0.PRE.1-brightgreen.svg)](https://github.com/zuihou/lamp-cloud)
 [![GitHub stars](https://img.shields.io/github/stars/zuihou/lamp-cloud.svg?style=social&label=Stars)](https://github.com/zuihou/lamp-cloud/stargazers)
 [![star](https://gitee.com/zuihou111/lamp-cloud/badge/star.svg?theme=white)](https://gitee.com/zuihou111/lamp-cloud/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/zuihou/lamp-cloud.svg?style=social&label=Fork)](https://github.com/zuihou/lamp-cloud/network/members)
@@ -60,10 +60,14 @@
 | DATASOURCE(独立数据源) | 每个租户独立一个 数据库(数据源)，执行代码时，动态切换数据源 | 可独立部署数据库，数据隔离性好、扩展性高、故障影响小 | 相对复杂、开发需要注意切换数据源时的事务问题、需要较多的数据库 |
 
 ## lamp 会员版项目演示地址
-- 地址： http://tangyh.top:10000/lamp-web/
-- 以下内置账号仅限于内置的0000租户 
+
+- (已完成) 基于 [FEBS-Cloud-Web](https://gitee.com/mrbirdd/FEBS-Cloud-Web) 改造的前端项目演示地址： http://tangyh.top:10000/lamp-web/
+- (正在开发中...)基于 [vue-admin-beautiful](https://github.com/chuzhixin/vue-admin-beautiful)
+  改造的前端项目演示地址： http://tangyh.top:180
+- (敬请期待...)基于 ant-design 开发的前端项目演示地址：???
+- 以下内置账号仅限于内置的0000租户
 - 平台管理员： lamp_pt/lamp (内置给公司内部运营人员使用)
-- 超级管理员： lamp/lamp    
+- 超级管理员： lamp/lamp
 - 普通管理员： general/lamp
 - 普通账号： normal/lamp
 
@@ -214,4 +218,5 @@
 * FEBS Cloud Web： [https://gitee.com/mrbirdd/FEBS-Cloud-Web](https://gitee.com/mrbirdd/FEBS-Cloud-Web)
     lamp-web 基于本项目改造， 感谢 [wuyouzhuguli](https://github.com/wuyouzhuguli)
 * Cloud-Platform： [https://gitee.com/geek_qi/cloud-platform](https://gitee.com/geek_qi/cloud-platform)
-    作者学习时接触到的第一个微服务项目
+  作者学习时接触到的第一个微服务项目
+* [vue-admin-beautiful](https://github.com/chuzhixin/vue-admin-beautiful) ： 前端框架

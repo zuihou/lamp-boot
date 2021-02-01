@@ -64,6 +64,12 @@ lamp:
   xss:
     enabled: true
     requestBodyEnabled: false
+  captcha:
+    type: ARITHMETIC
+    width: 158
+    height: 58
+    len: 2
+    charType: 2
   file:
     type: LOCAL # FAST_DFS LOCAL
     storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
