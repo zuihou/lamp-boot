@@ -25,20 +25,20 @@
 
 ### 工具集 （lamp-util 项目必备，其他2个可选）
 
-| 项目 | gitee | github | 备注 |
+| 项目 | gitee | github | 备注 | 
 | --- | --- | --- | --- |
 | 工具集 | https://gitee.com/zuihou111/lamp-util | https://github.com/zuihou/lamp-util | 业务无关的工具集，cloud 和 boot 项目都依赖它 |
 | 代码生成器 | https://gitee.com/zuihou111/lamp-generator | https://github.com/zuihou/lamp-generator | 给开发人员使用 |
 | 定时调度器 | https://gitee.com/zuihou111/lamp-job | https://github.com/zuihou/lamp-job | 尚未开发 |
 
-### 后端
+### 后端 （下面2个项目功能一致，任选其一即可）
 
 | 项目 | gitee | github | 备注 |
 | --- | --- | --- | --- |
 | 微服务版(后端) | https://gitee.com/zuihou111/lamp-cloud | https://github.com/zuihou/lamp-cloud | SpringCloud 版 |
 | 单体版(后端) | https://gitee.com/zuihou111/lamp-boot | https://github.com/zuihou/lamp-boot | SpringBoot 版(和 lamp-cloud 功能基本一致) |
 
-### 前端
+### 前端 （下面3个项目功能一致，任选其一即可）
 
 | 项目 | gitee | github | 备注 | 演示地址 |
 | --- | --- | --- | --- | --- |
