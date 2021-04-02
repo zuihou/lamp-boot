@@ -92,7 +92,7 @@
 
             <dependency>
                 <groupId>com.tangyh.basic</groupId>
-                <artifactId>lamp-injection-starter</artifactId>
+                <artifactId>lamp-echo-starter</artifactId>
                 <version>${lamp-util.version}</version>
             </dependency>
 

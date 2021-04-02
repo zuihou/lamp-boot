@@ -13,12 +13,12 @@ import java.util.Date;
  */
 public class XxlJobInfoVO implements Serializable {
 
-    private final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_FORMAT);
     /**
      * 执行器 名
      */
     private String jobGroupName;
     private String jobDesc;
+
     /**
      * 负责人
      */
@@ -67,6 +67,7 @@ public class XxlJobInfoVO implements Serializable {
      * 失败重试次数
      */
     private Integer executorFailRetryCount;
+
     /**
      * GLUE类型	#com.xxl.job.core.glue.GlueTypeEnum
      */
@@ -87,6 +88,8 @@ public class XxlJobInfoVO implements Serializable {
      * 子任务ID，多个逗号分隔
      */
     private String childJobId;
+
+    private final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_FORMAT);
 
     public static XxlJobInfoVO create(String jobGroupName, String jobDesc,
                                       LocalDateTime scheduleTime, String executorHandler,
