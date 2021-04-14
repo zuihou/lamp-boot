@@ -4,7 +4,6 @@ import com.tangyh.basic.security.annotation.EnableLoginArgResolver;
 import com.tangyh.basic.validator.annotation.EnableFormValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -29,8 +28,7 @@ import static com.tangyh.lamp.common.constant.BizConstant.UTIL_PACKAGE;
  * @author zuihou
  * @date 2018-01-13 1:34
  */
-@SpringBootApplication
-@EnableAutoConfiguration(exclude = {
+@SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
 })
 @EnableDiscoveryClient
