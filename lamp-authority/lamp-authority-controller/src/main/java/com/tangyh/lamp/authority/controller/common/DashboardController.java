@@ -1,214 +1,83 @@
-package com.tangyh.lamp.authority.service.common.impl;
+package com.tangyh.lamp.authority.controller.common;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.tangyh.basic.base.service.SuperServiceImpl;
-import com.tangyh.basic.cache.model.CacheKey;
-import com.tangyh.basic.cache.repository.CacheOps;
-import com.tangyh.basic.utils.CollHelper;
-import com.tangyh.basic.utils.DateUtils;
-import com.tangyh.lamp.authority.dao.common.LoginLogMapper;
-import com.tangyh.lamp.authority.entity.auth.User;
-import com.tangyh.lamp.authority.entity.common.LoginLog;
+import com.baidu.fsg.uid.UidGenerator;
+import com.tangyh.basic.annotation.user.LoginUser;
+import com.tangyh.basic.base.R;
+import com.tangyh.basic.security.model.SysUser;
 import com.tangyh.lamp.authority.service.auth.UserService;
 import com.tangyh.lamp.authority.service.common.LoginLogService;
-import com.tangyh.lamp.common.cache.common.LoginLogBrowserCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.LoginLogSystemCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.LoginLogTenDayCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TodayLoginIvCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TodayLoginPvCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TodayPvCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TotalLoginIvCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TotalLoginPvCacheKeyBuilder;
-import com.tangyh.lamp.common.cache.common.TotalPvCacheKeyBuilder;
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.OperatingSystem;
-import eu.bitwalker.useragentutils.UserAgent;
-import eu.bitwalker.useragentutils.Version;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>
- * 业务实现类
- * 系统日志
+ * 前端控制器
+ * 首页
  * </p>
  *
  * @author zuihou
  * @date 2019-10-20
  */
 @Slf4j
-@Service
-@DS("#thread.tenant")
+@Validated
+@RestController
+@Api(value = "dashboard", tags = "首页")
 @RequiredArgsConstructor
-public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginLog> implements LoginLogService {
+public class DashboardController {
+
+    private final LoginLogService loginLogService;
     private final UserService userService;
-    private static final Supplier<Stream<String>> BROWSER = () -> Stream.of(
-            "Chrome", "Firefox", "Microsoft Edge", "Safari", "Opera"
-    );
-    private static final Supplier<Stream<String>> OPERATING_SYSTEM = () -> Stream.of(
-            "Android", "Linux", "Mac OS X", "Ubuntu", "Windows 10", "Windows 8", "Windows 7", "Windows XP", "Windows Vista"
-    );
-    private final CacheOps cacheOps;
+    private final UidGenerator uidGenerator;
 
-    private static String simplifyOperatingSystem(String operatingSystem) {
-        return OPERATING_SYSTEM.get().parallel().filter(b -> StrUtil.containsIgnoreCase(operatingSystem, b)).findAny().orElse(operatingSystem);
+    @PostMapping("/dashboard/pvIncr")
+    public R<Boolean> pvIncr() {
+        loginLogService.pvIncr();
+        return R.success();
     }
 
-    private static String simplifyBrowser(String browser) {
-        return BROWSER.get().parallel().filter(b -> StrUtil.containsIgnoreCase(browser, b)).findAny().orElse(browser);
+
+    @GetMapping("/dashboard/item")
+    public R<Map<String, Object>> item() {
+        Map<String, Object> data = new HashMap<>(11);
+        // 用户数
+        data.put("totalUserCount", userService.count());
+        data.put("todayUserCount", userService.todayUserCount());
+        // 页面 访问量
+        data.put("totalPv", loginLogService.getTotalPv());
+        data.put("todayPv", loginLogService.getTodayPv());
+        // 独立 登录IV数
+        data.put("totalLoginIv", loginLogService.getTotalLoginIv());
+        data.put("todayLoginIv", loginLogService.getTodayLoginIv());
+        // 独立 登录PV数
+        data.put("totalLoginPv", loginLogService.getTotalLoginPv());
+        data.put("todayLoginPv", loginLogService.getTodayLoginPv());
+
+        return R.success(data);
     }
 
-    @Override
-    public LoginLog save(Long userId, String account, String ua, String ip, String location, String description) {
-        User user;
-        if (userId != null) {
-            user = this.userService.getByIdCache(userId);
-        } else {
-            user = this.userService.getByAccount(account);
-        }
+    @GetMapping("/dashboard/chart")
+    public R<Map<String, Object>> chart(@ApiIgnore @LoginUser SysUser user) {
+        Map<String, Object> data = new HashMap<>(11);
+        data.put("lastTenVisitCount", loginLogService.findLastTenDaysVisitCount(null));
+        data.put("lastTenUserVisitCount", loginLogService.findLastTenDaysVisitCount(user.getAccount()));
 
-        LoginLog loginLog = LoginLog.builder()
-                .location(location)
-                .loginDate(DateUtils.formatAsDate(LocalDateTime.now()))
-                .description(description)
-                .requestIp(ip).ua(ua)
-                .build();
-
-        UserAgent userAgent = UserAgent.parseUserAgentString(ua);
-        Browser browser = userAgent.getBrowser();
-        OperatingSystem operatingSystem = userAgent.getOperatingSystem();
-        Version browserVersion = userAgent.getBrowserVersion();
-        if (browser != null) {
-            loginLog.setBrowser(simplifyBrowser(browser.getName()));
-        }
-        if (browserVersion != null) {
-            loginLog.setBrowserVersion(browserVersion.getVersion());
-        }
-        if (operatingSystem != null) {
-            loginLog.setOperatingSystem(simplifyOperatingSystem(operatingSystem.getName()));
-        }
-        if (user != null) {
-            loginLog.setAccount(user.getAccount()).setUserId(user.getId()).setUserName(user.getName())
-                    .setCreatedBy(user.getId());
-        }
-
-        super.save(loginLog);
-        LocalDate now = LocalDate.now();
-        String tenDaysAgo = DateUtils.formatAsDate(now.plusDays(-9));
-
-        CacheKey totalLoginPvKey = TotalLoginPvCacheKeyBuilder.build();
-        CacheKey todayLoginPvKey = TodayLoginPvCacheKeyBuilder.build(now);
-        // 登录IV
-        CacheKey totalLoginIvKey = TotalLoginIvCacheKeyBuilder.build();
-        CacheKey todayLoginIvKey = TodayLoginIvCacheKeyBuilder.build(now);
-
-        CacheKey loginLogTenDayKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgo);
-        CacheKey loginLogBrowserKey = new LoginLogBrowserCacheKeyBuilder().key();
-        CacheKey loginLogSystemKey = new LoginLogSystemCacheKeyBuilder().key();
-        cacheOps.del(totalLoginPvKey);
-        cacheOps.del(todayLoginPvKey);
-        cacheOps.del(todayLoginIvKey);
-        cacheOps.del(totalLoginIvKey);
-        cacheOps.del(loginLogTenDayKey);
-        cacheOps.del(loginLogBrowserKey);
-        cacheOps.del(loginLogSystemKey);
-        if (user != null) {
-            CacheKey loginLogTenDayUserKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgo, user.getAccount());
-            cacheOps.del(loginLogTenDayUserKey);
-        }
-        return loginLog;
+        data.put("browserCount", loginLogService.findByBrowser());
+        data.put("operatingSystemCount", loginLogService.findByOperatingSystem());
+        return R.success(data);
     }
 
-    @Override
-    public void pvIncr() {
-        CacheKey totalPvKey = TotalPvCacheKeyBuilder.build();
-        cacheOps.incr(totalPvKey);
-
-        CacheKey todayPvKey = TodayPvCacheKeyBuilder.build(LocalDate.now());
-        cacheOps.incr(todayPvKey);
-    }
-
-    @Override
-    public Long getTotalPv() {
-        CacheKey key = TotalPvCacheKeyBuilder.build();
-        return cacheOps.getCounter(key, k -> 0L);
-    }
-
-    @Override
-    public Long getTodayPv() {
-        CacheKey key = TodayPvCacheKeyBuilder.build(LocalDate.now());
-        return cacheOps.getCounter(key, k -> 0L);
-    }
-
-    @Override
-    public Long getTotalLoginPv() {
-        CacheKey loginLogTotalKey = TotalLoginPvCacheKeyBuilder.build();
-        return Convert.toLong(cacheOps.get(loginLogTotalKey, key -> this.baseMapper.getTotalLoginPv()), 0L);
-    }
-
-    @Override
-    public Long getTodayLoginPv() {
-        LocalDate now = LocalDate.now();
-        CacheKey loginLogTodayKey = TodayLoginPvCacheKeyBuilder.build(now);
-        return Convert.toLong(cacheOps.get(loginLogTodayKey, k -> this.baseMapper.getTodayLoginPv(now)), 0L);
-    }
-
-    @Override
-    public Long getTotalLoginIv() {
-        CacheKey key = TotalLoginIvCacheKeyBuilder.build();
-        return Convert.toLong(cacheOps.get(key, k -> this.baseMapper.getTotalLoginIv()), 0L);
-    }
-
-    @Override
-    public Long getTodayLoginIv() {
-        LocalDate now = LocalDate.now();
-        CacheKey loginLogTodayIpKey = TodayLoginIvCacheKeyBuilder.build(now);
-        return Convert.toLong(cacheOps.get(loginLogTodayIpKey, k -> this.baseMapper.getTodayLoginIv(now)), 0L);
-    }
-
-    @Override
-    public List<Map<String, String>> findLastTenDaysVisitCount(String account) {
-        LocalDateTime tenDaysAgo = LocalDateTime.of(LocalDate.now().plusDays(-9), LocalTime.MIN);
-        String tenDaysAgoStr = DateUtils.formatAsDate(tenDaysAgo);
-        CacheKey loginLogTenDayKey = new LoginLogTenDayCacheKeyBuilder().key(tenDaysAgoStr, account);
-        return cacheOps.get(loginLogTenDayKey, k -> {
-            List<Map<String, String>> map = baseMapper.findLastTenDaysVisitCount(tenDaysAgo, account);
-            return map.stream().map(item -> {
-                Map<String, String> kv = new HashMap<>(CollHelper.initialCapacity(map.size()));
-                kv.put("login_date", item.get("login_date"));
-                kv.put("count", String.valueOf(item.get("count")));
-                return kv;
-            }).collect(Collectors.toList());
-        });
-    }
-
-    @Override
-    public List<Map<String, Object>> findByBrowser() {
-        CacheKey loginLogBrowserKey = new LoginLogBrowserCacheKeyBuilder().key();
-        return cacheOps.get(loginLogBrowserKey, k -> baseMapper.findByBrowser());
-    }
-
-    @Override
-    public List<Map<String, Object>> findByOperatingSystem() {
-        CacheKey loginLogSystemKey = new LoginLogSystemCacheKeyBuilder().key();
-        return cacheOps.get(loginLogSystemKey, k -> baseMapper.findByOperatingSystem());
-    }
-
-    @Override
-    public boolean clearLog(LocalDateTime clearBeforeTime, Integer clearBeforeNum) {
-        return baseMapper.clearLog(clearBeforeTime, clearBeforeNum) > 0;
+    @GetMapping("/common/generateId")
+    public R<Object> generate() {
+        long uid = uidGenerator.getUid();
+        return R.success(uid + "length" + String.valueOf(uid).length());
     }
 }
