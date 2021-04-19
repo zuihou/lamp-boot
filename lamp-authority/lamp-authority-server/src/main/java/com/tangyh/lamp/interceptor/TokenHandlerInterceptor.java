@@ -80,10 +80,13 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             // 3，解析token
             parseToken(request);
         } catch (UnauthorizedException | ForbiddenException e) {
+            log.error("request={}", request.getRequestURL(), e);
             throw e;
         } catch (BizException e) {
+            log.error("request={}", request.getRequestURL(), e);
             throw UnauthorizedException.wrap(e.getMessage());
         } catch (Exception e) {
+            log.error("request={}", request.getRequestURL(), e);
             throw BizException.wrap(R.FAIL_CODE, "验证token出错");
         }
 
@@ -115,8 +118,10 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             String tokenCache = cacheOps.get(cacheKey);
 
             if (StrUtil.isEmpty(tokenCache)) {
+                log.error("token is empty");
                 throw UnauthorizedException.wrap(JWT_NOT_LOGIN.getMsg());
             } else if (StrUtil.equals(BizConstant.LOGIN_STATUS, tokenCache)) {
+                log.error("您被踢了");
                 throw UnauthorizedException.wrap(JWT_OFFLINE.getMsg());
             }
         }
