@@ -25,6 +25,7 @@
         <module>lamp-tenant</module>
         <module>lamp-msg</module>
         <module>lamp-file</module>
+        <module>lamp-boot-server</module>
     </modules>
 
     <properties>

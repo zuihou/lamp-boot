@@ -1,2 +1,2 @@
 #!/bin/bash
-sh start.sh restart lamp-authority-server prod
+sh start.sh restart lamp-boot-server prod

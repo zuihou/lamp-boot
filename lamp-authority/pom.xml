@@ -18,7 +18,6 @@
         <module>lamp-authority-entity</module>
         <module>lamp-authority-biz</module>
         <module>lamp-authority-controller</module>
-        <module>lamp-authority-server</module>
     </modules>
 
 </project>
