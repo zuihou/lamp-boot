@@ -1,0 +1,17 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: '@project.artifactId@'
+  profiles:
+    active: dev
+logging:
+  file:
+    path: /Users/tangyh/data/projects/logs
+    name: ${logging.file.path}/${spring.application.name}/root.log
+  config: classpath:logback-spring.xml
+
+info:
+  name: '@project.name@'
+  description: '@project.description@'
+  version: '@project.version@'

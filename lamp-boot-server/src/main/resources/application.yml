@@ -1,0 +1,294 @@
+lamp:
+  nginx:
+    ip: 127.0.0.1      # 正式环境需要将该ip设置成nginx对应的 公网ip
+    port: 10000
+  cache:
+    type: REDIS
+  redis:
+    ip: 127.0.0.1
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
+  rabbitmq:
+    enabled: false
+    ip: 127.0.0.1
+    port: 5672
+    username: zuihou
+    password: zuihou
+  mysql:
+    ip: 127.0.0.1
+    port: 3306
+    driverClassName: com.mysql.cj.jdbc.Driver
+    database: lamp_boot_column
+    username: root
+    password: root
+    url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+  database:
+    tenantDatabasePrefix: lamp_base
+    multiTenantType: COLUMN
+    isNotWrite: false
+    isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
+    isSeata: false
+    id-type: HU_TOOL
+    hutoolId:
+      workerId: 0
+      dataCenterId: 0
+    cache-id:
+      time-bits: 31
+      worker-bits: 22
+      seq-bits: 10
+      epochStr: '2020-09-15'
+      boost-power: 3
+      padding-factor: 50
+  injection:
+    # 是否启用 远程数据 手动注入
+    enabled: true
+    # 是否启用 远程数据 注解注入
+    aop-enabled: true
+    guavaCache:
+      enabled: false
+      maximumSize: 1000
+      refreshWriteTime: 10
+      refreshThreadPoolSize: 1000
+  security:
+    # 是否开启URI权限校验
+    enabled: true
+    type: SERVICE
+    caseSensitive: false
+  authentication:
+    expire: 28800               # token有效期为8小时
+    refreshExpire: 86400        # 刷新token有效期为24小时
+  log:
+    enabled: true
+    type: DB
+  xss:
+    enabled: true
+    requestBodyEnabled: false
+  captcha:
+    type: ARITHMETIC
+    width: 158
+    height: 58
+    len: 2
+    charType: 2
+  file:
+    type: LOCAL # FAST_DFS LOCAL
+    storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
+    uriPrefix: http://${lamp.nginx.ip}:${lamp.nginx.port}/file/   # 文件访问 需要通过这个uri前缀进行访问
+    inner-uri-prefix: null  #  内网的url前缀
+    down-by-id: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download?ids[]=%s
+    down-by-biz-id: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download/biz?bizIds[]=%s
+    down-by-url: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download/url?url=%s&filename=%s
+    ali:
+      # 请填写自己的阿里云存储配置
+      uriPrefix: http://test.oss-cn-shenzhen.aliyuncs.com/
+      bucket-name: test
+      endpoint: http://oss-cn-shenzhen.aliyuncs.com
+      access-key-id: test
+      access-key-secret: test
+  swagger:
+    license: Powered By zuihou
+    licenseUrl: https://github.com/zuihou
+    termsOfServiceUrl: https://github.com/zuihou
+    version: '@project.version@'
+    global-operation-parameters:
+      - name: token
+        description: 用户身份token
+        modelRef: String
+        parameterType: header
+        required: true
+        # 默认值只是方便本地开发时，少填参数，生产环境请禁用swagger或者禁用默认参数
+        defaultValue: "Bearer test"
+      - name: Authorization
+        description: 客户端信息
+        modelRef: String
+        parameterType: header
+        required: true
+        defaultValue: "Basic enVpaG91X3VpOnp1aWhvdV91aV9zZWNyZXQ="
+      - name: tenant
+        description: 租户编码
+        modelRef: String
+        parameterType: header
+        required: true
+        defaultValue: "MDAwMA=="
+    docket:
+      oauth:
+        title: 认证模块
+        base-package: com.tangyh.lamp.oauth.controller
+      auth:
+        title: 权限模块
+        base-package: com.tangyh.lamp.authority.controller.auth
+      common:
+        title: 公共模块
+        base-package: com.tangyh.lamp.authority.controller.common
+      core:
+        title: 组织模块
+        base-package: com.tangyh.lamp.authority.controller.core
+      tenant:
+        title: 租户模块
+        base-package: com.tangyh.lamp.tenant.controller
+      msg:
+        title: 消息服务
+        base-package: com.tangyh.lamp.msg.controller;com.tangyh.lamp.sms.controller
+      file:
+        title: 文件服务
+        base-package: com.tangyh.lamp.file.controller
+
+knife4j:
+  enable: true
+  setting:
+    enableReloadCacheParameter: true
+    enableVersion: true
+    enableDynamicParameter: true
+    enableFooter: false
+    enableFooterCustom: true
+    footerCustomContent: Apache License 2.0 | Copyright  2020 [lamp-cloud](https://github.com/zuihou)
+
+setting:
+  path:
+    uploadPath: /data/projects/uploadfile/temp/
+
+
+server:
+  shutdown: GRACEFUL
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+  port: 8760
+  undertow:
+    threads:
+      io: 8 # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+      worker: 120  # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    buffer-size: 2048  # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理 , 每块buffer的空间大小,越小的空间被利用越充分
+    direct-buffers: true  # 是否分配的直接内存
+
+dozer:
+  mappingFiles:
+    - classpath*:dozer/*.dozer.xml
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+      enabled: true
+
+spring:
+  lifecycle:
+    # 优雅停机宽限期时间
+    timeout-per-shutdown-phase: 30s
+  freemarker:
+    suffix: .ftl
+    cache: false
+    charset: UTF-8
+    contentType: text/html
+    requestContextAttribute: ctx
+    templateEncoding: UTF-8
+    templateLoaderPath: classpath:/
+    settings:
+      defaultEncoding: UTF-8
+      url_escaping_charset: UTF-8
+      locale: zh_CN
+  servlet:
+    multipart:
+      max-file-size: 512MB      # Max file size，默认1M
+      max-request-size: 512MB   # Max request size，默认10M
+  rabbitmq:
+    enabled: ${lamp.rabbitmq.enabled}
+    host: ${lamp.rabbitmq.ip}
+    port: ${lamp.rabbitmq.port}
+    username: ${lamp.rabbitmq.username}
+    password: ${lamp.rabbitmq.password}
+    listener:
+      type: direct # simple direct
+  redis:
+    host: ${lamp.redis.ip}
+    password: ${lamp.redis.password}
+    port: ${lamp.redis.port}
+    database: ${lamp.redis.database}
+    lettuce:
+      pool:
+        max-idle: 10
+        min-idle: 10
+        max-active: 100
+  cache:
+    type: GENERIC
+  datasource:
+      # 从这里开始(dynamic)，中间的这段配置用于 lamp.database.multiTenantType == DATASOURCE 时
+      # 联系作者开通
+      # 从这里结束(dynamic)，中间的这段配置用于 lamp.database.multiTenantType == DATASOURCE 时
+    druid:
+      enable: true
+      # 从这里开始(druid)，中间的这段配置用于 lamp.database.multiTenantType != DATASOURCE 时
+      username: ${lamp.mysql.username}
+      password: ${lamp.mysql.password}
+      driver-class-name: ${lamp.mysql.driverClassName}
+      url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+      db-type: mysql
+      initialSize: 10
+      minIdle: 10
+      maxActive: 200
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 'x'
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
+      filters: stat,wall
+      filter:
+        wall:
+          enabled: true
+          config:
+            commentAllow: true
+            multiStatementAllow: true
+            noneBaseStatementAllow: true
+      # 从这里结束(druid)，中间的这段配置用于 lamp.database.multiTenantType != DATASOURCE 时
+
+      # 以下的2段配置，同时适用于所有模式
+      web-stat-filter:  # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js , *.gif ,*.jpg ,*.png ,*.css ,*.ico , /druid/*"
+        session-stat-max-count: 1000
+        profile-enable: true
+        session-stat-enable: false
+      stat-view-servlet:  #展示Druid的统计信息,StatViewServlet的用途包括：1.提供监控信息展示的html页面2.提供监控信息的JSON API
+        enabled: true
+        url-pattern: /druid/*   #根据配置中的url-pattern来访问内置监控页面，如果是上面的配置，内置监控页面的首页是/druid/index.html例如：http://127.0.0.1:9000/druid/index.html
+        reset-enable: true    #允许清空统计数据
+        login-username: lamp
+        login-password: lamp
+
+mybatis-plus:
+  mapper-locations:
+    - classpath*:mapper_**/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.tangyh.lamp.*.entity;com.tangyh.basic.database.mybatis.typehandler
+  typeEnumsPackage: com.tangyh.lamp.*.enumeration
+  global-config:
+    db-config:
+      id-type: INPUT
+      insert-strategy: NOT_NULL
+      update-strategy: NOT_NULL
+      select-strategy: NOT_EMPTY
+  configuration:
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+
+# 用于/actuator/info
+info:
+  name: '@project.name@'
+  description: '@project.description@'
+  version: '@project.version@'
+  spring-boot-version: '@spring.boot.version@'
