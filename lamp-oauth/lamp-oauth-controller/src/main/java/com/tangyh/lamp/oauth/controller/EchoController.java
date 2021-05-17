@@ -28,7 +28,7 @@ import java.util.Set;
 @AllArgsConstructor
 @IgnoreResponseBodyAdvice
 @Api(value = "数据注入查询接口", tags = "数据注入查询接口， 不建议前端调用")
-public class InjectionController {
+public class EchoController {
     private final DictionaryService dictionaryService;
     private final OrgService orgService;
     private final StationService stationService;

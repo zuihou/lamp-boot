@@ -289,15 +289,18 @@ public class UserController extends SuperCacheController<UserService, Long, User
                 .like(User::getEmail, userPage.getEmail())
                 .like(User::getMobile, userPage.getMobile())
                 .eq(User::getStationId, userPage.getStationId())
-                .eq(User::getPositionStatus, userPage.getPositionStatus())
-                .eq(User::getEducation, userPage.getEducation())
-                .eq(User::getNation, userPage.getNation())
-                .eq(User::getSex, userPage.getSex())
+                .in(User::getPositionStatus, userPage.getPositionStatus())
+                .in(User::getEducation, userPage.getEducation())
+                .in(User::getNation, userPage.getNation())
+                .in(User::getSex, userPage.getSex())
                 .eq(User::getState, userPage.getState());
         baseService.findPage(page, wrapper);
         // 手动注入
         echoService.action(page);
 
-        page.getRecords().forEach(item -> item.setPassword(null));
+        page.getRecords().forEach(item -> {
+            item.setPassword(null);
+            item.setSalt(null);
+        });
     }
 }

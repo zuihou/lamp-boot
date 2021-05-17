@@ -1,9 +1,8 @@
-package com.tangyh.lamp.interceptor;
+package com.tangyh.lamp.boot.interceptor;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import com.tangyh.basic.base.R;
 import com.tangyh.basic.cache.model.CacheKey;
 import com.tangyh.basic.cache.repository.CacheOps;
 import com.tangyh.basic.context.ContextConstants;
@@ -87,7 +86,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             throw UnauthorizedException.wrap(e.getMessage());
         } catch (Exception e) {
             log.error("request={}", request.getRequestURL(), e);
-            throw BizException.wrap(R.FAIL_CODE, "验证token出错");
+            throw UnauthorizedException.wrap("验证token出错");
         }
 
         return super.preHandle(request, response, handler);

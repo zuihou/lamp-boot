@@ -11,7 +11,6 @@ import com.tangyh.lamp.authority.ext.UserResolverServiceImpl;
 import com.tangyh.lamp.authority.service.auth.UserService;
 import com.tangyh.lamp.authority.service.common.OptLogService;
 import com.tangyh.lamp.common.properties.IgnoreProperties;
-import com.tangyh.lamp.interceptor.TokenHandlerInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -41,7 +40,7 @@ public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfi
 
     @Bean
     public HandlerInterceptor getTokenHandlerInterceptor() {
-        return new TokenHandlerInterceptor(profiles, ignoreTokenProperties, databaseProperties,
+        return new com.tangyh.lamp.boot.interceptor.TokenHandlerInterceptor(profiles, ignoreTokenProperties, databaseProperties,
                 tokenUtil, cacheOps);
     }
 
