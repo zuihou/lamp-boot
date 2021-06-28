@@ -3,7 +3,7 @@
 [![Language](https://img.shields.io/badge/语言-Java%20%7C%20SpringCloud%20%7C%20Vue3%20%7C%20...-red?style=flat-square&color=42b883)](https://github.com/zuihou/lamp-cloud)
 [![License](https://img.shields.io/github/license/zuihou/lamp-cloud?color=42b883&style=flat-square)](https://github.com/zuihou/lamp-cloud/blob/master/LICENSE)
 [![Author](https://img.shields.io/badge/作者-zuihou-orange.svg)](https://github.com/zuihou)
-[![Version](https://img.shields.io/badge/版本-3.2.2-brightgreen.svg)](https://github.com/zuihou/lamp-cloud)
+[![Version](https://img.shields.io/badge/版本-3.2.3-brightgreen.svg)](https://github.com/zuihou/lamp-cloud)
 [![Star](https://img.shields.io/github/stars/zuihou/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/zuihou/lamp-cloud/stargazers)
 [![Fork](https://img.shields.io/github/forks/zuihou/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/zuihou/lamp-cloud/network/members)
 [![Star](https://gitee.com/zuihou111/lamp-cloud/badge/star.svg?theme=gray)](https://gitee.com/zuihou111/lamp-cloud/stargazers)
@@ -49,13 +49,11 @@
 核心技术采用SpringBoot、Mybatis、RabbitMQ、FastDFS/MinIO等主要框架和中间件。 希望能努力打造一套从 `Web基础框架` - `分布式微服务架构` - `持续集成` - `系统监测`
 的解决方案。本项目旨在实现基础框架能力，不涉及具体业务。
 
-# lamp-cloud-plus 会员版项目演示地址
-- lamp-web-plus演示地址： https://tangyh.top
-- lamp-web演示地址： https://tangyh.top/lamp-web
-
-# lamp-boot-plus 会员版项目演示地址
-- lamp-web-plus演示地址： https://boot.tangyh.top
-- lamp-web演示地址： https://boot.tangyh.top/lamp-web
+# 会员版演示地址
+- 后端使用lamp-cloud-plus，前端使用lamp-web-plus。演示地址： https://tangyh.top
+- 后端使用lamp-cloud-plus，前端使用lamp-web。演示地址： https://tangyh.top/lamp-web
+- 后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址： https://boot.tangyh.top
+- 后端使用lamp-boot-plus， 前端使用lamp-web。演示地址： https://boot.tangyh.top/lamp-web
 
 # 演示账号
 - 以下内置账号仅限于内置的0000租户

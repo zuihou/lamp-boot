@@ -8,6 +8,7 @@ import cn.afterturn.easypoi.excel.entity.ExcelToHtmlParams;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.afterturn.easypoi.view.PoiBaseView;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tangyh.basic.annotation.log.SysLog;
@@ -16,6 +17,8 @@ import com.tangyh.basic.base.R;
 import com.tangyh.basic.base.request.PageParams;
 import com.tangyh.basic.base.request.PageUtil;
 import com.tangyh.basic.context.ContextUtil;
+import com.tangyh.basic.database.mybatis.conditions.Wraps;
+import com.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
 import com.tangyh.lamp.authority.service.auth.RoleService;
 import com.tangyh.lamp.authority.service.auth.UserService;
 import com.tangyh.lamp.msg.dto.MsgPageResult;
@@ -65,8 +68,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MsgController {
     private final MsgService msgService;
-    private final RoleService roleService;
-    private final UserService userService;
+    private final RoleService roleApi;
+    private final UserService userBizApi;
 
 
     /**
@@ -87,9 +90,11 @@ public class MsgController {
     @ApiOperation(value = "分页查询消息中心", notes = "分页查询消息中心")
     @PostMapping("/page")
     @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
-    public R<IPage<MsgPageResult>> page(@RequestBody @Validated PageParams<MsgQuery> params) {
-        IPage<MsgPageResult> page = params.buildPage();
-        query(params, page);
+    public R<IPage<Msg>> page(@RequestBody @Validated PageParams<MsgQuery> params) {
+        IPage<Msg> page = params.buildPage();
+        Msg model = BeanUtil.toBean(params.getModel(), Msg.class);
+        LbqWrapper<Msg> wraps = Wraps.lbq(model, params.getExtra(), Msg.class);
+        msgService.page(page, wraps);
         return R.success(page);
     }
 
@@ -199,14 +204,16 @@ public class MsgController {
     @PreAuth("hasAnyPermission('{}add')")
     public R<Msg> save(@RequestBody @Validated MsgSaveDTO data) {
         if (CollectionUtil.isEmpty(data.getUserIdList()) && CollectionUtil.isNotEmpty(data.getRoleCodeList())) {
-            List<Long> result = roleService.findUserIdByCode(data.getRoleCodeList().toArray(new String[0]));
+            List<Long> result = roleApi.findUserIdByCode(data.getRoleCodeList().toArray(new String[0]));
+
             if (result.isEmpty()) {
                 return R.fail("已选角色下尚未分配任何用户");
             }
             data.setUserIdList(new HashSet<>(result));
+
         }
         if (MsgType.PUBLICITY.eq(data.getMsgDTO().getMsgType())) {
-            List<Long> result = userService.findAllUserId();
+            List<Long> result = userBizApi.findAllUserId();
             data.setUserIdList(new HashSet<>(result));
         }
 

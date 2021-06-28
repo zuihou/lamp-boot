@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-msg</artifactId>
         <groupId>com.tangyh.lamp</groupId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,6 +36,10 @@
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tangyh.basic</groupId>
+            <artifactId>lamp-echo-starter</artifactId>
         </dependency>
 
         <dependency>
