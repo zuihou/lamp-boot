@@ -11,11 +11,12 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 10/01/2021 10:00:02
+ Date: 10/01/2021 09:59:39
 */
 
 SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET
+FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for c_datasource_config
@@ -79,7 +80,9 @@ CREATE TABLE `c_tenant`
 -- Records of c_tenant
 -- ----------------------------
 BEGIN;
-INSERT INTO `c_tenant` VALUES (1, '0000', '最后内置的运营&超级租户', 'CREATE', 'LOCAL', 'NORMAL', b'1', '最后', NULL, NULL, '内置租户,用于测试租户系统所有功能, 用于管理整个系统.请勿删除', '2019-08-29 16:50:35', 1, '2019-08-29 16:50:35', 1);
+INSERT INTO `c_tenant`
+VALUES (1, '0000', '最后内置的运营&超级租户', 'CREATE', 'LOCAL', 'NORMAL', b'1', '最后', NULL, NULL,
+        '内置租户,用于测试租户系统所有功能, 用于管理整个系统.请勿删除', '2019-08-29 16:50:35', 1, '2019-08-29 16:50:35', 1);
 COMMIT;
 
 -- ----------------------------
@@ -128,7 +131,7 @@ CREATE TABLE `worker_node`
     `type`        int(11) NOT NULL COMMENT '节点类型: ACTUAL 或者 CONTAINER',
     `launch_date` date        NOT NULL COMMENT '上线日期',
     `modified`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `created`     timestamp   NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
+    `created`     timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='DB WorkerID Assigner for UID Generator';
 
