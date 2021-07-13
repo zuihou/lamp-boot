@@ -54,14 +54,8 @@ public class SmsTemplateServiceImpl extends SuperServiceImpl<SmsTemplateMapper, 
 
     @Transactional(readOnly = true)
     @Override
-    public Map<Serializable, Object> findNameByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(listByIds(ids), SmsTemplate::getId, SmsTemplate::getName);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Map<Serializable, Object> findByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(listByIds(ids), SmsTemplate::getId, org -> org);
+        return CollHelper.uniqueIndex(listByIds(ids), SmsTemplate::getId, SmsTemplate::getName);
     }
 
     private void buildParams(SmsTemplate smsTemplate) {

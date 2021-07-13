@@ -2,6 +2,7 @@ package com.tangyh.lamp.authority.service.auth.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+
 import com.tangyh.basic.base.service.SuperServiceImpl;
 import com.tangyh.basic.cache.model.CacheKey;
 import com.tangyh.basic.cache.repository.CacheOps;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+
 @RequiredArgsConstructor
 public class RoleAuthorityServiceImpl extends SuperServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
 

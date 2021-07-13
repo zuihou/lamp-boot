@@ -87,13 +87,8 @@ public class StationServiceImpl extends SuperCacheServiceImpl<StationMapper, Sta
     }
 
     @Override
-    public Map<Serializable, Object> findNameByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findStation(ids), Station::getId, Station::getName);
-    }
-
-    @Override
     public Map<Serializable, Object> findByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findStation(ids), Station::getId, station -> station);
+        return CollHelper.uniqueIndex(findStation(ids), Station::getId, Station::getName);
     }
 
     private List<Station> findStation(Set<Serializable> ids) {

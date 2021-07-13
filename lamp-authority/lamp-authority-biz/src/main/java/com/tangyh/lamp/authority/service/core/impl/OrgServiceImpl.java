@@ -111,11 +111,11 @@ public class OrgServiceImpl extends SuperCacheServiceImpl<OrgMapper, Org> implem
         );
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Map<Serializable, Object> findNameByIds(Set<Serializable> ids) {
-        return CollHelper.uniqueIndex(findOrg(ids), Org::getId, Org::getLabel);
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+//    public Map<Serializable, Object> findNameByIds(Set<Serializable> ids) {
+//        return CollHelper.uniqueIndex(findOrg(ids), Org::getId, Org::getLabel);
+//    }
 
     @Transactional(readOnly = true)
     @Override
