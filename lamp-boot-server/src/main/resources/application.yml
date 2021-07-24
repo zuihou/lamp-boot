@@ -1,7 +1,4 @@
 lamp:
-  nginx:
-    ip: 127.0.0.1      # 正式环境需要将该ip设置成nginx对应的 公网ip
-    port: 10000
   cache:
     type: REDIS
   redis:
@@ -41,7 +38,7 @@ lamp:
       epochStr: '2020-09-15'
       boost-power: 3
       padding-factor: 50
-  injection:
+  echo:
     # 是否启用 远程数据 手动注入
     enabled: true
     # 是否启用 远程数据 注解注入
@@ -72,25 +69,36 @@ lamp:
     len: 2
     charType: 2
   file:
-    type: LOCAL # FAST_DFS LOCAL MIN_IO ALI
-    storage-path: /data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
-    uriPrefix: http://${lamp.nginx.ip}:${lamp.nginx.port}/file/   # 文件访问 需要通过这个uri前缀进行访问
-    inner-uri-prefix: null  #  内网的url前缀
-    down-by-id: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download?ids[]=%s
-    down-by-biz-id: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download/biz?bizIds[]=%s
-    down-by-url: http://${lamp.nginx.ip}:${lamp.nginx.port}/api/file/attachment/download/url?url=%s&filename=%s
+    storageType: LOCAL #  FAST_DFS LOCAL MIN_IO ALI_OSS HUAWEI_OSS QINIU_OSS
+    delFile: false
+    local:
+      storage-path: /Users/tangyh/data/projects/uploadfile/file/     # 文件存储路径  （ 某些版本的 window 需要改成  D:\\data\\projects\\uploadfile\\file\\  ）
+      endpoint: http://127.0.0.1/file/   # 文件访问 （部署nginx后，配置nginx的ip，并配置nginx静态代理storage-path地址的静态资源）
+      inner-uri-prefix: null  #  内网的url前缀
     ali:
       # 请填写自己的阿里云存储配置
-      uriPrefix: http://test.oss-cn-shenzhen.aliyuncs.com/
-      bucket-name: test
-      endpoint: http://oss-cn-shenzhen.aliyuncs.com
-      access-key-id: test
-      access-key-secret: test
+      uriPrefix: "http://zuihou-admin-cloud.oss-cn-beijing.aliyuncs.com/"
+      bucket-name: "zuihou-admin-cloud"
+      endpoint: "oss-cn-beijing.aliyuncs.com"
+      access-key-id: "填写你的id"
+      access-key-secret: "填写你的秘钥"
     minIo:
-      endpoint: "http://127.0.0.1:9000"
-      accessKey: "minioadmin"
-      secretKey: "minioadmin"
+      endpoint: "http://127.0.0.1:9000/"
+      accessKey: "lamp"
+      secretKey: "lamp"
       bucket: "dev"
+    huawei:
+      uriPrefix: "dev.obs.cn-southwest-2.myhuaweicloud.com"
+      endpoint: "obs.cn-southwest-2.myhuaweicloud.com"
+      accessKey: "1"
+      secretKey: "2"
+      location: "cn-southwest-2"
+      bucket: "dev"
+    qiNiu:
+      zone: "z0"
+      accessKey: "1"
+      secretKey: "2"
+      bucket: "zuihou_admin_cloud"
   swagger:
     license: Powered By zuihou
     licenseUrl: https://github.com/zuihou
@@ -284,7 +292,7 @@ mybatis-plus:
       id-type: INPUT
       insert-strategy: NOT_NULL
       update-strategy: NOT_NULL
-      select-strategy: NOT_EMPTY
+      where-strategy: NOT_EMPTY
   configuration:
     #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
     map-underscore-to-camel-case: true

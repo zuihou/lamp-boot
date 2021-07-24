@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-msg</artifactId>
         <groupId>com.tangyh.lamp</groupId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -25,9 +25,14 @@
             <artifactId>lamp-common-api</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tangyh.basic</groupId>
+            <artifactId>lamp-echo-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.tangyh.basic</groupId>
@@ -37,14 +42,20 @@
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.tangyh.basic</groupId>
-            <artifactId>lamp-echo-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-websocket</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>

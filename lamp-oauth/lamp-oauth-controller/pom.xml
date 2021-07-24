@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-oauth</artifactId>
         <groupId>com.tangyh.lamp</groupId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -29,7 +29,11 @@
             <artifactId>lamp-tenant-biz</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.tangyh.lamp</groupId>
+            <artifactId>lamp-msg-api</artifactId>
+            <version>${lamp-project.version}</version>
+        </dependency>
         <!-- jwt 只有Oauth服务需要使用 -->
         <dependency>
             <groupId>com.tangyh.basic</groupId>

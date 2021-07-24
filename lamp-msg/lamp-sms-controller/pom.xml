@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-msg</artifactId>
         <groupId>com.tangyh.lamp</groupId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -20,7 +20,11 @@
             <artifactId>lamp-sms-biz</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.tangyh.lamp</groupId>
+            <artifactId>lamp-oauth-api</artifactId>
+            <version>${lamp-project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.tangyh.basic</groupId>

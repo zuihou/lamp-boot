@@ -35,10 +35,7 @@ public class XxlJobInfoVO implements Serializable {
      * 调度配置，值含义取决于调度类型
      */
     private String scheduleConf;
-    /**
-     * 调度时间
-     */
-    private String scheduleTime;
+    private final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_FORMAT);
     /**
      * 调度过期策略
      */
@@ -88,8 +85,10 @@ public class XxlJobInfoVO implements Serializable {
      * 子任务ID，多个逗号分隔
      */
     private String childJobId;
-
-    private final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_FORMAT);
+    /**
+     * 调度时间
+     */
+    private String scheduleTime;
 
     public static XxlJobInfoVO create(String jobGroupName, String jobDesc,
                                       LocalDateTime scheduleTime, String executorHandler,

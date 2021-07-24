@@ -7,7 +7,7 @@ spring:
     active: dev
 logging:
   file:
-    path: /Users/tangyh/data/projects/logs
+    path: /Users/tangyh/data/logs
     name: ${logging.file.path}/${spring.application.name}/root.log
   config: classpath:logback-spring.xml
 

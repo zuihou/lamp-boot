@@ -19,14 +19,14 @@ import com.tangyh.basic.base.request.PageUtil;
 import com.tangyh.basic.context.ContextUtil;
 import com.tangyh.basic.database.mybatis.conditions.Wraps;
 import com.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
-import com.tangyh.lamp.authority.service.auth.RoleService;
-import com.tangyh.lamp.authority.service.auth.UserService;
+import com.tangyh.lamp.authority.api.UserBizApi;
 import com.tangyh.lamp.msg.dto.MsgPageResult;
 import com.tangyh.lamp.msg.dto.MsgQuery;
 import com.tangyh.lamp.msg.dto.MsgSaveDTO;
 import com.tangyh.lamp.msg.entity.Msg;
 import com.tangyh.lamp.msg.enumeration.MsgType;
 import com.tangyh.lamp.msg.service.MsgService;
+import com.tangyh.lamp.oauth.api.RoleApi;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +68,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MsgController {
     private final MsgService msgService;
-    private final RoleService roleApi;
-    private final UserService userBizApi;
+    private final RoleApi roleApi;
+    private final UserBizApi userBizApi;
 
 
     /**
@@ -204,17 +204,19 @@ public class MsgController {
     @PreAuth("hasAnyPermission('{}add')")
     public R<Msg> save(@RequestBody @Validated MsgSaveDTO data) {
         if (CollectionUtil.isEmpty(data.getUserIdList()) && CollectionUtil.isNotEmpty(data.getRoleCodeList())) {
-            List<Long> result = roleApi.findUserIdByCode(data.getRoleCodeList().toArray(new String[0]));
-
-            if (result.isEmpty()) {
-                return R.fail("已选角色下尚未分配任何用户");
+            R<List<Long>> result = roleApi.findUserIdByCode(data.getRoleCodeList().toArray(new String[0]));
+            if (result.getIsSuccess()) {
+                if (result.getData().isEmpty()) {
+                    return R.fail("已选角色下尚未分配任何用户");
+                }
+                data.setUserIdList(new HashSet<>(result.getData()));
             }
-            data.setUserIdList(new HashSet<>(result));
-
         }
         if (MsgType.PUBLICITY.eq(data.getMsgDTO().getMsgType())) {
-            List<Long> result = userBizApi.findAllUserId();
-            data.setUserIdList(new HashSet<>(result));
+            R<List<Long>> result = userBizApi.findAllUserId();
+            if (result.getIsSuccess()) {
+                data.setUserIdList(new HashSet<>(result.getData()));
+            }
         }
 
         return R.success(msgService.saveMsg(data));
