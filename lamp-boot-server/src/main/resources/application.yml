@@ -25,6 +25,7 @@ lamp:
     multiTenantType: COLUMN
     tenantIdColumn: tenant_code
     isNotWrite: false
+    p6spy: true
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
     isSeata: false
     id-type: HU_TOOL
