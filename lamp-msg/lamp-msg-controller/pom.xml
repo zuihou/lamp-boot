@@ -22,15 +22,9 @@
         </dependency>
         <dependency>
             <groupId>com.tangyh.lamp</groupId>
-            <artifactId>lamp-authority-api</artifactId>
+            <artifactId>lamp-authority-biz</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.tangyh.lamp</groupId>
-            <artifactId>lamp-oauth-api</artifactId>
-            <version>${lamp-project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-security-starter</artifactId>
