@@ -128,25 +128,25 @@ lamp:
     docket:
       oauth:
         title: 认证模块
-        base-package: com.tangyh.lamp.oauth.controller
+        base-package: top.tangyh.lamp.oauth.controller
       auth:
         title: 权限模块
-        base-package: com.tangyh.lamp.authority.controller.auth
+        base-package: top.tangyh.lamp.authority.controller.auth
       common:
         title: 公共模块
-        base-package: com.tangyh.lamp.authority.controller.common
+        base-package: top.tangyh.lamp.authority.controller.common
       core:
         title: 组织模块
-        base-package: com.tangyh.lamp.authority.controller.core
+        base-package: top.tangyh.lamp.authority.controller.core
       tenant:
         title: 租户模块
-        base-package: com.tangyh.lamp.tenant.controller
+        base-package: top.tangyh.lamp.tenant.controller
       msg:
         title: 消息服务
-        base-package: com.tangyh.lamp.msg.controller;com.tangyh.lamp.sms.controller
+        base-package: top.tangyh.lamp.msg.controller;top.tangyh.lamp.sms.controller
       file:
         title: 文件服务
-        base-package: com.tangyh.lamp.file.controller
+        base-package: top.tangyh.lamp.file.controller
 
 knife4j:
   enable: true
@@ -286,8 +286,8 @@ mybatis-plus:
   mapper-locations:
     - classpath*:mapper_**/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.tangyh.lamp.*.entity;com.tangyh.basic.database.mybatis.typehandler
-  typeEnumsPackage: com.tangyh.lamp.*.enumeration
+  typeAliasesPackage: top.tangyh.lamp.*.entity;top.tangyh.basic.database.mybatis.typehandler
+  typeEnumsPackage: top.tangyh.lamp.*.enumeration
   global-config:
     db-config:
       id-type: INPUT
