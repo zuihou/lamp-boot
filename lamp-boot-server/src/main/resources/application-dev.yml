@@ -1,0 +1,25 @@
+lamp:
+  nginx:
+    ip: 10.10.10.181      # 正式环境需要将该ip设置成nginx对应的 公网ip
+    port: 10000
+  cache:
+    type: REDIS
+  redis:
+    ip: 10.10.10.181
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
+  rabbitmq:
+    enabled: false
+    ip: 10.10.10.181
+    port: 5672
+    username: zuihou
+    password: zuihou
+  mysql:
+    ip: 10.10.10.181
+    port: 3306
+    driverClassName: com.mysql.cj.jdbc.Driver
+    database: lamp_boot_column
+    username: root
+    password: root
+    url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
