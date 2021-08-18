@@ -56,7 +56,7 @@ public class OauthGeneralController {
     /**
      * 需要让前端查询的枚举类所在的包
      */
-    private static final String ENUMS_PACKAGE = "com.tangyh";
+    private static final String ENUMS_PACKAGE = "top.tangyh";
 
     static {
         Set<Class<?>> enumClass = ClassUtils.scanPackage(ENUMS_PACKAGE, CLASS_FILTER);

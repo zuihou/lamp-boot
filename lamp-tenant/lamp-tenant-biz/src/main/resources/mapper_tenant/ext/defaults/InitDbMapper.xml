@@ -3,12 +3,22 @@
 <mapper namespace="top.tangyh.lamp.tenant.dao.InitDbMapper">
 
     <update id="createDatabase" parameterType="java.util.Map">
-        CREATE DATABASE IF NOT EXISTS ${database} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
+        CREATE
+        DATABASE IF NOT EXISTS
+        ${database}
+        DEFAULT
+        CHARACTER
+        SET
+        utf8mb4
+        COLLATE
+        utf8mb4_general_ci
     </update>
 
 
     <delete id="dropDatabase" parameterType="java.util.Map">
-        DROP DATABASE IF EXISTS ${database}
+        DROP
+        DATABASE IF EXISTS
+        ${database}
     </delete>
 
 </mapper>
