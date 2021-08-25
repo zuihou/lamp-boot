@@ -1,4 +1,9 @@
 lamp:
+  system:
+    # 登录时否验证密码有效性 （常用于开发环境快速登录）
+    verifyPassword: true
+    # 登录时否验证验证码有效性 （常用于开发环境快速登录）
+    verifyCaptcha: true
   cache:
     type: REDIS
   redis:

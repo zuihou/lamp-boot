@@ -22,13 +22,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.tangyh.lamp.common.properties.SystemProperties;
 
 /**
  * @author zuihou
  * @date 2017-12-15 14:42
  */
 @Configuration
-@EnableConfigurationProperties({IgnoreProperties.class})
+@EnableConfigurationProperties({IgnoreProperties.class, SystemProperties.class})
 @RequiredArgsConstructor
 public class AuthorityWebConfiguration extends BaseConfig implements WebMvcConfigurer {
 

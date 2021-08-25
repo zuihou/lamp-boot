@@ -9,6 +9,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.Servlet;
 
+import static top.tangyh.lamp.common.constant.BizConstant.BUSINESS_PACKAGE;
+
 /**
  * 全局统一返回值 包装器
  *
@@ -18,6 +20,6 @@ import javax.servlet.Servlet;
 @Configuration
 @ConditionalOnClass({Servlet.class, DispatcherServlet.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@RestControllerAdvice(basePackages = {"top.tangyh.lamp"})
+@RestControllerAdvice(basePackages = { BUSINESS_PACKAGE })
 public class ResponseConfiguration extends AbstractGlobalResponseBodyAdvice {
 }
