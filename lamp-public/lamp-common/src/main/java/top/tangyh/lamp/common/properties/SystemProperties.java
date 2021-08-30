@@ -8,7 +8,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 /**
  * 登录配置
  *
- * @author zuihou 77
+ * @author zuihou
  * @date 2021/1/28 7:57 下午
  */
 @Setter
