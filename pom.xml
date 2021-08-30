@@ -30,7 +30,7 @@
     </modules>
 
     <properties>
-        <lamp-util.version>3.5.0</lamp-util.version>
+        <lamp-util.version>3.5.1</lamp-util.version>
         <lamp-project.version>3.5.1</lamp-project.version>
         <!-- jdk8 将这里改成 8 -->
         <maven.compiler.source>11</maven.compiler.source>
