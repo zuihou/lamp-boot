@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Setter
 @Getter
-@RefreshScope
 @ConfigurationProperties(prefix = CaptchaProperties.PREFIX)
 public class CaptchaProperties {
     public static final String PREFIX = "lamp.captcha";

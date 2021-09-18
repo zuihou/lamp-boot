@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.lamp.file.enumeration.FileStorageType;
 
@@ -21,7 +20,6 @@ import java.util.Set;
 @Setter
 @Getter
 @ConfigurationProperties(prefix = FileServerProperties.PREFIX)
-@RefreshScope
 public class FileServerProperties {
     public static final String PREFIX = "lamp.file";
     /**
