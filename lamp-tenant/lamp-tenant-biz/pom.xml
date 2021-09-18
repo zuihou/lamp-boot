@@ -53,13 +53,6 @@
             <artifactId>mybatis-plus</artifactId>
         </dependency>
 
-        <!-- @RefreshScope 需要使用 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-context</artifactId>
-        </dependency>
-
-
     </dependencies>
 
 </project>
