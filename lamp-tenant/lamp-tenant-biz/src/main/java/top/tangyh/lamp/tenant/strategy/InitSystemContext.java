@@ -1,10 +1,10 @@
 package top.tangyh.lamp.tenant.strategy;
 
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.database.properties.DatabaseProperties;
-import top.tangyh.basic.utils.BizAssert;
-import top.tangyh.lamp.tenant.dto.TenantConnectDTO;
 import org.springframework.stereotype.Component;
+import top.tangyh.basic.database.properties.DatabaseProperties;
+import top.tangyh.basic.utils.ArgumentAssert;
+import top.tangyh.lamp.tenant.dto.TenantConnectDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class InitSystemContext {
      */
     public boolean initConnect(TenantConnectDTO tenantConnect) {
         InitSystemStrategy initSystemStrategy = initSystemStrategyMap.get(databaseProperties.getMultiTenantType().name());
-        BizAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
+        ArgumentAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
 
         return initSystemStrategy.initConnect(tenantConnect);
     }
@@ -45,7 +45,7 @@ public class InitSystemContext {
      */
     public boolean reset(String tenant) {
         InitSystemStrategy initSystemStrategy = initSystemStrategyMap.get(databaseProperties.getMultiTenantType().name());
-        BizAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
+        ArgumentAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
         return initSystemStrategy.reset(tenant);
     }
 
@@ -56,7 +56,7 @@ public class InitSystemContext {
      */
     public boolean delete(List<Long> ids, List<String> tenantCodeList) {
         InitSystemStrategy initSystemStrategy = initSystemStrategyMap.get(databaseProperties.getMultiTenantType().name());
-        BizAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
+        ArgumentAssert.notNull(initSystemStrategy, StrUtil.format("您配置的租户模式:{}不可用", databaseProperties.getMultiTenantType().name()));
 
         return initSystemStrategy.delete(ids, tenantCodeList);
     }
