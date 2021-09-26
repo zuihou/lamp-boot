@@ -45,7 +45,7 @@ public class UserUpdatePasswordDTO implements Serializable {
      * 密码
      */
     @ApiModelProperty(value = "当前密码")
-    @NotEmpty(message = "当前密码不能为空")
+//    @NotEmpty(message = "当前密码不能为空")
     @Size(max = 64, message = "当前密码长度不能超过64")
     private String oldPassword;
     /**
@@ -53,7 +53,7 @@ public class UserUpdatePasswordDTO implements Serializable {
      */
     @ApiModelProperty(value = "密码")
     @NotEmpty(message = "密码不能为空")
-    @Size(min = 6, max = 64, message = "密码长度不能超过64")
+    @Size(min = 6, max = 64, message = "密码长度不能小于6且超过64个字符")
     private String password;
 
     /**
@@ -61,7 +61,7 @@ public class UserUpdatePasswordDTO implements Serializable {
      */
     @ApiModelProperty(value = "确认密码")
     @NotEmpty(message = "确认密码不能为空")
-    @Size(min = 6, max = 64, message = "确认密码长度不能超过64")
+    @Size(min = 6, max = 64, message = "密码长度不能小于6且超过64个字符")
     private String confirmPassword;
     /**
      * 租户编码
