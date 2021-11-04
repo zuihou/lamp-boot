@@ -56,7 +56,9 @@ public class IgnoreProperties {
             "/**/anno/**"
     );
     /**
-     * 不需要携带 租户编码, 也无法校验权限
+     * 不需要携带 租户ID, 也不校验是否登录（token）。  即： 请求头中不携带 tenant
+     * <p>
+     * 注意： 此类接口，无法操作租户库(base_0000、extend_0000)的数据，因为后台无法获取租户信息，导致无法切换数据库
      *
      * @see 3.x
      */
@@ -64,18 +66,16 @@ public class IgnoreProperties {
 
     /**
      * 不需要登录, 且不需要校验权限
+     * <p>
+     * 注意： 此类接口，可以正常操作租户库(base_0000、extend_0000)的数据
+     * 注意： 此类接口，无法获取当前请求的用户信息(userId)
+     *
+     * <p>
+     * 如： 门户网站的接口，登录页面获取系统配置的接口等
      *
      * @see 3.x
      */
     private List<String> token = CollUtil.newArrayList("/**/noToken/**", "/ds/**");
-//    private List<String> login = CollUtil.newArrayList("/**/anyUser/**", "/ds/**");
-
-    /**
-     * 需要登录，但忽略权限的接口
-     *
-     * @see 4.0.0
-     */
-    private List<String> auth = CollUtil.newArrayList("/**/anyone/**");
 
     public boolean isIgnoreToken(String path) {
         List<String> all = new ArrayList<>();
@@ -88,21 +88,6 @@ public class IgnoreProperties {
         List<String> all = new ArrayList<>();
         all.addAll(getBaseUri());
         all.addAll(getTenant());
-        return all.stream().anyMatch(url -> path.startsWith(url) || ANT_PATH_MATCHER.match(url, path));
-    }
-
-
-    /**
-     * 是否忽略权限
-     *
-     * @param path 相对路径
-     * @return
-     */
-    public boolean isIgnoreAuth(String path) {
-        Set<String> all = new HashSet<>();
-        all.addAll(getBaseUri());
-        all.addAll(getToken());
-        all.addAll(getAuth());
         return all.stream().anyMatch(url -> path.startsWith(url) || ANT_PATH_MATCHER.match(url, path));
     }
 
