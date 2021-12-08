@@ -123,7 +123,7 @@ lamp:
         modelRef: String
         parameterType: header
         required: true
-        defaultValue: "Basic enVpaG91X3VpOnp1aWhvdV91aV9zZWNyZXQ="
+        defaultValue: "Basic bGFtcF93ZWI6bGFtcF93ZWJfc2VjcmV0"
       - name: tenant
         description: 租户编码
         modelRef: String
