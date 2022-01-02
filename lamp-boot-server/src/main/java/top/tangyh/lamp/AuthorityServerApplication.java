@@ -1,10 +1,7 @@
 package top.tangyh.lamp;
 
-import top.tangyh.basic.security.annotation.EnableLoginArgResolver;
-import top.tangyh.basic.validator.annotation.EnableFormValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -14,6 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import top.tangyh.basic.security.annotation.EnableLoginArgResolver;
+import top.tangyh.basic.validator.annotation.EnableFormValidator;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -29,8 +28,7 @@ import static top.tangyh.lamp.common.constant.BizConstant.UTIL_PACKAGE;
  * @author zuihou
  * @date 2018-01-13 1:34
  */
-@SpringBootApplication
-@EnableAutoConfiguration(exclude = {
+@SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
 })
 @EnableDiscoveryClient
