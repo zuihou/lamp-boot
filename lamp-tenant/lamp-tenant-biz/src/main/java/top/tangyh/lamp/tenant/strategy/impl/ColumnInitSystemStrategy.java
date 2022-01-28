@@ -156,7 +156,7 @@ public class ColumnInitSystemStrategy implements InitSystemStrategy {
     }
 
     private boolean initRole(Long roleId) {
-        Role role = Role.builder().id(roleId).name("超级管理员").code("SUPER_ADMIN").describe("内置超级管理员").dsType(DataScopeType.ALL).readonly(true).build();
+        Role role = Role.builder().id(roleId).name("超级管理员").code("SUPER_ADMIN").describe("内置超级管理员").category("10").readonly(true).build();
         return roleService.save(role);
     }
 

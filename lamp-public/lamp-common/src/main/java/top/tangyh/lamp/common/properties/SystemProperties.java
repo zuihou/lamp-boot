@@ -3,6 +3,7 @@ package top.tangyh.lamp.common.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * 登录配置
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Setter
 @Getter
+@RefreshScope
 @ConfigurationProperties(prefix = SystemProperties.PREFIX)
 public class SystemProperties {
     public static final String PREFIX = "lamp.system";

@@ -1,63 +1,63 @@
 package top.tangyh.lamp.authority.enumeration.auth;
 
-import top.tangyh.basic.base.BaseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import top.tangyh.basic.base.BaseEnum;
 
 import java.util.stream.Stream;
 
 /**
  * <p>
  * 实体注释中生成的类型枚举
- * 角色的资源
+ * 机构类型
  * </p>
  *
  * @author zuihou
- * @date 2020-11-20
+ * @date 2021-11-08
  */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "AuthorizeType", description = "权限类型-枚举")
-public enum AuthorizeType implements BaseEnum {
+@ApiModel(value = "OrgTypeEnum", description = "机构类型-枚举")
+public enum OrgTypeEnum implements BaseEnum {
 
     /**
-     * MENU="菜单"
+     * 单位
      */
-    MENU("菜单"),
-    DATA("数据"),
+    COMPANY("01", "单位"),
     /**
-     * RESOURCE="资源"
+     * 部门
      */
-    RESOURCE("资源"),
+    DEPT("02", "部门"),
     ;
 
-    @ApiModelProperty(value = "描述")
+    private String code;
     private String desc;
 
 
     /**
      * 根据当前枚举的name匹配
      */
-    public static AuthorizeType match(String val, AuthorizeType def) {
+    public static OrgTypeEnum match(String val, OrgTypeEnum def) {
         return Stream.of(values()).parallel().filter(item -> item.name().equalsIgnoreCase(val)).findAny().orElse(def);
     }
 
-    public static AuthorizeType get(String val) {
+    public static OrgTypeEnum get(String val) {
         return match(val, null);
     }
 
-    public boolean eq(AuthorizeType val) {
+    public boolean eq(OrgTypeEnum val) {
         return val != null && eq(val.name());
     }
 
     @Override
-    @ApiModelProperty(value = "编码", allowableValues = "MENU,RESOURCE", example = "MENU")
+    @ApiModelProperty(value = "编码", allowableValues = "10,20", example = "10")
     public String getCode() {
-        return this.name();
+        return this.code;
     }
+
 
 }

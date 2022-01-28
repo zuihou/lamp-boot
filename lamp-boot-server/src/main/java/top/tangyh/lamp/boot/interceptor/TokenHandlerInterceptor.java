@@ -3,6 +3,11 @@ package top.tangyh.lamp.boot.interceptor;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import top.tangyh.basic.cache.model.CacheKey;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.context.ContextConstants;
@@ -19,12 +24,6 @@ import top.tangyh.basic.utils.StrPool;
 import top.tangyh.lamp.common.cache.common.TokenUserIdCacheKeyBuilder;
 import top.tangyh.lamp.common.constant.BizConstant;
 import top.tangyh.lamp.common.properties.IgnoreProperties;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.util.StringUtils;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,6 +67,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
         }
         ContextUtil.setBoot(true);
         String traceId = IdUtil.fastSimpleUUID();
+        ContextUtil.setPath(getHeader(ContextConstants.PATH_HEADER, request));
         MDC.put(ContextConstants.LOG_TRACE_ID, traceId);
         try {
             //1, 解码 请求头中的租户信息
@@ -171,10 +171,10 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private String getHeader(String name, HttpServletRequest request) {
         String value = request.getHeader(name);
-        if (StringUtils.isEmpty(value)) {
+        if (StrUtil.isEmpty(value)) {
             value = request.getParameter(name);
         }
-        if (StringUtils.isEmpty(value)) {
+        if (StrUtil.isEmpty(value)) {
             return null;
         }
         return URLUtil.decode(value);
