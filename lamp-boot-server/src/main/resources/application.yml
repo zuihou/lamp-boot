@@ -24,7 +24,7 @@ lamp:
     database: lamp_boot_column
     username: root
     password: root
-    url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
     tenantDatabasePrefix: lamp_base
     multiTenantType: COLUMN
@@ -248,7 +248,7 @@ spring:
       username: ${lamp.mysql.username}
       password: ${lamp.mysql.password}
       driver-class-name: ${lamp.mysql.driverClassName}
-      url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=CTT&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
+      url: jdbc:mysql://${lamp.mysql.ip}:${lamp.mysql.port}/${lamp.mysql.database}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
       db-type: mysql
       initialSize: 10
       minIdle: 10
