@@ -35,11 +35,10 @@
 
 ## 前端
 
-| 项目 | gitee | github | 备注 | 演示地址                             |
-| --- | --- | --- | --- |----------------------------------|
-| lamp-web | [lamp-web](https://gitee.com/zuihou111/lamp-web) | [lamp-web](https://github.com/zuihou/lamp-web) | 基于 vue-admin-element (element-ui) | https://pro.tangyh.top/          |
-| lamp-web-plus(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-plus) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus) | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top/lamp-web/ |
-| lamp-web-beautiful(停更) | [lamp-web-beautiful](https://gitee.com/zuihou111/lamp-web-beautiful) | [lamp-web-beautiful](https://github.com/zuihou/lamp-web-beautiful) | 基于 vue-admin-beautiful | 无                                |
+| 项目 | gitee | github | 备注 | 演示地址 |
+| --- | --- | --- | --- | --- |
+| lamp-web-plus(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-plus) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus) | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top |
+| lamp-web | [lamp-web](https://gitee.com/zuihou111/lamp-web) | [lamp-web](https://github.com/zuihou/lamp-web) | 基于 vue-admin-element (element-ui) | https://pro.tangyh.top/lamp-web |
 
 # lamp-boot 简介
 
@@ -53,23 +52,15 @@
 的解决方案。本项目旨在实现基础框架能力，不涉及具体业务。
 
 # 会员版演示地址
-- 后端使用lamp-cloud-plus，前端使用lamp-web-plus。演示地址： https://pro.tangyh.top/
-- 后端使用lamp-cloud-plus，前端使用lamp-web。演示地址： https://pro.tangyh.top/lamp-web/
-- 后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址： https://boot.tangyh.top/
-- 后端使用lamp-boot-plus， 前端使用lamp-web。演示地址： https://boot.tangyh.top/lamp-web/
-
-# 演示账号
-- 以下内置账号仅限于内置的0000租户
-- 平台管理员： lamp_pt/lamp (内置给公司内部运营人员使用)
-- 超级管理员： lamp/lamp
-- 普通管理员： general/lamp
-- 普通账号： normal/lamp
+- 官网：[https://tangyh.top](https://tangyh.top)
+- 4.0版本：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址：   [https://pro.tangyh.top](https://pro.tangyh.top)
+- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址：  [https://boot.tangyh.top](https://boot.tangyh.top)
+- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web。演示地址：     [https://boot.tangyh.top/lamp-web](https://boot.tangyh.top/lamp-web)
 
 # 快速上手
-
-- 入门到精通，参考文档： https://www.kancloud.cn/zuihou/zuihou-admin-cloud
-- 发现bug和建议，请提交issue： https://github.com/zuihou/lamp-cloud/issues
-- 常见问题，请参考Discussions： https://github.com/zuihou/lamp-cloud/discussions
+- 入门到精通，参考 [在线文档](https://www.kancloud.cn/zuihou/zuihou-admin-cloud)
+- 发现bug和建议，请提交 [issue](https://github.com/zuihou/lamp-cloud/issues)
+- 常见问题，请参考 [Discussions](https://github.com/zuihou/lamp-cloud/discussions)
 
 # 项目截图：
 
@@ -82,6 +73,6 @@
 # 会员版
 本项目分为开源版和会员版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 会员版源码在私有gitlab托管，购买后开通账号。
 
-会员版和开源版区别请看：[会员版](https://www.kancloud.cn/zuihou/zuihou-admin-cloud/2074547)
+区别请看：[会员版](https://tangyh.top/pages/vip/)
 
 
