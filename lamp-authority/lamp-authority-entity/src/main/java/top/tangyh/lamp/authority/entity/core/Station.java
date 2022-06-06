@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import top.tangyh.basic.annotation.echo.Echo;
 import top.tangyh.basic.base.entity.Entity;
-import top.tangyh.basic.model.EchoVO;
+import top.tangyh.basic.interfaces.echo.EchoVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
-import static top.tangyh.lamp.common.constant.EchoConstants.ORG_ID_CLASS;
+import static top.tangyh.lamp.model.constant.EchoApi.ORG_ID_CLASS;
 
 /**
  * <p>

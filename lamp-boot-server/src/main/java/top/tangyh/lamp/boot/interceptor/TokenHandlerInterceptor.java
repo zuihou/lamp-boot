@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import top.tangyh.basic.cache.model.CacheKey;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
@@ -20,6 +20,7 @@ import top.tangyh.basic.exception.UnauthorizedException;
 import top.tangyh.basic.jwt.TokenUtil;
 import top.tangyh.basic.jwt.model.AuthInfo;
 import top.tangyh.basic.jwt.utils.JwtUtil;
+import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.lamp.common.cache.common.TokenUserIdCacheKeyBuilder;
 import top.tangyh.lamp.common.constant.BizConstant;
@@ -51,7 +52,7 @@ import static top.tangyh.basic.exception.code.ExceptionCode.JWT_OFFLINE;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
+public class TokenHandlerInterceptor implements AsyncHandlerInterceptor {
 
     private final String profiles;
     private final IgnoreProperties ignoreTokenProperties;
@@ -63,7 +64,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
             log.info("not exec!!! url={}", request.getRequestURL());
-            return super.preHandle(request, response, handler);
+            return true;
         }
         ContextUtil.setBoot(true);
         String traceId = IdUtil.fastSimpleUUID();
@@ -89,7 +90,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             throw UnauthorizedException.wrap("验证token出错");
         }
 
-        return super.preHandle(request, response, handler);
+        return true;
     }
 
     private boolean parseToken(HttpServletRequest request) {
@@ -197,7 +198,6 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         ContextUtil.remove();
-        super.afterCompletion(request, response, handler, ex);
     }
 
 }

@@ -1,9 +1,6 @@
 package top.tangyh.lamp.authority.dto.auth;
 
-import top.tangyh.basic.model.RemoteData;
-import top.tangyh.lamp.authority.entity.core.Org;
-import top.tangyh.lamp.authority.entity.core.Station;
-import top.tangyh.lamp.authority.enumeration.auth.Sex;
+import top.tangyh.lamp.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -60,14 +57,14 @@ public class UserDTO implements Serializable {
      * #c_org
      */
     @ApiModelProperty(value = "组织ID")
-    private RemoteData<Long, Org> org;
+    private Long org;
 
     /**
      * 岗位ID
      * #c_station
      */
     @ApiModelProperty(value = "岗位ID")
-    private RemoteData<Long, Station> station;
+    private Long station;
 
     /**
      * 邮箱

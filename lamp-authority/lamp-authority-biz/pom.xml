@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-authority</artifactId>
         <groupId>top.tangyh.lamp</groupId>
-        <version>3.6.2</version>
+        <version>3.7.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -24,7 +24,10 @@
             <artifactId>lamp-file-sdk</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-mvc</artifactId>
+        </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>
@@ -42,12 +45,12 @@
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-boot-util</artifactId>
         </dependency>
-
-        <!-- user 只有权限服务 放在biz层， 其他服务都在controller模块 -->
         <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-security-starter</artifactId>
+            <groupId>top.tangyh.lamp</groupId>
+            <artifactId>lamp-security-sdk</artifactId>
+            <version>${lamp-project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
@@ -56,6 +59,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- @RefreshScope 需要使用 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
         </dependency>
 
         <dependency>

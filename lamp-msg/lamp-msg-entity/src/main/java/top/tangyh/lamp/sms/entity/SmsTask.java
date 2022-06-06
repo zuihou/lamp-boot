@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import top.tangyh.basic.annotation.echo.Echo;
 import top.tangyh.basic.base.entity.Entity;
-import top.tangyh.basic.model.EchoVO;
+import top.tangyh.basic.interfaces.echo.EchoVO;
 import top.tangyh.lamp.sms.enumeration.SourceType;
 import top.tangyh.lamp.sms.enumeration.TaskStatus;
 import io.swagger.annotations.ApiModel;
@@ -26,7 +26,7 @@ import java.util.Map;
 
 import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
-import static top.tangyh.lamp.common.constant.EchoConstants.SMS_TEMPLATE_ID_CLASS;
+import static top.tangyh.lamp.model.constant.EchoApi.SMS_TEMPLATE_ID_CLASS;
 
 /**
  * <p>

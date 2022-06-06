@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @author zuihou
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Setter
 @Getter
+@RefreshScope
 @ConfigurationProperties(prefix = CaptchaProperties.PREFIX)
 public class CaptchaProperties {
     public static final String PREFIX = "lamp.captcha";

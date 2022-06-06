@@ -3,7 +3,7 @@ package top.tangyh.lamp.authority.service.common.impl;
 import cn.hutool.core.convert.Convert;
 
 import top.tangyh.basic.base.service.SuperCacheServiceImpl;
-import top.tangyh.basic.cache.model.CacheKeyBuilder;
+import top.tangyh.basic.model.cache.CacheKeyBuilder;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.lamp.authority.dao.common.AreaMapper;
 import top.tangyh.lamp.authority.entity.common.Area;
@@ -12,6 +12,7 @@ import top.tangyh.lamp.common.cache.common.AreaCacheKeyBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 

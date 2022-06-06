@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.tangyh.basic.utils.CollHelper;
 import top.tangyh.basic.utils.StrPool;
+
 import top.tangyh.lamp.file.dao.FileMapper;
 import top.tangyh.lamp.file.domain.FileDeleteBO;
 import top.tangyh.lamp.file.domain.FileGetUrlBO;
@@ -85,7 +86,7 @@ public class MinIoFileStrategyImpl extends AbstractFileStrategy {
         file.setBucket(bucket);
         file.setPath(path);
         file.setUniqueFileName(uniqueFileName);
-        file.setUrl(fileProperties.getMinIo().getUrlPrefix() + bucket + StrPool.SLASH +path);
+        file.setUrl(fileProperties.getMinIo().getUrlPrefix() + bucket + StrPool.SLASH + path);
         file.setStorageType(FileStorageType.MIN_IO);
     }
 
@@ -106,7 +107,6 @@ public class MinIoFileStrategyImpl extends AbstractFileStrategy {
         Map<String, String> map = new LinkedHashMap<>(CollHelper.initialCapacity(fileGets.size()));
         for (FileGetUrlBO fileGet : fileGets) {
             String bucket = StrUtil.isEmpty(fileGet.getBucket()) ? minIo.getBucket() : fileGet.getBucket();
-
             try {
                 if (CollUtil.isNotEmpty(publicBucket) && publicBucket.contains(bucket)) {
                     StringBuilder url = new StringBuilder(minIo.getUrlPrefix())

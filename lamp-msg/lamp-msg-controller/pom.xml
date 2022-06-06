@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-msg</artifactId>
         <groupId>top.tangyh.lamp</groupId>
-        <version>3.6.2</version>
+        <version>3.7.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,9 +26,5 @@
             <version>${lamp-project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-security-starter</artifactId>
-        </dependency>
     </dependencies>
 </project>

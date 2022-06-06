@@ -4,11 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>top.tangyh.lamp</groupId>
-        <artifactId>lamp-boot</artifactId>
-        <version>3.6.2</version>
-        <relativePath>../../pom.xml</relativePath>
+        <artifactId>lamp-public</artifactId>
+        <version>3.7.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.lamp</groupId>
     <artifactId>lamp-common</artifactId>
@@ -19,6 +18,11 @@
         <dependency>
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.tangyh.lamp</groupId>
+            <artifactId>lamp-model</artifactId>
+            <version>${lamp-project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.tangyh.basic.utils.CollHelper;
 import top.tangyh.basic.utils.StrPool;
+
 import top.tangyh.lamp.file.dao.FileMapper;
 import top.tangyh.lamp.file.domain.FileDeleteBO;
 import top.tangyh.lamp.file.domain.FileGetUrlBO;
@@ -50,7 +51,7 @@ public class LocalFileStrategyImpl extends AbstractFileStrategy {
         FileUtils.writeByteArrayToFile(outFile, multipartFile.getBytes());
 
         // 返回数据
-        String url = local.getUrlPrefix() + bucket + StrPool.SLASH +path;
+        String url = local.getUrlPrefix() + bucket + StrPool.SLASH + path;
         file.setUrl(url);
         file.setUniqueFileName(uniqueFileName);
         file.setPath(path);

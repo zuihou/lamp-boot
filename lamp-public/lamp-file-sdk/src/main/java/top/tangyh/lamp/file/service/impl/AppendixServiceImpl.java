@@ -13,17 +13,17 @@ import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.base.service.SuperServiceImpl;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
-import top.tangyh.basic.model.EchoVO;
+import top.tangyh.basic.interfaces.echo.EchoVO;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.BeanPlusUtil;
 import top.tangyh.basic.utils.CollHelper;
-import top.tangyh.lamp.common.vo.result.AppendixResultVO;
-import top.tangyh.lamp.common.vo.save.AppendixSaveVO;
+
 import top.tangyh.lamp.file.entity.Appendix;
 import top.tangyh.lamp.file.mapper.AppendixMapper;
 import top.tangyh.lamp.file.service.AppendixService;
+import top.tangyh.lamp.model.vo.result.AppendixResultVO;
+import top.tangyh.lamp.model.vo.save.AppendixSaveVO;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,12 +66,11 @@ public class AppendixServiceImpl extends SuperServiceImpl<AppendixMapper, Append
         Set<String> bizTypeSet = CollUtil.newHashSet();
         map.forEach((biz, item) -> bizTypeSet.add(biz.getBizType()));
 
-        list.forEach(item -> {
-            bizTypeSet.forEach(bizType -> {
-                Collection<AppendixResultVO> colls = map.get(buildBiz(item.getId(), bizType));
-                item.getEchoMap().put(bizType, colls);
-            });
-        });
+        list.forEach(item ->
+                bizTypeSet.forEach(bizType ->
+                        item.getEchoMap().put(bizType, map.get(buildBiz(item.getId(), bizType)))
+                )
+        );
     }
 
     @Override

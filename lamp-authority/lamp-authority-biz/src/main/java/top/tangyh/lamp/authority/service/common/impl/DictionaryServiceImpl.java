@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.base.service.SuperServiceImpl;
-import top.tangyh.basic.cache.model.CacheHashKey;
+import top.tangyh.basic.model.cache.CacheHashKey;
 import top.tangyh.basic.cache.repository.CachePlusOps;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
@@ -27,6 +27,7 @@ import top.tangyh.lamp.authority.entity.common.Dictionary;
 import top.tangyh.lamp.authority.service.common.DictionaryService;
 import top.tangyh.lamp.common.cache.common.DictionaryTypeCacheKeyBuilder;
 import top.tangyh.lamp.common.constant.DefValConstants;
+
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -176,7 +177,7 @@ public class DictionaryServiceImpl extends SuperServiceImpl<DictionaryMapper, Di
         if (idList.isEmpty()) {
             return true;
         }
-        List<Dictionary> list = listByIds((Collection<Long>)idList);
+        List<Dictionary> list = listByIds((Collection<Long>)  idList);
         boolean remove = super.removeByIds(idList);
         CacheHashKey[] hashKeys = list.stream().map(model -> new DictionaryTypeCacheKeyBuilder().hashKey(model.getType())).toArray(CacheHashKey[]::new);
         cachePlusOps.del(hashKeys);

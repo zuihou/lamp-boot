@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.tangyh.basic.utils.CollHelper;
 import top.tangyh.basic.utils.StrPool;
+
 import top.tangyh.lamp.file.dao.FileMapper;
 import top.tangyh.lamp.file.domain.FileDeleteBO;
 import top.tangyh.lamp.file.domain.FileGetUrlBO;
@@ -90,7 +91,7 @@ public class HuaweiFileStrategyImpl extends AbstractFileStrategy {
             request.setMetadata(metadata);
             obsClient.putObject(request);
 
-            String url = huawei.getUrlPrefix() +bucket + StrPool.SLASH + path;
+            String url = huawei.getUrlPrefix() + bucket + StrPool.SLASH + path;
             file.setUrl(url);
         }
         file.setBucket(bucket);

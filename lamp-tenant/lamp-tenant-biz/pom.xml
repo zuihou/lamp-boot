@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-tenant</artifactId>
         <groupId>top.tangyh.lamp</groupId>
-        <version>3.6.2</version>
+        <version>3.7.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -21,13 +21,18 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-authority-biz</artifactId>
+            <artifactId>lamp-file-sdk</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-file-sdk</artifactId>
+            <artifactId>lamp-authority-biz</artifactId>
             <version>${lamp-project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-mvc</artifactId>
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
@@ -52,6 +57,13 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
         </dependency>
+
+        <!-- @RefreshScope 需要使用 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+        </dependency>
+
 
     </dependencies>
 
