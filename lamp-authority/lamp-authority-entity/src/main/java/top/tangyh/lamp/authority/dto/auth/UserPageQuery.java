@@ -1,6 +1,5 @@
 package top.tangyh.lamp.authority.dto.auth;
 
-import top.tangyh.lamp.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.tangyh.lamp.model.enumeration.Sex;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -149,9 +149,11 @@ public class UserPageQuery implements Serializable {
      */
     @ApiModelProperty(value = "最后登录时间")
     private LocalDateTime lastLoginTime;
+    private Long createdOrgId;
 
     @ApiModelProperty(value = "范围")
     private String scope;
     @ApiModelProperty(value = "角色id")
     private String roleId;
+
 }

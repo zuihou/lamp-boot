@@ -1,12 +1,10 @@
 package top.tangyh.lamp.userinfo.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.CollHelper;
-
 import top.tangyh.lamp.userinfo.dao.RoleHelperMapper;
 
 import java.util.Arrays;
@@ -33,7 +31,6 @@ public class RoleHelperService {
      * @date 2022/4/24 2:49 PM
      * @create [2022/4/24 2:49 PM ] [tangyh] [初始创建]
      */
-
     public boolean checkRole(Long employeeId, String... codes) {
         ContextUtil.setDatabaseBase();
         ArgumentAssert.notEmpty(codes, "请传递角色编码");
@@ -45,7 +42,6 @@ public class RoleHelperService {
         return mainOrgCount > 0 ? true : roleHelperMapper.countRoleFormOrg(Arrays.asList(codes), employeeId) > 0;
     }
 
-
     public List<Long> listResourceId(Long employeeId, Long applicationId) {
         ContextUtil.setDatabaseBase();
         List<Long> resourceIdRoleList = roleHelperMapper.selectResourceIdFromRoleByUserId(employeeId, applicationId);
@@ -53,7 +49,6 @@ public class RoleHelperService {
         List<Long> resourceIdOrgList = roleHelperMapper.selectResourceIdFromOrgByUserId(employeeId, applicationId);
         return CollHelper.addAllUnique(resourceIdRoleList, resourceIdMainOrgList, resourceIdOrgList);
     }
-
 
     public List<String> findRoleCodeByUserId(Long userId) {
         ContextUtil.setDatabaseBase();

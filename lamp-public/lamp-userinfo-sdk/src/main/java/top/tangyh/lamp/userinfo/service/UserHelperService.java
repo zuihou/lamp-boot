@@ -1,6 +1,5 @@
 package top.tangyh.lamp.userinfo.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,18 +27,15 @@ public class UserHelperService {
     private final OrgHelperMapper orgHelperMapper;
     private final StationHelperMapper stationHelperMapper;
 
-
     public SysUser getUserByIdCache(Long userId) {
         ContextUtil.setDatabaseBase();
         return userHelperMapper.selectById(userId);
     }
 
-
     public SysOrg getOrgByIdCache(Long orgId) {
         ContextUtil.setDatabaseBase();
         return orgHelperMapper.selectById(orgId);
     }
-
 
     public SysStation getStationByIdCache(Long positionId) {
         ContextUtil.setDatabaseBase();
