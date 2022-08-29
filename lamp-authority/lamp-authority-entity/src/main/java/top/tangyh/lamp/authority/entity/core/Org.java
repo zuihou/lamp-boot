@@ -3,6 +3,10 @@ package top.tangyh.lamp.authority.entity.core;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import top.tangyh.basic.annotation.echo.Echo;
+import top.tangyh.basic.base.entity.TreeEntity;
+import top.tangyh.basic.interfaces.echo.EchoVO;
+import top.tangyh.lamp.model.constant.EchoDictType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,17 +16,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import top.tangyh.basic.annotation.echo.Echo;
-import top.tangyh.basic.base.entity.TreeEntity;
-import top.tangyh.basic.interfaces.echo.EchoVO;
-import top.tangyh.lamp.model.constant.EchoDictType;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
+import static top.tangyh.lamp.model.constant.Condition.LIKE;
 import static top.tangyh.lamp.model.constant.EchoApi.DICTIONARY_ITEM_CLASS;
 
 

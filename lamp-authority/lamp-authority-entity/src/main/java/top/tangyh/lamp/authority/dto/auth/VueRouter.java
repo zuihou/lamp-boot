@@ -2,9 +2,9 @@ package top.tangyh.lamp.authority.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import top.tangyh.basic.base.entity.TreeEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.tangyh.basic.base.entity.TreeEntity;
 
 /**
  * 构建 Vue路由

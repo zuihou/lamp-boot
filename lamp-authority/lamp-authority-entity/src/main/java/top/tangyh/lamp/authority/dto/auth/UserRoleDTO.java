@@ -7,16 +7,11 @@ package top.tangyh.lamp.authority.dto.auth;
  * @date 2019/07/28
  */
 
+import top.tangyh.lamp.authority.entity.auth.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
-import top.tangyh.lamp.authority.entity.auth.User;
 
 import java.io.Serializable;
 import java.util.List;

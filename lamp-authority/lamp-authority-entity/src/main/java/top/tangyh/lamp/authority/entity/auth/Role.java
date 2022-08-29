@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
+import static top.tangyh.lamp.model.constant.Condition.LIKE;
 import static top.tangyh.lamp.model.constant.EchoApi.DICTIONARY_ITEM_CLASS;
 
 /**
@@ -52,7 +52,7 @@ public class Role extends Entity<Long> implements EchoVO {
      * 角色类别;[10-功能角色 20-桌面角色 30-数据角色]
      */
     @ApiModelProperty(value = "角色类别")
-    @TableField(value = "`category`", condition = LIKE)
+    @TableField(value = "category", condition = LIKE)
     @Size(max = 2, message = "角色类别长度不能超过{max}")
     @Echo(api = DICTIONARY_ITEM_CLASS, dictType = EchoDictType.ROLE_CATEGORY)
     private String category;

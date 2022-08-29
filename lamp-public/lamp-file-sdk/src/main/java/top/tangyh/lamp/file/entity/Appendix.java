@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
-import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
+import static top.tangyh.lamp.model.constant.Condition.LIKE;
 
 
 /**
@@ -82,7 +82,7 @@ public class Appendix extends Entity<Long> {
     /**
      * 大小
      */
-    @TableField(value = "size")
+    @TableField(value = "size_")
     private Long size;
 
 

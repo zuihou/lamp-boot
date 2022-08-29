@@ -3,6 +3,7 @@ package top.tangyh.lamp.authority.dto.auth;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.handler.inter.IExcelDataModel;
 import cn.afterturn.easypoi.handler.inter.IExcelModel;
+import top.tangyh.lamp.model.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import top.tangyh.lamp.model.enumeration.Sex;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;

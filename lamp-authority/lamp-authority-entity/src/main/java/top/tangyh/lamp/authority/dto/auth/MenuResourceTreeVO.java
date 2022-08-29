@@ -2,15 +2,15 @@ package top.tangyh.lamp.authority.dto.auth;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
+import top.tangyh.basic.base.entity.TreeEntity;
+import top.tangyh.lamp.authority.enumeration.auth.AuthorizeType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
-import top.tangyh.basic.base.entity.TreeEntity;
-import top.tangyh.lamp.authority.enumeration.auth.AuthorizeType;
 
 import javax.validation.constraints.Size;
 
-import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
+import static top.tangyh.lamp.model.constant.Condition.LIKE;
 
 /**
  * menuList

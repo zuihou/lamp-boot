@@ -3,6 +3,7 @@ package top.tangyh.lamp.authority.entity.common;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import top.tangyh.basic.base.entity.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,12 +13,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import top.tangyh.basic.base.entity.SuperEntity;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static com.baomidou.mybatisplus.annotation.SqlCondition.LIKE;
+import static top.tangyh.lamp.model.constant.Condition.LIKE;
 
 /**
  * <p>

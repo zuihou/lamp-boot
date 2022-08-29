@@ -1,5 +1,6 @@
 package top.tangyh.lamp.authority.dto.common;
 
+import top.tangyh.lamp.authority.entity.common.OptLog;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import top.tangyh.lamp.authority.entity.common.OptLog;
 
 import java.io.Serializable;
 
