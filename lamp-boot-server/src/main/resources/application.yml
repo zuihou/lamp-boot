@@ -26,6 +26,7 @@ lamp:
     driverClassName: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@172.26.3.67:1521:helowin
     owner: ''
+    p6spy: false
   mysql: &db-mysql
     db-type: mysql
     validation-query: SELECT 'x'
@@ -285,7 +286,6 @@ spring:
       max-wait: 60000
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
-      validation-query: SELECT 'x'
       test-on-borrow: false
       test-on-return: false
       test-while-idle: true

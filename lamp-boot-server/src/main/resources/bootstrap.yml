@@ -10,6 +10,8 @@ logging:
     path: /Users/tangyh/data/logs
     name: ${logging.file.path}/${spring.application.name}/root.log
   config: classpath:logback-spring.xml
+  level:
+    druid.sql.Statement: debug
 
 info:
   name: '@project.name@'
