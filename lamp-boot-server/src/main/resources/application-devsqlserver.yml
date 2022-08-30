@@ -1,0 +1,40 @@
+lamp:
+  nginx:
+    ip: 127.0.0.1      # 正式环境需要将该ip设置成nginx对应的 公网ip
+    port: 10000
+  cache:
+    type: REDIS
+  redis:
+    ip: 127.0.0.1
+    port: 16379
+    password: SbtyMveYNfLzTks7H0apCmyStPzWJqjy
+    database: 0
+  rabbitmq:
+    enabled: false
+    ip: 127.0.0.1
+    port: 5672
+    username: zuihou
+    password: zuihou
+  sqlserver: &db-sqlserver
+    username: 'sa'
+    password: '1234@abcd'
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    # url: jdbc:sqlserver://172.26.3.67:1433;DatabaseName=lamp_defaults
+    url: jdbc:sqlserver://117.187.194.249:1433;DatabaseName=lamp_defaults
+    db-type: sqlserver
+    validation-query: SELECT 'x'
+    filters: stat,wall
+    owner: 'dbo'
+  database:
+    <<: *db-sqlserver
+    multiTenantType: SCHEMA
+
+
+spring:
+  datasource:
+    druid:
+      <<: *db-sqlserver
+      filter:
+        slf4j:
+          enabled: true     # 使用slf4j打印可执行日志时，改成true
+          statement-executable-sql-log-enable: true
