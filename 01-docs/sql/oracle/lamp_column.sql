@@ -1,5 +1,7 @@
--- 模式 新建lamp_， 导入base_0000.sql + extend_0000.sql + defaults.sql ，在执行本脚本
-
+/*
+1. 模式 新建lamp_column库， 导入lamp_base_0000.sql + lamp_extend_0000.sql + lamp_defaults.sql
+2. 在执行本脚本
+*/
 -- 新增租户编码字段
 
 ALTER TABLE c_application ADD  tenant_code varchar(20)   ;
