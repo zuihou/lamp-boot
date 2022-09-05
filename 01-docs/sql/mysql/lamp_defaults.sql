@@ -94,11 +94,11 @@ CREATE TABLE `c_tenant_datasource_config`
     `id`                   bigint(20) NOT NULL COMMENT 'ID',
     `tenant_id`            bigint(20) NOT NULL COMMENT '租户id',
     `datasource_config_id` bigint(20) NOT NULL COMMENT '数据源id',
-    `application`          varchar(100) NOT NULL DEFAULT '' COMMENT '服务',
+    `db_prefix`          varchar(100) NOT NULL DEFAULT '' COMMENT '服务',
     `create_time`          datetime              DEFAULT NULL COMMENT '创建时间',
     `created_by`           bigint(20) DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_tenan_application` (`tenant_id`,`datasource_config_id`,`application`)
+    UNIQUE KEY `uk_tenan_application` (`tenant_id`,`datasource_config_id`,`db_prefix`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租户数据源关系';
 
 -- ----------------------------
