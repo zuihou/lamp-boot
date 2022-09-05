@@ -1,0 +1,8 @@
+lamp:
+  database:
+    p6spy: true
+
+logging:
+  file:
+    path: /Users/tangyh/data/logs
+  config: classpath:logback-spring-dev.xml

@@ -10,15 +10,21 @@ lamp:
     port: 5672
     username: zuihou
     password: zuihou
-  mysql:
-    ip: 127.0.0.1
-    port: 3306
+  druid:
     driverClassName: com.mysql.cj.jdbc.Driver
-    database: zuihou_defaults
-    username: root
-    password: root
+    username: 'root'
+    password: 'ZHadmin123.'
+    url: jdbc:mysql://127.0.0.1:3218/lamp_boot_column?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
   database:
     isNotWrite: true
+  file:
+    storageType: MIN_IO
+    delFile: false
+    minIo:
+      endpoint: "https://static.tangyh.top/"
+      accessKey: "lamp"
+      secretKey: "."
+      bucket: "dev"
   swagger:
     # 正式环境用nginx代理，为了保持和cloud版本一致的URL，特意调整
     docket:
@@ -33,10 +39,10 @@ lamp:
       core:
         base-path: /api/authority
       tenant:
-        base-path: /api/authority
-      sms:
-        base-path: /api/msg
-      msgs:
+        base-path: /api/tenant
+      msg:
         base-path: /api/msg
       file:
         base-path: /api/file
+      activiti:
+        base-path: /api/activiti

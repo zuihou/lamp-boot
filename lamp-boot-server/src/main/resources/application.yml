@@ -15,52 +15,29 @@ lamp:
     enabled: false
     ip: 127.0.0.1
     port: 5672
-    username: zuihou
-    password: zuihou
-  oracle: &db-oracle
-    db-type: oracle
-    validation-query: SELECT 'x' FROM DUAL
-    filters: stat,wall,slf4j       # druid不支持使用p6spy打印日志，所以采用druid 的 slf4j 过滤器来打印可执行日志
-    username: 'lamp_defaults'
-    password: 'lamp_defaults'
-    driverClassName: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@172.26.3.67:1521:helowin
-    owner: ''
-    p6spy: false
-  mysql: &db-mysql
-    db-type: mysql
-    validation-query: SELECT 'x'
-    filters: stat,wall
+    username: lamp
+    password: lamp
+  druid:
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: 'root'
     password: 'root'
-    owner: ''
-    # 生产使用原生驱动，开发使用p6spy驱动打印日志
-    driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/lamp_defaults?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&nullCatalogMeansCurrent=true
-  sqlserver: &db-sqlserver
-    username: 'sa'
-    password: '1234@abcd'
-    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    # url: jdbc:sqlserver://172.26.3.67:1433;DatabaseName=lamp_defaults
-    url: jdbc:sqlserver://117.187.194.249:1433;DatabaseName=lamp_defaults
-    db-type: sqlserver
-    validation-query: SELECT 'x'
-    filters: stat,wall
-    owner: 'dbo'
   database:
-    <<: *db-sqlserver
-    # <<: *db-mysql
-    # <<: *db-oracle
-    tenantDatabasePrefix: lamp_base  # schema 模式专用
-    initDatabasePrefix:   #  # schema 和 datasource 模式需要初始化的租户库前缀
+    dbType: MYSQL
+    # 需要初始化的数据库前缀
+    initDatabasePrefix:
       - lamp_base
-      - lamp_extend
+    # SCHEMA模式专用 当前服务的租户库前缀
+    tenantDatabasePrefix: lamp_base
+    # SCHEMA模式专用
+    owner: ''
     multiTenantType: SCHEMA
+    # COLUMN模式专用 隔离租户的字段
     tenantIdColumn: tenant_code
     isNotWrite: false
-    p6spy: true
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
     isSeata: false
+    p6spy: true
     id-type: HU_TOOL
     hutoolId:
       workerId: 0
@@ -77,31 +54,20 @@ lamp:
     enabled: true
     # 是否启用 远程数据 注解注入
     aop-enabled: true
-    guavaCache:
-      enabled: false
-      maximumSize: 1000
-      refreshWriteTime: 10
-      refreshThreadPoolSize: 1000
+  authentication:
+    expire: 28800               # token有效期为8小时
+    refreshExpire: 86400        # 刷新token有效期为24小时
   security:
     # 是否开启URI权限校验
     enabled: true
     type: SERVICE
     caseSensitive: false
-  authentication:
-    expire: 28800               # token有效期为8小时
-    refreshExpire: 86400        # 刷新token有效期为24小时
   log:
     enabled: true
     type: DB
   xss:
     enabled: true
     requestBodyEnabled: false
-  captcha:
-    type: ARITHMETIC
-    width: 158
-    height: 58
-    len: 2
-    charType: 2
   file:
     storageType: LOCAL #  FAST_DFS LOCAL MIN_IO ALI_OSS HUAWEI_OSS QINIU_OSS
     delFile: false
@@ -180,6 +146,21 @@ lamp:
       file:
         title: 文件服务
         base-package: top.tangyh.lamp.file.controller
+      activiti:
+        title: 流程组件模块
+        base-package: top.tangyh.lamp.activiti.controller
+  captcha:
+    type: ARITHMETIC
+    width: 158
+    height: 58
+    len: 2
+    charType: 2
+  async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+    keepAliveSeconds: 300
+    threadNamePrefix: 'lamp-async-executor-'
 
 knife4j:
   enable: true
@@ -277,9 +258,12 @@ spring:
     druid:
       enable: true
       # 从这里开始(druid)，中间的这段配置用于 lamp.database.multiTenantType != DATASOURCE 时
-      <<: *db-mysql
-#      <<: *db-sqlserver
-      # <<: *db-oracle
+      username: ${lamp.druid.username}
+      password: ${lamp.druid.password}
+      driverClassName: ${lamp.druid.driverClassName}
+      url: ${lamp.druid.url}
+      db-type: mysql
+      validation-query: SELECT 'x'
       initialSize: 10
       minIdle: 10
       maxActive: 200
@@ -291,7 +275,7 @@ spring:
       test-while-idle: true
       time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
       min-evictable-idle-time-millis: 300000    #配置一个连接在池中最小生存的时间，单位是毫秒
-#      filters: stat,wall
+      filters: stat,wall
       filter:
         wall:
           enabled: true

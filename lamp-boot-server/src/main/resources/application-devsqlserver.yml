@@ -1,7 +1,4 @@
 lamp:
-  nginx:
-    ip: 127.0.0.1      # 正式环境需要将该ip设置成nginx对应的 公网ip
-    port: 10000
   cache:
     type: REDIS
   redis:
@@ -13,28 +10,35 @@ lamp:
     enabled: false
     ip: 127.0.0.1
     port: 5672
-    username: zuihou
-    password: zuihou
-  sqlserver: &db-sqlserver
+    username: lamp
+    password: lamp
+  druid:
     username: 'sa'
     password: '1234@abcd'
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    # url: jdbc:sqlserver://172.26.3.67:1433;DatabaseName=lamp_defaults
-    url: jdbc:sqlserver://117.187.194.249:1433;DatabaseName=lamp_defaults
-    db-type: sqlserver
-    validation-query: SELECT 'x'
-    filters: stat,wall
-    owner: 'dbo'
+    url: jdbc:sqlserver://172.26.3.67:1433;DatabaseName=lamp_defaults
   database:
-    <<: *db-sqlserver
+    dbType: SQL_SERVER
+    # 需要初始化的数据库前缀
+    initDatabasePrefix:
+      - lamp_base
+    # SCHEMA模式专用 当前服务的租户库前缀
+    tenantDatabasePrefix: lamp_base
+    # SCHEMA模式专用
+    owner: 'dbo'
     multiTenantType: SCHEMA
-
+    # COLUMN模式专用 隔离租户的字段
+    tenantIdColumn: tenant_code
+    isSeata: false
+    p6spy: true
 
 spring:
   datasource:
+    dynamic:
+      druid:
+        validation-query: SELECT 'x'
+        db-type: sqlserver
+    # 从这里结束(dynamic)，中间的这段配置用于 lamp.database.multiTenantType == DATASOURCE 时
     druid:
-      <<: *db-sqlserver
-      filter:
-        slf4j:
-          enabled: true     # 使用slf4j打印可执行日志时，改成true
-          statement-executable-sql-log-enable: true
+      db-type: sqlserver
+      validation-query: SELECT 'x'

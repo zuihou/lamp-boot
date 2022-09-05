@@ -4,7 +4,7 @@ spring:
   application:
     name: '@project.artifactId@'
   profiles:
-    active: dev
+    active: devmysql
 logging:
   file:
     path: /Users/tangyh/data/logs
