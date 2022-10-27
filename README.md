@@ -62,6 +62,13 @@
 - 发现bug和建议，请提交 [issue](https://github.com/zuihou/lamp-cloud/issues)
 - 常见问题，请参考 [Discussions](https://github.com/zuihou/lamp-cloud/discussions)
 
+# 作者参与过或PR过的项目
+- [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin)
+- [knife4j](https://gitee.com/xiaoym/knife4j)
+- [x-easypdf](https://gitee.com/dromara/x-easypdf)
+- [J2Cache](https://gitee.com/ld/J2Cache)
+
+
 # 项目截图：
 
 | 预览 | 预览 |
