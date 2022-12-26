@@ -7,11 +7,15 @@ package top.tangyh.lamp.authority.dto.auth;
  * @date 2019/07/28
  */
 
-import top.tangyh.lamp.authority.entity.auth.User;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.tangyh.lamp.authority.entity.auth.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,10 +27,10 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@ApiModel(value = "UserRoleDTO", description = "用户角色DTO")
+@Schema(description = "用户角色DTO")
 public class UserRoleDTO implements Serializable {
-    @ApiModelProperty(value = "用户id")
+    @Schema(description = "用户id")
     private List<Long> idList;
-    @ApiModelProperty(value = "用户信息")
+    @Schema(description = "用户信息")
     private List<User> userList;
 }

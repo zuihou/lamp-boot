@@ -1,5 +1,6 @@
 package top.tangyh.lamp.boot.config;
 
+import jakarta.servlet.Servlet;
 import top.tangyh.basic.boot.handler.AbstractGlobalExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.Servlet;
 
 /**
  * 全局异常处理

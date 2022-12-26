@@ -39,10 +39,7 @@
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-jwt-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-dozer-starter</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
             <artifactId>lamp-file-entity</artifactId>

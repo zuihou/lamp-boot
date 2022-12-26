@@ -6,7 +6,7 @@
     <parent>
         <groupId>top.tangyh.basic</groupId>
         <artifactId>lamp-parent</artifactId>
-        <version>3.9.0</version>
+        <version>3.9.0-java17-RC1</version>
         <relativePath/>
     </parent>
 
@@ -21,7 +21,7 @@
     <description>lamp项目业务父pom</description>
     <url>https://github.com/zuihou/lamp-cloud</url>
     <properties>
-        <lamp-util.version>3.9.0</lamp-util.version>
+        <lamp-util.version>3.9.0-java17-RC1</lamp-util.version>
         <lamp-project.version>3.9.0</lamp-project.version>
         <docker.image.prefix>zuihou</docker.image.prefix>
     </properties>
@@ -60,12 +60,13 @@
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
-                <artifactId>lamp-databases</artifactId>
+                <artifactId>lamp-captcha-starter</artifactId>
                 <version>${lamp-util.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
-                <artifactId>lamp-dozer-starter</artifactId>
+                <artifactId>lamp-databases</artifactId>
                 <version>${lamp-util.version}</version>
             </dependency>
             <dependency>

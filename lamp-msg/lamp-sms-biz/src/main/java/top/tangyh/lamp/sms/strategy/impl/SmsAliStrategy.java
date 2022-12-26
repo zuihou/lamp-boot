@@ -36,12 +36,11 @@ public class SmsAliStrategy extends AbstractSmsStrategy {
      * 产品域名,开发者无需替换
      */
     private static final String DOMAIN = "dysmsapi.aliyuncs.com";
+    private final static Map<String, com.aliyun.dysmsapi20170525.Client> CACHE = new HashMap<>();
 
     public SmsAliStrategy(SmsTaskMapper smsTaskMapper, SmsSendStatusService smsSendStatusService) {
         super(smsTaskMapper, smsSendStatusService);
     }
-
-    private final static Map<String, com.aliyun.dysmsapi20170525.Client> CACHE = new HashMap<>();
 
     /**
      * 使用AK&SK初始化账号Client
@@ -50,7 +49,7 @@ public class SmsAliStrategy extends AbstractSmsStrategy {
      * @throws Exception
      */
     @SneakyThrows
-    public static com.aliyun.dysmsapi20170525.Client createClient(SmsDO smsDO)  {
+    public static com.aliyun.dysmsapi20170525.Client createClient(SmsDO smsDO) {
         String key = StrUtil.format("{}:{}:{}:{}", smsDO.getAppId(), smsDO.getAppSecret(),
                 PRODUCT, DOMAIN);
 

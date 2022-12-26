@@ -1,5 +1,6 @@
 package top.tangyh.lamp.boot.config;
 
+import jakarta.servlet.Servlet;
 import top.tangyh.basic.boot.handler.AbstractGlobalResponseBodyAdvice;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -7,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.Servlet;
 
 import static top.tangyh.lamp.common.constant.BizConstant.BUSINESS_PACKAGE;
 

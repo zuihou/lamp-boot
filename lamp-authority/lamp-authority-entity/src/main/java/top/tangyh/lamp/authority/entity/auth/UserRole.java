@@ -3,9 +3,8 @@ package top.tangyh.lamp.authority.entity.auth;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import top.tangyh.basic.base.entity.SuperEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.tangyh.basic.base.entity.SuperEntity;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -33,7 +32,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("c_user_role")
-@ApiModel(value = "UserRole", description = "角色分配")
+@Schema(description = "角色分配")
 @AllArgsConstructor
 public class UserRole extends SuperEntity<Long> {
 
@@ -43,7 +42,7 @@ public class UserRole extends SuperEntity<Long> {
      * 角色ID
      * #c_role
      */
-    @ApiModelProperty(value = "角色ID")
+    @Schema(description = "角色ID")
     @NotNull(message = "角色ID不能为空")
     @TableField("role_id")
     @Excel(name = "角色ID")
@@ -53,7 +52,7 @@ public class UserRole extends SuperEntity<Long> {
      * 用户ID
      * #c_user
      */
-    @ApiModelProperty(value = "用户ID")
+    @Schema(description = "用户ID")
     @NotNull(message = "用户ID不能为空")
     @TableField("user_id")
     @Excel(name = "用户ID")

@@ -1,11 +1,10 @@
 package top.tangyh.lamp.sms.enumeration;
 
-import top.tangyh.basic.interfaces.BaseEnum;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import top.tangyh.basic.interfaces.BaseEnum;
 
 import java.util.stream.Stream;
 
@@ -21,7 +20,7 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "ProviderType", description = "供应商类型-枚举")
+@Schema(description = "供应商类型-枚举")
 public enum ProviderType implements BaseEnum {
 
     /**
@@ -40,7 +39,7 @@ public enum ProviderType implements BaseEnum {
     CL("0", "创蓝", "\\{([^\\}]+)\\}"),
     ;
 
-    @ApiModelProperty(value = "描述")
+    @Schema(description = "描述")
     private String val;
 
     private String desc;
@@ -60,7 +59,7 @@ public enum ProviderType implements BaseEnum {
     }
 
     @Override
-    @ApiModelProperty(value = "编码", allowableValues = "ALI,TENCENT,BAIDU", example = "ALI")
+    @Schema(description = "编码", allowableValues = "ALI,TENCENT,BAIDU", example = "ALI")
     public String getCode() {
         return this.name();
     }

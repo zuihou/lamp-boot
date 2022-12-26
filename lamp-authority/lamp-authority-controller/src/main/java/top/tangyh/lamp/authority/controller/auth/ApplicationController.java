@@ -3,6 +3,11 @@ package top.tangyh.lamp.authority.controller.auth;
 
 import cn.hutool.core.util.RandomUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.controller.SuperCacheController;
@@ -11,11 +16,6 @@ import top.tangyh.lamp.authority.dto.auth.ApplicationSaveDTO;
 import top.tangyh.lamp.authority.dto.auth.ApplicationUpdateDTO;
 import top.tangyh.lamp.authority.entity.auth.Application;
 import top.tangyh.lamp.authority.service.auth.ApplicationService;
-import io.swagger.annotations.Api;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/application")
-@Api(value = "Application", tags = "应用")
+@Tag(name = "应用")
 @ApiSupport(author = "zuihou")
 @PreAuth(replace = "authority:application:")
 public class ApplicationController extends SuperCacheController<ApplicationService, Long, Application, ApplicationPageQuery, ApplicationSaveDTO, ApplicationUpdateDTO> {

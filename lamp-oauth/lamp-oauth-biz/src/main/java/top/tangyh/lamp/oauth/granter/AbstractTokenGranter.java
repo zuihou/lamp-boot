@@ -15,7 +15,7 @@ package top.tangyh.lamp.oauth.granter;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import top.tangyh.basic.base.R;
@@ -43,12 +43,12 @@ import top.tangyh.lamp.authority.service.auth.OnlineService;
 import top.tangyh.lamp.authority.service.auth.UserService;
 import top.tangyh.lamp.common.constant.AppendixType;
 import top.tangyh.lamp.common.properties.SystemProperties;
-import top.tangyh.lamp.model.vo.result.AppendixResultVO;
 import top.tangyh.lamp.file.service.AppendixService;
+import top.tangyh.lamp.model.enumeration.system.TenantStatusEnum;
+import top.tangyh.lamp.model.vo.result.AppendixResultVO;
 import top.tangyh.lamp.oauth.event.LoginEvent;
 import top.tangyh.lamp.oauth.event.model.LoginStatusDTO;
 import top.tangyh.lamp.tenant.entity.Tenant;
-import top.tangyh.lamp.model.enumeration.system.TenantStatusEnum;
 import top.tangyh.lamp.tenant.service.TenantService;
 
 import java.time.LocalDateTime;
@@ -134,7 +134,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
      * 检测 client
      */
     protected R<String[]> checkClient() {
-        String basicHeader = ServletUtil.getHeader(WebUtils.request(), BASIC_HEADER_KEY, StrPool.UTF_8);
+        String basicHeader = JakartaServletUtil.getHeader(WebUtils.request(), BASIC_HEADER_KEY, StrPool.UTF_8);
         String[] client = JwtUtil.getClient(basicHeader);
         Application application = applicationService.getByClient(client[0], client[1]);
 

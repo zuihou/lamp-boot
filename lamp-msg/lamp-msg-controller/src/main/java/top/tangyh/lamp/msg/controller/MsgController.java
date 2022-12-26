@@ -7,13 +7,14 @@ import cn.afterturn.easypoi.excel.ExcelXorHtmlUtil;
 import cn.afterturn.easypoi.excel.entity.ExcelToHtmlParams;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
-import cn.afterturn.easypoi.view.PoiBaseView;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,8 +44,6 @@ import top.tangyh.lamp.msg.entity.Msg;
 import top.tangyh.lamp.msg.enumeration.MsgType;
 import top.tangyh.lamp.msg.service.MsgService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +61,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/msg")
-@Api(value = "MsgController", tags = "消息中心")
+@Tag(name = "消息中心")
 @Validated
 @PreAuth(replace = "msg:msg:")
 @RequiredArgsConstructor
@@ -87,7 +86,7 @@ public class MsgController {
      * @param params 分页查询对象
      * @return 查询结果
      */
-    @ApiOperation(value = "分页查询消息中心", notes = "分页查询消息中心")
+    @Operation(summary = "分页查询消息中心", description = "分页查询消息中心")
     @PostMapping("/page")
     @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
     public R<IPage<Msg>> page(@RequestBody @Validated PageParams<MsgQuery> params) {
@@ -134,7 +133,7 @@ public class MsgController {
      * @param request  请求
      * @param response 响应
      */
-    @ApiOperation(value = "导出Excel")
+    @Operation(summary = "导出Excel")
     @RequestMapping(value = "/export", method = RequestMethod.POST, produces = "application/octet-stream")
     @SysLog("'导出Excel:'.concat(#params.extra[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     public void exportExcel(@RequestBody @Validated PageParams<MsgQuery> params, HttpServletRequest request, HttpServletResponse response) {
@@ -147,7 +146,8 @@ public class MsgController {
         map.put(NormalExcelConstants.PARAMS, exportParams);
         Object fileName = params.getExtra().getOrDefault(NormalExcelConstants.FILE_NAME, "临时文件");
         map.put(NormalExcelConstants.FILE_NAME, fileName);
-        PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
+//        TODO java17
+//        PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
     }
 
     /**
@@ -156,7 +156,7 @@ public class MsgController {
      * @param params 预览参数
      * @return 预览数据
      */
-    @ApiOperation(value = "预览Excel")
+    @Operation(summary = "预览Excel")
     @SysLog("'预览Excel:' + (#params.extra[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
     public R<String> preview(@RequestBody @Validated PageParams<MsgQuery> params) {
@@ -173,7 +173,7 @@ public class MsgController {
      * @param id 主键id
      * @return 查询结果
      */
-    @ApiOperation(value = "查询消息中心", notes = "查询消息中心")
+    @Operation(summary = "查询消息中心", description = "查询消息中心")
     @GetMapping("/{id}")
     @SysLog("查询消息中心")
     public R<Msg> get(@PathVariable Long id) {
@@ -186,7 +186,7 @@ public class MsgController {
      * @param data 新增对象
      * @return 新增结果
      */
-    @ApiOperation(value = "新增消息中心", notes = "新增消息中心不为空的字段")
+    @Operation(summary = "新增消息中心", description = "新增消息中心不为空的字段")
     @PostMapping
     @SysLog("新增消息中心")
     @PreAuth("hasAnyPermission('{}add')")
@@ -216,7 +216,7 @@ public class MsgController {
      * @param ids 主键id
      * @return 删除结果
      */
-    @ApiOperation(value = "删除消息", notes = "根据id物理删除消息")
+    @Operation(summary = "删除消息", description = "根据id物理删除消息")
     @DeleteMapping
     @SysLog("删除消息")
     public R<Boolean> delete(@RequestBody List<Long> ids) {

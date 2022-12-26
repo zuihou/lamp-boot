@@ -1,7 +1,6 @@
 package top.tangyh.lamp.model.vo.result;
 
-import top.tangyh.basic.interfaces.BaseEnum;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import top.tangyh.basic.interfaces.BaseEnum;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @Builder
-@ApiModel(value = "Option", description = "下拉、多选组件选项")
+@Schema(description = "下拉、多选组件选项")
 public class Option {
     private String label;
     private String text;
