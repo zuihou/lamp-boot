@@ -80,6 +80,6 @@
 # 会员版
 本项目分为开源版和会员版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 会员版源码在私有gitlab托管，购买后开通账号。
 
-区别请看：[会员版](https://tangyh.top/pages/vip/)
+区别请看：[会员版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8)
 
 
