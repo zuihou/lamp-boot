@@ -78,7 +78,7 @@ lamp:
     ali:
       # 请填写自己的阿里云存储配置
       uriPrefix: "http://zuihou-admin-cloud.oss-cn-beijing.aliyuncs.com/"
-      bucket-name: "zuihou-admin-cloud"
+      bucket: "zuihou-admin-cloud"
       endpoint: "oss-cn-beijing.aliyuncs.com"
       access-key-id: "填写你的id"
       access-key-secret: "填写你的秘钥"
