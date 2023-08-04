@@ -128,31 +128,6 @@ lamp:
         parameterType: header
         required: true
         defaultValue: "MDAwMA=="
-    docket:
-      oauth:
-        title: 认证模块
-        base-package: top.tangyh.lamp.oauth.controller
-      auth:
-        title: 权限模块
-        base-package: top.tangyh.lamp.authority.controller.auth
-      common:
-        title: 公共模块
-        base-package: top.tangyh.lamp.authority.controller.common
-      core:
-        title: 组织模块
-        base-package: top.tangyh.lamp.authority.controller.core
-      tenant:
-        title: 租户模块
-        base-package: top.tangyh.lamp.tenant.controller
-      msg:
-        title: 消息服务
-        base-package: top.tangyh.lamp.msg.controller;top.tangyh.lamp.sms.controller
-      file:
-        title: 文件服务
-        base-package: top.tangyh.lamp.file.controller
-      activiti:
-        title: 流程组件模块
-        base-package: top.tangyh.lamp.activiti.controller
   captcha:
     type: ARITHMETIC
     width: 158
@@ -218,7 +193,7 @@ springdoc:
     - group: 'oauth_auth'
       displayName: '认证服务'
       paths-to-match: '/**'
-      packages-to-scan: top.tangyh.lamp
+      packages-to-scan: top.tangyh.lamp.oauth.controller
     - group: 'tenant_tenant'
       displayName: '租户模块'
       paths-to-match: '/**'
@@ -227,8 +202,6 @@ springdoc:
       displayName: '流程组件模块'
       paths-to-match: '/**'
       packages-to-scan: top.tangyh.lamp.activiti.controller
-
-
 
 
 setting:
@@ -251,16 +224,20 @@ server:
     buffer-size: 2048  # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理 , 每块buffer的空间大小,越小的空间被利用越充分
     direct-buffers: true  # 是否分配的直接内存
 
-
 management:
   endpoints:
     web:
       base-path: /actuator
       exposure:
         include: '*'
+    #对外开放所有监控点
+    enabled-by-default: true
   endpoint:
     health:
       show-details: ALWAYS
+      enabled: true
+    #其他
+    beans:
       enabled: true
 
 spring:
