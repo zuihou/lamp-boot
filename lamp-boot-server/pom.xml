@@ -5,39 +5,31 @@
     <parent>
         <groupId>top.tangyh.lamp</groupId>
         <artifactId>lamp-dependencies-parent</artifactId>
-        <version>3.11.0-java17</version>
+        <version>4.16.0-java17</version>
         <relativePath>../lamp-dependencies-parent/pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
     <artifactId>lamp-boot-server</artifactId>
     <name>${project.artifactId}</name>
-    <description>单体服务启动模块</description>
+    <description>lamp-boot-启动模块</description>
 
     <dependencies>
+        <!-- @lamp.generator auto insert server.pom.xml -->
+
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-saas-mode</artifactId>
+            <artifactId>lamp-database-mode</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-authority-controller</artifactId>
+            <artifactId>lamp-generator-controller</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-file-controller</artifactId>
-            <version>${lamp-project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-msg-controller</artifactId>
-            <version>${lamp-project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-sms-controller</artifactId>
+            <artifactId>lamp-base-controller</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
         <dependency>
@@ -47,44 +39,67 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.lamp</groupId>
-            <artifactId>lamp-tenant-controller</artifactId>
+            <artifactId>lamp-system-controller</artifactId>
+            <version>${lamp-project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>top.tangyh.lamp</groupId>
+            <artifactId>lamp-data-scope-sdk</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-swagger2-starter</artifactId>
+            <artifactId>lamp-all</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>top.tangyh.basic</groupId>
+                    <artifactId>lamp-cloud-starter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+
         <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-validator-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>HikariCP</artifactId>
+                    <groupId>com.zaxxer</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-xss-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-cache-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-spring-boot-starter</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+
+
+        <!-- websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

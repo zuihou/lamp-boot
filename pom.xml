@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.lamp</groupId>
-    <artifactId>lamp-boot</artifactId>
-    <version>3.11.0-java17</version>
+    <artifactId>lamp-webmvc</artifactId>
+    <version>4.16.0-java17</version>
     <packaging>pom</packaging>
-    <url>https://gitee.com/zuihou111/lamp-boot</url>
+    <url>https://gitee.com/zuihou111/lamp-cloud</url>
     <name>${project.artifactId}</name>
     <description>lamp-boot</description>
     <developers>
@@ -18,14 +18,13 @@
     </developers>
 
     <modules>
+        <!-- @lamp.generator auto insert root.pom.xml -->
         <module>lamp-dependencies-parent</module>
         <module>lamp-public</module>
+        <module>lamp-base</module>
         <module>lamp-oauth</module>
-        <module>lamp-authority</module>
-        <module>lamp-tenant</module>
-        <module>lamp-msg</module>
-        <module>lamp-file</module>
+        <module>lamp-system</module>
+        <module>lamp-generator</module>
         <module>lamp-boot-server</module>
     </modules>
-
 </project>

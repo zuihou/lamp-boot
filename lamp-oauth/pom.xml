@@ -5,7 +5,7 @@
     <parent>
         <groupId>top.tangyh.lamp</groupId>
         <artifactId>lamp-dependencies-parent</artifactId>
-        <version>3.11.0-java17</version>
+        <version>4.16.0-java17</version>
         <relativePath>../lamp-dependencies-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -15,8 +15,10 @@
     <description>认证服务</description>
     <packaging>pom</packaging>
     <modules>
+        <module>lamp-oauth-entity</module>
         <module>lamp-oauth-controller</module>
         <module>lamp-oauth-biz</module>
+        <module>lamp-oauth-userinfo</module>
     </modules>
 
 </project>

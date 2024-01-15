@@ -2,17 +2,21 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: '@project.artifactId@'
+    name: @project.artifactId@
+    # lamp自定义配置，用于lamp-scan-starter扫描接口时，拼接uri前缀。 需要和网关配置的前缀一致
+    path: '/base'
   profiles:
-    active: devmysql
+    active: @profile.active@
+
 logging:
   file:
-    path: /Users/tangyh/data/logs
+    path: /Users/tangyh/data/projects/logs
     name: ${logging.file.path}/${spring.application.name}/root.log
   config: classpath:logback-spring.xml
   level:
     druid.sql.Statement: debug
 
+# 用于/actuator/info
 info:
   name: '@project.name@'
   description: '@project.description@'
