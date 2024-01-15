@@ -57,7 +57,9 @@ public class ResourceBiz {
             return false;
         }
 
-        return !children.stream().allMatch(item -> item.getIsHidden() == null || item.getIsHidden());
+        // hidden： true - 视图   false - 菜单  null - 菜单
+
+        return children.stream().allMatch(item -> item.getIsHidden() != null && item.getIsHidden());
     }
 
     /**
@@ -228,6 +230,17 @@ public class ResourceBiz {
         long apiStart = System.currentTimeMillis();
         boolean flag = apiList.parallelStream().distinct().anyMatch(item -> {
             String uri = item.getUri();
+            /*
+             * 若您确定只使用lamp-boot，而非lamp-cloud，请将def_resource_api表中uri的代理的前缀(/base、/system、/oauth)去除，即可 删除删除删除 if里面的代码！
+             * 因为脚本数据是基于lamp-cloud配置的，所以uri地址会多一段gateway代理前缀。如
+             * lamp-cloud 中地址为：/base/baseEmployee/page
+             * 对应lamp-boot的地址为：/baseEmployee/page
+             * 其中/base是因为使用了gateway增加的！
+             */
+            if (!StrUtil.startWithAny(uri, "/gateway")) {
+                uri = StrUtil.subSuf(uri, StrUtil.indexOf(uri, '/', 1));
+            }
+
             if (StrUtil.equalsIgnoreCase(uri, path)) {
                 if (StrUtil.equalsIgnoreCase(method, item.getRequestMethod()) || HttpMethod.ALL.name().equalsIgnoreCase(item.getRequestMethod())) {
                     return true;
