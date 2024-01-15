@@ -24,7 +24,7 @@ public enum ResourceTypeEnum implements BaseEnum {
     /**
      * 视图
      */
-    VIEW("30", "视图"),
+//    VIEW("30", "视图"),
     /**
      * 按钮
      */
@@ -59,7 +59,7 @@ public enum ResourceTypeEnum implements BaseEnum {
     }
 
     @Override
-    @Schema(description = "编码", allowableValues = "20,30,40,50,60", example = "20")
+    @Schema(description = "编码", allowableValues = "20,40,50,60", example = "20")
     public String getCode() {
         return this.code;
     }
