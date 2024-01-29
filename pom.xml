@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.lamp</groupId>
-    <artifactId>lamp-webmvc</artifactId>
+    <artifactId>lamp-boot</artifactId>
     <version>4.16.0-java17</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/zuihou111/lamp-cloud</url>
