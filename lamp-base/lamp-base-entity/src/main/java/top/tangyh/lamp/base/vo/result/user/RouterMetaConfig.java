@@ -27,6 +27,7 @@ public class RouterMetaConfig implements Serializable {
     /* 公共属性 start */
     private String titleKey = "title";
     private String iconKey = "icon";
+    private String componentKey = "component";
     /* 公共属性 end */
 
     /* vben 专用属性 start */

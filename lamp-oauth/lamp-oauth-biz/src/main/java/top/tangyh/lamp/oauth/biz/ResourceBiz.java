@@ -289,6 +289,7 @@ public class ResourceBiz {
             if (meta == null) {
                 meta = new RouterMeta();
             }
+            meta.setComponent(item.getComponent());
             if (StrUtil.isEmpty(meta.getTitle())) {
                 meta.setTitle(item.getName());
             }
@@ -297,6 +298,7 @@ public class ResourceBiz {
                 //  是否内嵌页面
                 meta.setFrameSrc(item.getComponent());
                 item.setComponent(BizConstant.IFRAME);
+                meta.setComponent("sys/iframe/index");
             } else if (ResourceOpenWithEnum.OUTER_CHAIN.eq(item.getOpenWith())) {
                 // 是否外链
                 item.setComponent(BizConstant.IFRAME);
@@ -334,6 +336,7 @@ public class ResourceBiz {
                 if (meta == null) {
                     meta = new RouterMeta();
                 }
+                meta.setComponent(item.getComponent());
                 if (StrUtil.isEmpty(meta.getTitle())) {
                     meta.setTitle(item.getName());
                 }
@@ -342,6 +345,7 @@ public class ResourceBiz {
                     //  是否内嵌页面
                     meta.setFrameSrc(item.getComponent());
                     item.setComponent(BizConstant.IFRAME);
+                    meta.setComponent("_builtin/iframe/index");
                 } else if (ResourceOpenWithEnum.OUTER_CHAIN.eq(item.getOpenWith())) {
                     // 是否外链
                     item.setComponent(BizConstant.IFRAME);
