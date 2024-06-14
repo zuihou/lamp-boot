@@ -92,7 +92,7 @@ public class FileContext {
      */
     public boolean delete(List<File> list) {
         if (!fileServerProperties.getDelFile()) {
-            return false;
+            return true;
         }
 
         list.forEach(item -> {
