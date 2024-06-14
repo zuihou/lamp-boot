@@ -60,8 +60,8 @@ public class BaseEmployeeBiz {
         }
         String username = StrUtil.isBlank(saveVO.getUsername()) ? IdUtil.simpleUUID() : saveVO.getUsername();
         // 保存 用户表 和 员工表
-        DefUserSaveVO userSaveVO = DefUserSaveVO.builder().username(username).nickName(saveVO.getRealName()).build();
-        BeanUtil.copyProperties(saveVO, userSaveVO);
+        DefUserSaveVO userSaveVO = BeanUtil.toBean(saveVO, DefUserSaveVO.class);
+        userSaveVO.setUsername(username).setNickName(saveVO.getRealName());
         DefUser defUser = defUserService.save(userSaveVO);
 
         // 保存员工表
