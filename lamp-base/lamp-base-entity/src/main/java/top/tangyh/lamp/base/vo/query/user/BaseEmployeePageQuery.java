@@ -48,7 +48,7 @@ public class BaseEmployeePageQuery implements Serializable {
      * 岗位Id
      */
     @Schema(description = "岗位Id")
-    private List<Long> positionId;
+    private Long positionId;
     /**
      * 机构ID
      */
@@ -63,7 +63,7 @@ public class BaseEmployeePageQuery implements Serializable {
      * 职位状态;[10-在职 20-离职]@Echo(api = EchoApi.DICTIONARY_ITEM_FEIGN_CLASS, dictType = EchoDictType.Base.POSITION_STATUS)
      */
     @Schema(description = "职位状态")
-    private List<String> positionStatus;
+    private String positionStatus;
     /**
      * 状态;[0-禁用 1-启用]
      */

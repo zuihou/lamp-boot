@@ -67,8 +67,8 @@ public class BaseEmployeeServiceImpl extends SuperCacheServiceImpl<BaseEmployeeM
         BaseEmployeePageQuery model = params.getModel();
         LbQueryWrap<BaseEmployee> wrap = Wraps.lbQ();
         wrap.like(BaseEmployee::getRealName, model.getRealName())
-                .in(BaseEmployee::getPositionStatus, model.getPositionStatus())
-                .in(BaseEmployee::getPositionId, model.getPositionId())
+                .eq(BaseEmployee::getPositionStatus, model.getPositionStatus())
+                .eq(BaseEmployee::getPositionId, model.getPositionId())
                 .eq(BaseEmployee::getActiveStatus, model.getActiveStatus())
                 .eq(BaseEmployee::getState, model.getState())
                 .in(BaseEmployee::getUserId, model.getUserIdList());
