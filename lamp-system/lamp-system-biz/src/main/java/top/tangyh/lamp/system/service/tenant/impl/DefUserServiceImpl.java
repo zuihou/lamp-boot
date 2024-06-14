@@ -273,7 +273,9 @@ public class DefUserServiceImpl extends SuperCacheServiceImpl<DefUserManager, Lo
     public Boolean updateBaseInfo(DefUserBaseInfoUpdateVO data) {
         DefUser old = getById(data.getId());
         DefUser defUser = BeanUtil.toBean(data, DefUser.class);
-
+        if (data.getLogo() != null) {
+            appendixService.save(AppendixSaveVO.build(data.getId(), AppendixType.System.DEF__USER__AVATAR, data.getLogo()));
+        }
         boolean flag = superManager.updateById(defUser);
         if (StrUtil.isAllNotEmpty(data.getIdCard(), old.getIdCard()) && !StrUtil.equals(old.getIdCard(), data.getIdCard())) {
             cacheOps.del(DefUserIdCardCacheKeyBuilder.builder(old.getIdCard()));

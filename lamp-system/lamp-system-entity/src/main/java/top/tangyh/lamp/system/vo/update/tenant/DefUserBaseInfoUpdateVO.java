@@ -81,4 +81,10 @@ public class DefUserBaseInfoUpdateVO implements Serializable {
     @Schema(description = "工作描述")
     @Size(max = 255, message = "工作描述长度不能超过{max}")
     private String workDescribe;
+
+    /**
+     * 上传的头像
+     */
+    @Schema(description = "上传的头像")
+    private Long logo;
 }
