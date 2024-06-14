@@ -60,11 +60,11 @@ public class DefInterfacePropertyServiceImpl extends SuperServiceImpl<DefInterfa
         List<Long> pendingList = pendingRecords.stream().map(DefInterfacePropertyUpdateVO::getId).toList();
         superManager.removeByIds(pendingList);
 
-        List<DefInterfaceProperty> saveList = BeanUtil.copyToList(insertRecords, DefInterfaceProperty.class);
-        superManager.saveBatch(saveList);
-
         List<DefInterfaceProperty> updateList = BeanUtil.copyToList(updateRecords, DefInterfaceProperty.class);
         superManager.updateBatchById(updateList);
+
+        List<DefInterfaceProperty> saveList = BeanUtil.copyToList(insertRecords, DefInterfaceProperty.class);
+        superManager.saveBatch(saveList);
 
         return true;
     }
