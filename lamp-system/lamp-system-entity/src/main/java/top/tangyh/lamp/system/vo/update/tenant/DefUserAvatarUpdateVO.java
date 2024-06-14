@@ -1,7 +1,6 @@
 package top.tangyh.lamp.system.vo.update.tenant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +40,6 @@ public class DefUserAvatarUpdateVO implements Serializable {
      * 上传的头像
      */
     @Schema(description = "上传的头像")
-    @Valid
     private Long appendixAvatar;
 
 }
