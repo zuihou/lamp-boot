@@ -127,7 +127,7 @@
         </dependency>
         <!-- 第三方文件存储： FastDFS -->
         <dependency>
-            <groupId>com.github.tobato</groupId>
+            <groupId>top.tangyh.basic</groupId>
             <artifactId>fastdfs-client</artifactId>
         </dependency>
         <!-- 第三方文件存储：minio  -->
