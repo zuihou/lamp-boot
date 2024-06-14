@@ -91,11 +91,11 @@ public class MsgBiz {
      * 验证数据，并初始化数据
      */
     private DefMsgTemplate validAndInit(ExtendMsgSendVO msgSaveVO) {
-        ArgumentAssert.notEmpty(msgSaveVO.getTemplateCode(), "请选择消息模板");
+        ArgumentAssert.notEmpty(msgSaveVO.getCode(), "请选择消息模板");
 
         DefMsgTemplate msgTemplate = null;
-        if (StrUtil.isNotEmpty(msgSaveVO.getTemplateCode())) {
-            msgTemplate = extendMsgTemplateService.getByCode(msgSaveVO.getTemplateCode());
+        if (StrUtil.isNotEmpty(msgSaveVO.getCode())) {
+            msgTemplate = extendMsgTemplateService.getByCode(msgSaveVO.getCode());
         }
         ArgumentAssert.notNull(msgTemplate, "请选择正确的消息模板");
 

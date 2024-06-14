@@ -164,6 +164,7 @@ public class ExtendMsgServiceImpl extends SuperServiceImpl<ExtendMsgManager, Lon
     @Transactional(rollbackFor = Exception.class)
     public Boolean send(ExtendMsgSendVO data, DefMsgTemplate msgTemplate, SysUser sysUser) {
         ExtendMsg extendMsg = BeanUtil.toBean(data, ExtendMsg.class);
+        extendMsg.setTemplateCode(data.getCode());
         extendMsg.setChannel(SourceType.SERVICE);
         extendMsg.setType(msgTemplate.getType());
         extendMsg.setRemindMode(msgTemplate.getRemindMode());

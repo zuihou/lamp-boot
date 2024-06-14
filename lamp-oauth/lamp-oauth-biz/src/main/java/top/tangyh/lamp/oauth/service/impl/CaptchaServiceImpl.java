@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.cache.redis2.CacheResult;
 import top.tangyh.basic.cache.repository.CacheOps;
-import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.utils.ArgumentAssert;
@@ -102,7 +101,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
         // 在「运营平台」-「消息模板」配置一个「模板标识」为 templateCode， 且「模板内容」中需要有 code 占位符
         // 也可以考虑给模板增加一个过期时间等参数
-        ExtendMsgSendVO msgSendVO = ExtendMsgSendVO.builder().templateCode(templateCode).build();
+        ExtendMsgSendVO msgSendVO = ExtendMsgSendVO.builder().code(templateCode).build();
         msgSendVO.addParam("code", code);
         msgSendVO.addRecipient(mobile);
         return R.success(msgApi.sendByTemplate(msgSendVO, null));
@@ -127,7 +126,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         log.info("邮件验证码 cacheKey={}, code={}", cacheKey, code);
 
         // 在「运营平台」-「消息模板」配置一个「模板标识」为 templateCode， 且「模板内容」中需要有 code 占位符
-        ExtendMsgSendVO msgSendVO = ExtendMsgSendVO.builder().templateCode(templateCode).build();
+        ExtendMsgSendVO msgSendVO = ExtendMsgSendVO.builder().code(templateCode).build();
         msgSendVO.addParam("code", code);
         msgSendVO.addRecipient(email);
         return R.success(msgApi.sendByTemplate(msgSendVO, null));

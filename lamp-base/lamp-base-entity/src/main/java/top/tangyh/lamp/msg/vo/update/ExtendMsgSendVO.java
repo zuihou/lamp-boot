@@ -44,8 +44,8 @@ public class ExtendMsgSendVO implements Serializable {
      */
     @Schema(description = "模板标识")
     @Size(max = 255, message = "模板标识长度不能超过{max}")
-    @NotEmpty(message = "模板标识")
-    private String templateCode;
+    @NotEmpty(message = "请填写模板标识")
+    private String code;
     /**
      * 参数;
      * <p>
