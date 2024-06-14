@@ -1,0 +1,12 @@
+lamp:
+  generator:
+    outputDir: /Users/tangyh/gitlab/lamp-boot-pro-column
+    frontOutputDir: /Users/tangyh/gitlab/lamp-web-pro
+    frontSoyOutputDir: /Users/tangyh/gitlab/lamp-web-pro-soybean
+    # 作者
+    author: zuihou
+    # 默认项目
+    projectType: BOOT
+
+server:
+  port: 18760
