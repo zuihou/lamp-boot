@@ -279,4 +279,14 @@ public class RouterMeta extends LinkedHashMap<String, Object> implements Seriali
         this.put(routerMetaConfig.getFixedIndexInTabKey(), val);
         return this;
     }
+
+    @Schema(description = "组件")
+    public String getComponent() {
+        return (String) this.get(routerMetaConfig.getComponentKey());
+    }
+
+    public RouterMeta setComponent(String val) {
+        this.put(routerMetaConfig.getComponentKey(), val);
+        return this;
+    }
 }
