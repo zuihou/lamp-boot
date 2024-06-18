@@ -80,10 +80,12 @@
 
 - 官网
     - [https://tangyh.top](https://tangyh.top)
-- 4.0版本演示地址（账号密码都在登录页左侧）
-    - 数据源模式：后端使用lamp-cloud-pro-datasource-column， 前端使用lamp-web-pro，演示地址：   [https://datasource.tangyh.top](https://datasource.tangyh.top)
-    - 字段模式：后端使用lamp-cloud-pro-column， 前端使用lamp-web-pro，演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
-    - 非租户模式：后端使用lamp-cloud，前端使用lamp-web，演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
+- 4.0版本演示地址 （账号密码都是   lamp）
+  - 数据源模式（vben版）：演示地址：   [https://datasource.tangyh.top](https://datasource.tangyh.top)
+  - 数据源模式（soybean版）：演示地址：   [https://soy-datasource.tangyh.top](https://soy-datasource.tangyh.top)
+  - 字段模式（vben版）：演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
+  - 字段模式（soybean版）：演示地址：   [https://soy-column.tangyh.top](https://soy-column.tangyh.top)
+  - 非租户模式：演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
 
 # 作者参与过或PR过的项目
 
@@ -194,7 +196,9 @@
 
 本项目分为开源版、个人学习版和企业商用版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 个人和企业版源码在私有gitlab托管，购买后开通账号。
 
-区别请看：[会员版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)
+开源版是因为热爱，企业版是妥协于生活。
+
+开源版和企业版区别请看：[会员版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)
 
 # 开源协议
 
