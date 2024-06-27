@@ -19,6 +19,10 @@
             <artifactId>lamp-common</artifactId>
             <version>${lamp-project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

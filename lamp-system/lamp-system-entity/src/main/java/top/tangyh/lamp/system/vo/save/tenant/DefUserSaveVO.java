@@ -1,5 +1,6 @@
 package top.tangyh.lamp.system.vo.save.tenant;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -9,7 +10,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
 
 import java.io.Serializable;
@@ -31,7 +31,6 @@ import static top.tangyh.basic.utils.ValidatorUtil.REGEX_USERNAME;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Builder
@@ -44,6 +43,7 @@ public class DefUserSaveVO implements Serializable {
      * 用户名;大小写数字下划线
      */
     @Schema(description = "用户名")
+    @ExcelProperty("用户名")
     @NotEmpty(message = "请填写用户名")
     @Size(min = 6, max = 255, message = "用户名长度不能小于{min}或超过{max}")
     @NotEmptyPattern(regexp = REGEX_USERNAME, message = "仅支持英文(a-zA-Z)数字(0-9)和下划线(_)，且至少包含2项")
@@ -53,12 +53,14 @@ public class DefUserSaveVO implements Serializable {
      */
     @Schema(description = "昵称")
     @NotEmpty(message = "请填写昵称")
+    @ExcelProperty("昵称")
     @Size(max = 255, message = "昵称长度不能超过{max}")
     private String nickName;
     /**
      * 邮箱
      */
     @Schema(description = "邮箱")
+    @ExcelProperty("邮箱")
     @Size(max = 255, message = "邮箱长度不能超过{max}")
     @NotEmptyPattern(regexp = REGEX_EMAIL, message = "请输入正确的邮箱地址")
     private String email;
@@ -66,6 +68,7 @@ public class DefUserSaveVO implements Serializable {
      * 手机;1开头11位纯数字
      */
     @Schema(description = "手机")
+    @ExcelProperty("手机")
     @Size(max = 11, message = "手机长度不能超过{max}")
     @NotEmptyPattern(regexp = REGEX_MOBILE, message = "请输入11位的手机号")
     @NotEmpty(message = "请填写手机")
@@ -74,6 +77,7 @@ public class DefUserSaveVO implements Serializable {
      * 身份证;15或18位
      */
     @Schema(description = "身份证")
+    @ExcelProperty("身份证")
     @Size(max = 18, message = "身份证长度不能超过{max}")
     @NotEmptyPattern(regexp = REGEX_ID_CARD, message = "请输入正确的身份证号")
     private String idCard;
