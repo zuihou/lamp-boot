@@ -116,7 +116,4 @@ public class SysEmployee extends Entity<Long> implements Serializable, EchoVO {
     @TableField(value = "created_org_id")
     private Long createdOrgId;
 
-    @Schema(description = "用户信息")
-    @TableField(exist = false)
-    private SysUser defUser;
 }
