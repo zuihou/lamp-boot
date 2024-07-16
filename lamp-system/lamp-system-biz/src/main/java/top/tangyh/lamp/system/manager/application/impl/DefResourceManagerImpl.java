@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 import top.tangyh.basic.base.manager.impl.SuperCacheManagerImpl;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.database.mybatis.conditions.query.LbQueryWrap;
-import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.model.cache.CacheKeyBuilder;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.TreeUtil;
-import top.tangyh.lamp.common.cache.tenant.application.ApplicationResourceCacheKeyBuilder;
 import top.tangyh.lamp.common.cache.tenant.application.ResourceCacheKeyBuilder;
 import top.tangyh.lamp.system.entity.application.DefResource;
 import top.tangyh.lamp.system.manager.application.DefResourceManager;
@@ -22,8 +20,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
 
 /**
  * 应用管理
@@ -50,23 +46,14 @@ public class DefResourceManagerImpl extends SuperCacheManagerImpl<DefResourceMap
             return super.list(Wraps.<DefResource>lbQ().eq(DefResource::getState, true).orderByAsc(DefResource::getSortValue));
         } else {
             // 新方法
-            Set<Long> resourceIdSet = addApplicationResourceIdList(applicationIdList);
+            List<Long> resourceIdSet = addApplicationResourceIdList(applicationIdList);
             return findByIdsAndType(resourceIdSet, resourceTypeList);
         }
     }
 
-    private Set<Long> addApplicationResourceIdList(List<Long> applicationIdList) {
-        // 版本2
-        // 生成key的回调
-        Function<Long, CacheKey> cacheBuilder = ApplicationResourceCacheKeyBuilder::build;
-
-        // 缓存中不存在时，回调函数
-        Function<Long, List<Long>> loader = applicationId -> {
-            LbQueryWrap<DefResource> wrap = Wraps.<DefResource>lbQ().select(DefResource::getId).eq(DefResource::getApplicationId, applicationId).eq(DefResource::getState, true);
-            return super.listObjs(wrap, Convert::toLong);
-        };
-        return findCollectByIds(applicationIdList, cacheBuilder, loader);
-        // 版本2 end
+    private List<Long> addApplicationResourceIdList(List<Long> applicationIdList) {
+        LbQueryWrap<DefResource> wrap = Wraps.<DefResource>lbQ().select(DefResource::getId).in(DefResource::getApplicationId, applicationIdList).eq(DefResource::getState, true);
+        return super.listObjs(wrap, Convert::toLong);
     }
 
     @Override
