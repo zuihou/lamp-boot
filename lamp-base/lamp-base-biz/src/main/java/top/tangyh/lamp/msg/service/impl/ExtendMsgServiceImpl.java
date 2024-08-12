@@ -60,8 +60,10 @@ public class ExtendMsgServiceImpl extends SuperServiceImpl<ExtendMsgManager, Lon
     public ExtendMsgResultVO getResultById(Long id) {
         ExtendMsg msg = superManager.getById(id);
         ExtendMsgResultVO result = BeanUtil.toBean(msg, ExtendMsgResultVO.class);
-        List<ExtendMsgRecipient> list = recipientManager.listByMsgId(id);
-        result.setRecipientList(list.stream().map(ExtendMsgRecipient::getRecipient).toList());
+        if (result != null) {
+            List<ExtendMsgRecipient> list = recipientManager.listByMsgId(id);
+            result.setRecipientList(list.stream().map(ExtendMsgRecipient::getRecipient).toList());
+        }
         return result;
     }
 

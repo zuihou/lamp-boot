@@ -16,6 +16,7 @@ import com.aliyun.oss.model.UploadPartRequest;
 import com.aliyun.oss.model.UploadPartResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.stereotype.Component;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.lamp.file.dto.chunk.FileChunksMergeDTO;
@@ -38,6 +39,7 @@ import java.util.UUID;
  * @date 2020/11/22 4:58 下午
  */
 @Slf4j
+@Component("ALI_OSS_CHUNK")
 public class AliFileChunkStrategyImpl extends AbstractFileChunkStrategy {
     public AliFileChunkStrategyImpl(FileMapper fileMapper, FileServerProperties fileProperties) {
         super(fileMapper, fileProperties);

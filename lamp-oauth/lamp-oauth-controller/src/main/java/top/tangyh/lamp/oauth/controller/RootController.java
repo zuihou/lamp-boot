@@ -1,5 +1,7 @@
 package top.tangyh.lamp.oauth.controller;
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.jwt.TokenHelper;
-import top.tangyh.basic.jwt.model.Token;
 import top.tangyh.lamp.oauth.enumeration.GrantType;
 import top.tangyh.lamp.oauth.granter.TokenGranterBuilder;
 import top.tangyh.lamp.oauth.service.UserInfoService;
@@ -41,7 +41,6 @@ public class RootController {
     private final TokenGranterBuilder tokenGranterBuilder;
     private final DefUserService defUserService;
     private final UserInfoService userInfoService;
-    private final TokenHelper tokenUtil;
 
     /**
      * 登录接口
@@ -83,18 +82,17 @@ public class RootController {
 
     @Operation(summary = "退出", description = "退出")
     @PostMapping(value = "/anyUser/logout")
-    public R<Boolean> logout(String token) {
-        return tokenGranterBuilder.getGranter().logout(token);
+    public R<Boolean> logout() {
+        return tokenGranterBuilder.getGranter().logout();
     }
-
 
     /**
      * 验证token
      */
     @Operation(summary = "验证token是否正确", description = "验证token")
     @GetMapping(value = "/anyTenant/verify")
-    public R<Token> verify(@RequestParam(value = "token") String token) throws BizException {
-        return R.success(tokenUtil.parseToken(token));
+    public R<SaSession> verify(@RequestParam(value = "token") String token) throws BizException {
+        return R.success(StpUtil.getTokenSessionByToken(token));
     }
 
     /**

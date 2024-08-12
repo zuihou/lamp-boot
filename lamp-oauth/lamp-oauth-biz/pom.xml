@@ -34,10 +34,7 @@
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-webmvc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-jwt-starter</artifactId>
-        </dependency>
+
         <!-- log 只有认证服务biz模块引用，其他服务都在controller模块 -->
         <dependency>
             <groupId>top.tangyh.basic</groupId>

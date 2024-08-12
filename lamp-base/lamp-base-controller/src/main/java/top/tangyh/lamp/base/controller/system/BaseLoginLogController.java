@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/baseLoginLog")
+@RequestMapping({"/baseLoginLog", "/anyone/baseLoginLog"})
 @Tag(name = "登录日志")
 public class BaseLoginLogController extends SuperController<DefLoginLogService, Long, DefLoginLog, DefLoginLogSaveVO,
         DefLoginLogUpdateVO, DefLoginLogPageQuery, DefLoginLogResultVO> {
@@ -52,7 +52,7 @@ public class BaseLoginLogController extends SuperController<DefLoginLogService, 
         return echoService;
     }
 
-    @PostMapping(value = "/anyone/page")
+    @PostMapping(value = "/anyOnePage")
     public R<IPage<DefLoginLogResultVO>> anyOnePage(@RequestBody PageParams<DefLoginLogPageQuery> params) {
         return super.page(params);
     }

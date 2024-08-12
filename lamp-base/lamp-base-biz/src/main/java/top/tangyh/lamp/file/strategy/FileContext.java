@@ -7,6 +7,7 @@ import cn.hutool.core.util.URLUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.tangyh.basic.base.R;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -42,20 +42,15 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Component
 public class FileContext {
-    private final Map<String, FileStrategy> contextStrategyMap = new ConcurrentHashMap<>();
-    private final Map<String, FileChunkStrategy> contextChunkStrategyMap = new ConcurrentHashMap<>();
-    private final FileServerProperties fileServerProperties;
-    private final FileMapper fileMapper;
+    @Autowired
+    private Map<String, FileChunkStrategy> contextChunkStrategyMap;
+    @Autowired
+    private Map<String, FileStrategy> contextStrategyMap;
+    @Autowired
+    private FileServerProperties fileServerProperties;
+    @Autowired
+    private FileMapper fileMapper;
 
-    public FileContext(Map<String, FileStrategy> map,
-                       Map<String, FileChunkStrategy> chunkMap,
-                       FileServerProperties fileServerProperties,
-                       FileMapper fileMapper) {
-        this.contextStrategyMap.putAll(map);
-        this.contextChunkStrategyMap.putAll(chunkMap);
-        this.fileServerProperties = fileServerProperties;
-        this.fileMapper = fileMapper;
-    }
 
     private static Predicate<File> getFilePredicate() {
         return file -> file != null && StrUtil.isNotEmpty(file.getUrl());

@@ -91,7 +91,7 @@ public class ExtendMsgController extends SuperController<ExtendMsgService, Long,
      * @return 查询结果
      */
     @Operation(summary = "查询消息中心", description = "查询消息中心")
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     @WebLog("查询消息中心")
     @Override
     public R<ExtendMsgResultVO> get(@PathVariable Long id) {

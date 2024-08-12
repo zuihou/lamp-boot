@@ -37,13 +37,13 @@ public interface TokenGranter {
      */
     R<LoginResultVO> login(LoginParamVO loginParam);
 
+
     /**
      * 退出
      *
-     * @param token 用户token
      * @return
      */
-    R<Boolean> logout(String token);
+    R<Boolean> logout();
 
     /**
      * 切换企业和机构

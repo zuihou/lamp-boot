@@ -1,6 +1,14 @@
 package top.tangyh.lamp.system.controller.tenant;
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.session.TokenSign;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -19,16 +27,24 @@ import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.controller.SuperExcelController;
 import top.tangyh.basic.base.request.PageParams;
 import top.tangyh.basic.interfaces.echo.EchoService;
+import top.tangyh.basic.utils.DateUtils;
 import top.tangyh.lamp.system.entity.tenant.DefUser;
 import top.tangyh.lamp.system.service.tenant.DefUserService;
+import top.tangyh.lamp.system.vo.query.system.OnlineUsersPageQuery;
 import top.tangyh.lamp.system.vo.query.tenant.DefUserPageQuery;
+import top.tangyh.lamp.system.vo.result.system.OnlineTokenResultVO;
+import top.tangyh.lamp.system.vo.result.system.OnlineUsersResultVO;
 import top.tangyh.lamp.system.vo.result.tenant.DefUserExcelVO;
 import top.tangyh.lamp.system.vo.result.tenant.DefUserResultVO;
 import top.tangyh.lamp.system.vo.save.tenant.DefUserSaveVO;
 import top.tangyh.lamp.system.vo.update.tenant.DefUserPasswordResetVO;
 import top.tangyh.lamp.system.vo.update.tenant.DefUserUpdateVO;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -139,5 +155,137 @@ public class DefUserController extends SuperExcelController<DefUserService, Long
     @WebLog("'邀请员工进入企业前精确查询用户")
     public R<List<DefUserResultVO>> queryUser(@RequestBody DefUserPageQuery params) {
         return R.success(superService.queryUser(params));
+    }
+
+    @PostMapping("/onlineUsers/logout")
+    @Operation(summary = "强制注销")
+    @WebLog("强制注销")
+    public R<Boolean> logout(@RequestParam(required = false) Long userId, @RequestParam(required = false) String token) {
+        if (userId != null) {
+            StpUtil.logout(userId);
+        }
+        if (StrUtil.isNotEmpty(token)) {
+            StpUtil.logoutByTokenValue(token);
+        }
+        return R.success(true);
+    }
+
+
+    @PostMapping("/onlineUsers/kickout")
+    @Operation(summary = "踢人下线")
+    @WebLog("踢人下线")
+    public R<Boolean> kickout(@RequestParam(required = false) Long userId, @RequestParam(required = false) String token) {
+        if (userId != null) {
+            StpUtil.kickout(userId);
+        }
+        if (StrUtil.isNotEmpty(token)) {
+            StpUtil.kickoutByTokenValue(token);
+        }
+        return R.success(true);
+    }
+
+    @PostMapping("/onlineUsers/page")
+    @Operation(summary = "获取在线人员")
+    @WebLog("获取在线人员")
+    public R<IPage<OnlineUsersResultVO>> onlineUsersPage(@RequestBody @Validated PageParams<OnlineUsersPageQuery> params) {
+        OnlineUsersPageQuery model = params.getModel();
+
+        List<String> sessionIdList = StpUtil.searchSessionId(StringPool.EMPTY, 0, -1, false);
+        List<OnlineUsersResultVO> loginUserList = new ArrayList<>(sessionIdList.size());
+        LocalDateTime currentTime = LocalDateTime.now();
+        for (String sessionId : sessionIdList) {
+            // 根据会话id，查询对应的 SaSession 对象，此处一个 SaSession 对象即代表一个登录的账号
+            SaSession session = StpUtil.getSessionBySessionId(sessionId);
+
+            DefUser defUser = superService.getByIdCache(Convert.toLong(session.getLoginId()));
+
+            OnlineUsersResultVO bean = BeanUtil.toBean(session, OnlineUsersResultVO.class);
+            if (defUser != null) {
+                if (StrUtil.isNotEmpty(model.getUsername()) && !StrUtil.containsIgnoreCase(defUser.getUsername(), model.getUsername())) {
+                    continue;
+                }
+                if (StrUtil.isNotEmpty(model.getNickName()) && !StrUtil.containsIgnoreCase(defUser.getNickName(), model.getNickName())) {
+                    continue;
+                }
+                bean.setNickName(defUser.getNickName());
+                bean.setUsername(defUser.getUsername());
+            }
+            bean.setSessionTime(DateUtils.getDateTimeOfTimestamp(bean.getCreateTime()));
+            bean.setExpireTime(DateUtils.getDateTimeOfTimestamp(System.currentTimeMillis() + bean.getTimeout() * 1000));
+            Duration duration = Duration.between(bean.getSessionTime(), currentTime);
+            bean.setSessionStr(DateUtils.tranDurationToShow(duration));
+
+            Duration expireDuration = Duration.between(bean.getExpireTime(), currentTime);
+            bean.setExpireStr(DateUtils.tranDurationToShow(expireDuration));
+
+            loginUserList.add(bean);
+        }
+        List<OnlineUsersResultVO> sortedList = loginUserList.stream().sorted(((o1, o2) -> o2.getSessionTime().compareTo(o1.getSessionTime()))).collect(Collectors.toList());
+        return R.success(buildPager(params.getSize(), params.getCurrent(), sortedList));
+    }
+
+    @PostMapping("/onlineUsers/getTokenSignList")
+    @Operation(summary = "获取此 Session 绑定的 Token 签名列表 ")
+    @WebLog("获取 Token 签名列表 ")
+    public R<IPage<OnlineTokenResultVO>> getTokenSignList(@RequestBody @Validated PageParams<OnlineUsersPageQuery> params) {
+        SaSession session = StpUtil.getSessionBySessionId(params.getModel().getSessionId());
+        if (session == null) {
+            return R.success(new Page<>());
+        }
+        List<TokenSign> tokenSignList = session.getTokenSignList();
+
+        List<OnlineTokenResultVO> loginUserList = new ArrayList<>(tokenSignList.size());
+        LocalDateTime currentTime = LocalDateTime.now();
+        for (TokenSign tokenSign : tokenSignList) {
+            SaSession tokenSession = StpUtil.getTokenSessionByToken(tokenSign.getValue());
+            OnlineTokenResultVO bean = BeanUtil.toBean(tokenSign, OnlineTokenResultVO.class);
+
+            bean.setSessionTime(DateUtils.getDateTimeOfTimestamp(tokenSession.getCreateTime()));
+            bean.setExpireTime(DateUtils.getDateTimeOfTimestamp(System.currentTimeMillis() + tokenSession.getTimeout() * 1000));
+
+            Duration duration = Duration.between(bean.getSessionTime(), currentTime);
+            bean.setSessionStr(DateUtils.tranDurationToShow(duration));
+
+            Duration expireDuration = Duration.between(bean.getExpireTime(), currentTime);
+            bean.setExpireStr(DateUtils.tranDurationToShow(expireDuration));
+
+            loginUserList.add(bean);
+        }
+        IPage<OnlineTokenResultVO> page = new Page<>(params.getCurrent(), params.getSize(), loginUserList.size());
+        page.setRecords(loginUserList);
+        return R.success(page);
+    }
+
+    public static <T> IPage<T> buildPager(long pageSize, long pageIndex, List<T> list) {
+        //使用list 中的sublist方法分页
+        List<T> dataList = new ArrayList<>();
+        IPage<T> pageInfoVo = new Page<>(pageIndex, pageSize);
+        //当前第几页数据
+        long currentPage;
+        // 一共多少条记录
+        long totalRecord = list.size();
+        // 一共多少页
+        long totalPage = totalRecord % pageSize;
+        if (totalPage > 0) {
+            totalPage = totalRecord / pageSize + 1;
+        } else {
+            totalPage = totalRecord / pageSize;
+        }
+        pageInfoVo.setTotal(totalRecord);
+        // 当前第几页数据
+        currentPage = Math.min(totalPage, pageIndex);
+        // 起始索引
+        int fromIndex = (int) (pageSize * (currentPage - 1));
+        // 结束索引
+        int toIndex = (int) (Math.min(pageSize * currentPage, totalRecord));
+        try {
+            if (!list.isEmpty()) {
+                dataList = list.subList(fromIndex, toIndex);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            log.error("e", e);
+        }
+        pageInfoVo.setRecords(dataList);
+        return pageInfoVo;
     }
 }

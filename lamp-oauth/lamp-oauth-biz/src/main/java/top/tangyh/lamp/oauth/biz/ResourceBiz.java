@@ -27,10 +27,17 @@ import top.tangyh.lamp.system.enumeration.system.ClientTypeEnum;
 import top.tangyh.lamp.system.enumeration.tenant.ResourceOpenWithEnum;
 import top.tangyh.lamp.system.service.application.DefApplicationService;
 import top.tangyh.lamp.system.service.application.DefResourceService;
+import top.tangyh.lamp.system.vo.result.application.ResourceApiVO;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 资源大业务
@@ -195,6 +202,33 @@ public class ResourceBiz {
             forEachTree(tree, 1);
         }
         return tree;
+    }
+
+    public Map<ResourceApiVO, Set<String>> findAllApi() {
+        // 查询系统中配置的URI和权限关系
+        List<ResourceApiVO> list = defResourceService.findAllApi();
+
+        return list.stream()
+                .peek(item -> {
+                    String uri = item.getUri();
+                    if (!StrUtil.startWithAny(uri, "/gateway")) {
+                        uri = StrUtil.subSuf(uri, StrUtil.indexOf(uri, '/', 1));
+                    }
+                    item.setUri(uri);
+                })
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        resourceApiVO -> {
+                            Set<String> codes = new HashSet<>();
+                            codes.add(resourceApiVO.getCode());
+                            return codes;
+                        },
+                        (existingCodes, newCodes) -> {
+                            existingCodes.addAll(newCodes);
+                            return existingCodes;
+                        },
+                        LinkedHashMap::new
+                ));
     }
 
     /**

@@ -13,11 +13,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.tangyh.basic.boot.config.BaseConfig;
-import top.tangyh.basic.cache.repository.CacheOps;
-import top.tangyh.basic.jwt.TokenHelper;
+import top.tangyh.basic.constant.Constants;
 import top.tangyh.basic.log.event.SysLogListener;
 import top.tangyh.basic.utils.BeanPlusUtil;
-import top.tangyh.lamp.base.interceptor.AuthenticationFilter;
+import top.tangyh.lamp.base.interceptor.AuthenticationSaInterceptor;
 import top.tangyh.lamp.base.interceptor.TokenContextFilter;
 import top.tangyh.lamp.base.service.system.BaseOperationLogService;
 import top.tangyh.lamp.base.vo.save.system.BaseOperationLogSaveVO;
@@ -38,20 +37,18 @@ public class BaseWebConfiguration extends BaseConfig implements WebMvcConfigurer
 
 
     private final IgnoreProperties ignoreProperties;
-    private final TokenHelper tokenUtil;
-    private final CacheOps cacheOps;
     private final ResourceBiz oauthResourceBiz;
     @Value("${spring.profiles.active:dev}")
     protected String profiles;
 
     @Bean
     public HandlerInterceptor getTokenContextFilter() {
-        return new TokenContextFilter(profiles, ignoreProperties, tokenUtil, cacheOps);
+        return new TokenContextFilter(profiles, ignoreProperties);
     }
 
     @Bean
-    public HandlerInterceptor getAuthenticationFilter() {
-        return new AuthenticationFilter(ignoreProperties, oauthResourceBiz);
+    public HandlerInterceptor getSaFilter() {
+        return new AuthenticationSaInterceptor(ignoreProperties, oauthResourceBiz);
     }
 
     @Override
@@ -75,10 +72,11 @@ public class BaseWebConfiguration extends BaseConfig implements WebMvcConfigurer
                 .addPathPatterns("/**")
                 .order(5)
                 .excludePathPatterns(commonPathPatterns);
-        registry.addInterceptor(getAuthenticationFilter())
-                .addPathPatterns("/**")
-                .order(10)
-                .excludePathPatterns(commonPathPatterns);
+
+        // 注册 Sa-Token 拦截器，定义详细认证规则
+        registry.addInterceptor(getSaFilter()).addPathPatterns("/**").order(10);
+
+
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
@@ -121,7 +119,8 @@ public class BaseWebConfiguration extends BaseConfig implements WebMvcConfigurer
      * lamp.log.enabled = true 并且 lamp.log.type=DB时实例该类
      */
     @Bean
-    @ConditionalOnExpression("${lamp.log.enabled:true} && 'DB'.equals('${lamp.log.type:LOGGER}')")
+    @ConditionalOnExpression("${" + Constants.PROJECT_PREFIX + ".log.enabled:true} && 'DB'.equals('${" + Constants.PROJECT_PREFIX + ".log.type:LOGGER}')")
+
     public SysLogListener sysLogListener(BaseOperationLogService logApi) {
         return new SysLogListener(data -> logApi.save(BeanPlusUtil.toBean(data, BaseOperationLogSaveVO.class)));
     }

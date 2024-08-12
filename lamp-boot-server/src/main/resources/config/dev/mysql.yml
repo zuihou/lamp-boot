@@ -33,8 +33,6 @@ lamp:
   database: # 字段介绍参考 DatabaseProperties
     # 4.x 需要写死 column， 其他模式需要使用其他项目，而非改变此参数
     multiTenantType: NONE
-    # 是否不允许写入数据  WriteInterceptor
-    isNotWrite: false
     # 是否启用  sql性能规范插件
     isBlockAttack: false
     # 是否启用分布式事务

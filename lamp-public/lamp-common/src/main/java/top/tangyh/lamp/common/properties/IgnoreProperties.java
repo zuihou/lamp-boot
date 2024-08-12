@@ -1,10 +1,10 @@
 package top.tangyh.lamp.common.properties;
 
+import cn.dev33.satoken.spring.pathmatch.SaPathPatternParserUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.util.AntPathMatcher;
 import top.tangyh.basic.constant.Constants;
 import top.tangyh.lamp.model.enumeration.HttpMethod;
 
@@ -27,7 +27,6 @@ import static top.tangyh.basic.utils.CollHelper.putAll;
 @ConfigurationProperties(prefix = IgnoreProperties.PREFIX)
 public class IgnoreProperties {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".ignore";
-    private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
     /**
      * 是否启用网关的 uri权限鉴权 和 前端按钮权限 (设置为false，则不校验访问权限)
      *
@@ -39,29 +38,36 @@ public class IgnoreProperties {
      */
     private Boolean caseSensitive = false;
 
+    /** 系统没有配置某个URI时，是否允许访问 */
+    private Boolean notConfigUriAllow = false;
+
     private Map<String, Set<String>> baseUri = MapUtil.<String, Set<String>>builder(HttpMethod.ALL.name(), CollUtil.newHashSet(
-            "/**/{p:[a-zA-Z0-9]+}.css",
-            "/**/{p:[a-zA-Z0-9]+}.js",
-            "/**/{p:[a-zA-Z0-9]+}.html",
-            "/**/{p:[a-zA-Z0-9]+}.ico",
-            "/**/{p:[a-zA-Z0-9]+}.jpg",
-            "/**/{p:[a-zA-Z0-9]+}.jpeg",
-            "/**/{p:[a-zA-Z0-9]+}.png",
-            "/**/{p:[a-zA-Z0-9]+}.gif",
-            "/**/v2/**",
-            "/**/api-docs/**",
-            "/**/api-docs-ext/**",
-            "/**/swagger-resources/**",
-            "/**/webjars/**",
+            "/cache/**",
+            "/swagger-ui.html**",
+            "/doc.html**",
+            "/favicon.ico",
+
+            "/{p:[a-zA-Z0-9]+}.css",
+            "/{p:[a-zA-Z0-9]+}.js",
+            "/{p:[a-zA-Z0-9]+}.html",
+            "/{p:[a-zA-Z0-9]+}.ico",
+            "/{p:[a-zA-Z0-9]+}.jpg",
+            "/{p:[a-zA-Z0-9]+}.jpeg",
+            "/{p:[a-zA-Z0-9]+}.png",
+            "/{p:[a-zA-Z0-9]+}.gif",
+            "/v3/**",
+            "/webjars/**",
+            "/v2/**",
+            "/swagger-resources/**",
             "/actuator/**",
-            "/**/static/**",
-            "/**/public/**",
+            "/static/**",
+            "/public/**",
             "/error",
             // 表单验证
-            "/**/form/validator/**",
+            "/form/validator/**",
             // 不需要租户编码、不需要登录、不需要权限即可访问的接口
-            "/**/anno/**",
-            "/**/druid/**")).build();
+            "/anno/**",
+            "/druid/**")).build();
 
     /**
      * 需要携带租户ID，需要登录，但无需验证是否拥有 uri 权限的接口。 即： 请求头中携带 tenant，也携带 token， 但不对uri权限验证
@@ -103,19 +109,31 @@ public class IgnoreProperties {
     private Map<String, Set<String>> anyTenant = MapUtil.newHashMap();
 
 
+
+    public Map<String, Set<String>> buildAnyone() {
+        return putAll(getBaseUri(), this.getAnyTenant(), this.getAnyUser(), this.getAnyone());
+    }
+
+    public Map<String, Set<String>> buildAnyUser() {
+        return putAll(getBaseUri(), this.getAnyTenant(), this.getAnyUser());
+    }
+
+    public Map<String, Set<String>> buildAnyTenant() {
+        return putAll(getBaseUri(), this.getAnyTenant());
+    }
+
+
     /**
      * 是否忽略uri权限认证
      *
      * @param path 相对路径
      * @return
      */
-    public boolean isIgnoreUriAuth(String method, String path) {
+    public boolean isIgnoreAnyone(String method, String path) {
         Map<String, Set<String>> all = putAll(getBaseUri(), this.getAnyTenant(), this.getAnyUser(), this.getAnyone());
 
         return isIgnore(method, path, all);
     }
-
-
     /**
      * 是否忽略登录
      *
@@ -143,9 +161,9 @@ public class IgnoreProperties {
             String m = entry.getKey();
             Set<String> paths = entry.getValue();
             if (HttpMethod.ALL.name().equalsIgnoreCase(m)) {
-                return paths.stream().anyMatch(url -> ANT_PATH_MATCHER.match(url, path));
+                return paths.stream().anyMatch(url -> SaPathPatternParserUtil.match(url, path));
             } else {
-                return m.equalsIgnoreCase(method) && paths.stream().anyMatch(url -> ANT_PATH_MATCHER.match(url, path));
+                return m.equalsIgnoreCase(method) && paths.stream().anyMatch(url -> SaPathPatternParserUtil.match(url, path));
             }
         }
         return false;

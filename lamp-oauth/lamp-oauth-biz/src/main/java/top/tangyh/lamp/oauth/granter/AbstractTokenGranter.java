@@ -12,11 +12,10 @@
  */
 package top.tangyh.lamp.oauth.granter;
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,18 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.boot.utils.WebUtils;
-import top.tangyh.basic.cache.redis2.CacheResult;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.exception.UnauthorizedException;
 import top.tangyh.basic.exception.code.ExceptionCode;
-import top.tangyh.basic.jwt.TokenHelper;
-import top.tangyh.basic.jwt.model.JwtInfo;
-import top.tangyh.basic.jwt.model.Token;
-import top.tangyh.basic.jwt.properties.JwtProperties;
-import top.tangyh.basic.jwt.utils.Base64Util;
-import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.SpringUtils;
 import top.tangyh.basic.utils.StrPool;
@@ -46,8 +38,8 @@ import top.tangyh.lamp.base.entity.user.BaseOrg;
 import top.tangyh.lamp.base.service.user.BaseEmployeeService;
 import top.tangyh.lamp.base.service.user.BaseOrgService;
 import top.tangyh.lamp.base.vo.result.user.BaseEmployeeResultVO;
-import top.tangyh.lamp.common.cache.common.TokenUserIdCacheKeyBuilder;
 import top.tangyh.lamp.common.properties.SystemProperties;
+import top.tangyh.lamp.common.utils.Base64Util;
 import top.tangyh.lamp.file.service.AppendixService;
 import top.tangyh.lamp.model.enumeration.StateEnum;
 import top.tangyh.lamp.model.enumeration.base.OrgTypeEnum;
@@ -65,6 +57,11 @@ import top.tangyh.lamp.system.service.tenant.DefUserService;
 import java.util.List;
 
 import static top.tangyh.basic.context.ContextConstants.CLIENT_KEY;
+import static top.tangyh.basic.context.ContextConstants.JWT_KEY_COMPANY_ID;
+import static top.tangyh.basic.context.ContextConstants.JWT_KEY_DEPT_ID;
+import static top.tangyh.basic.context.ContextConstants.JWT_KEY_EMPLOYEE_ID;
+import static top.tangyh.basic.context.ContextConstants.JWT_KEY_TOP_COMPANY_ID;
+import static top.tangyh.basic.context.ContextConstants.JWT_KEY_USER;
 
 /**
  * 验证码TokenGranter
@@ -73,10 +70,7 @@ import static top.tangyh.basic.context.ContextConstants.CLIENT_KEY;
  */
 @Slf4j
 public abstract class AbstractTokenGranter implements TokenGranter {
-    @Autowired
-    protected TokenHelper tokenUtil;
-    @Autowired
-    protected JwtProperties jwtProperties;
+
     @Autowired
     protected CacheOps cacheOps;
     @Autowired
@@ -359,28 +353,36 @@ public abstract class AbstractTokenGranter implements TokenGranter {
      * @create [2022/10/5 12:41 PM ] [tangyh] [初始创建]
      */
     protected LoginResultVO buildResult(Employee employee, Org org, DefUser defUser) {
-        JwtInfo userInfo = new JwtInfo(defUser.getId(), employee.getEmployeeId(), org.getCurrentCompanyId(),
-                org.getCurrentTopCompanyId(), org.getCurrentDeptId(), UUID.randomUUID().toString(true));
-        Token token = tokenUtil.buildToken(userInfo, null);
+        //此登录接口登录web端
+        StpUtil.login(defUser.getId(), "PC");
+        SaSession tokenSession = StpUtil.getSession();
+        tokenSession.setLoginId(defUser.getId());
+        if (org.getCurrentTopCompanyId() != null) {
+            tokenSession.set(JWT_KEY_TOP_COMPANY_ID, org.getCurrentTopCompanyId());
+        }
+        if (org.getCurrentCompanyId() != null) {
+            tokenSession.set(JWT_KEY_COMPANY_ID, org.getCurrentCompanyId());
+        }
+        if (org.getCurrentDeptId() != null) {
+            tokenSession.set(JWT_KEY_DEPT_ID, org.getCurrentDeptId());
+        }
+        if (employee.getEmployeeId() != null) {
+            tokenSession.set(JWT_KEY_EMPLOYEE_ID, employee.getEmployeeId());
+        }
+        tokenSession.set(JWT_KEY_USER, defUser);
 
         LoginResultVO resultVO = new LoginResultVO();
-        BeanUtil.copyProperties(token, resultVO);
-        resultVO.setUuid(userInfo.getUuid());
-
-        CacheKey cacheKey = TokenUserIdCacheKeyBuilder.builder(resultVO.getUuid(), jwtProperties.getExpire());
-        cacheOps.set(cacheKey, resultVO.getToken());
+        resultVO.setToken(StpUtil.getTokenValue());
+        resultVO.setExpire(StpUtil.getTokenTimeout());
 
         log.info("用户：{}  {} 登录成功", defUser.getUsername(), defUser.getNickName());
         return resultVO;
     }
 
     @Override
-    public R<Boolean> logout(String tokenStr) {
+    public R<Boolean> logout() {
         try {
-            Token token = tokenUtil.parseToken(tokenStr);
-            // 根据系统参数，做一些其他操作
-            CacheKey cacheKey = TokenUserIdCacheKeyBuilder.builder(token.getUuid(), jwtProperties.getExpire());
-            cacheOps.del(cacheKey);
+            StpUtil.logout();
         } catch (Exception e) {
             log.debug("token已经过期，无需清理缓存");
         }
@@ -389,15 +391,8 @@ public abstract class AbstractTokenGranter implements TokenGranter {
 
     @Override
     public LoginResultVO switchOrg(Long orgId) {
-        Token token = tokenUtil.parseTokenSneaky(ContextUtil.getToken());
-        if (token == null) {
-            throw UnauthorizedException.wrap(ExceptionCode.JWT_TOKEN_EXPIRED);
-        }
-        CacheKey cacheKey = TokenUserIdCacheKeyBuilder.builder(token.getUuid(), jwtProperties.getExpire());
-        CacheResult<String> oldKeyVal = cacheOps.get(cacheKey);
-        if (StrUtil.isEmpty(oldKeyVal.getValue())) {
-            throw UnauthorizedException.wrap(ExceptionCode.JWT_TOKEN_EXPIRED);
-        }
+        StpUtil.checkLogin();
+
         Long userId = ContextUtil.getUserId();
         DefUser defUser = defUserService.getByIdCache(userId);
         if (defUser == null) {

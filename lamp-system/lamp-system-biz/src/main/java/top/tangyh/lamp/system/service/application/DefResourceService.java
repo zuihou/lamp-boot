@@ -4,6 +4,7 @@ import top.tangyh.basic.base.service.SuperCacheService;
 import top.tangyh.lamp.system.entity.application.DefResource;
 import top.tangyh.lamp.system.entity.application.DefResourceApi;
 import top.tangyh.lamp.system.vo.result.application.DefResourceResultVO;
+import top.tangyh.lamp.system.vo.result.application.ResourceApiVO;
 import top.tangyh.lamp.system.vo.save.application.DefResourceSaveVO;
 import top.tangyh.lamp.system.vo.update.application.DefResourceUpdateVO;
 
@@ -22,6 +23,12 @@ import java.util.Map;
  * @date 2021-09-13
  */
 public interface DefResourceService extends SuperCacheService<Long, DefResource> {
+    /**
+     * 查询系统中配置的所有API与资源编码
+     * @return API与资源编码
+     */
+    List<ResourceApiVO> findAllApi();
+
     /**
      * 查找租户拥有的资源
      *

@@ -47,7 +47,7 @@ import static top.tangyh.lamp.common.constant.SwaggerConstants.DATA_TYPE_MULTIPA
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/file/anyone")
+@RequestMapping("/anyone/file")
 @Tag(name = "文件上传")
 public class FileAnyoneController {
     private final FileService fileService;

@@ -8,11 +8,6 @@ lamp:
   webmvc:
     undertow: true
     header: false
-  authentication:
-    # jwt 签名，长度至少32位。 建议每个公司都修改一下这个字符串
-    jwtSignKey: 'lamp-cloud_is_a_fantastic_project'
-    expire: 28800               # token有效期为8小时
-    refreshExpire: 86400        # 刷新token有效期为24小时
   system:
     # 登录时否验证密码有效性 （常用于开发环境快速登录）
     verifyPassword: true
@@ -28,6 +23,23 @@ lamp:
     cachePrefix: lc
     # oauth 服务扫描枚举类的包路径
     enumPackage: "top.tangyh"
+    # 演示环境启用
+    notAllowWrite: false
+    notAllowWriteList:
+      POST:
+        - /defResource
+        - /defTenantApplicationRel/cancel
+      PUT:
+        - /defResource
+        - /defResource/moveResource
+      DELETE:
+        - /defResource*/**
+        - /defTenant*/**
+        - /defApplication*/**
+        - /defUser*/**
+        - /defParameter*/**
+        - /defDict*/**
+        - /defClient*/**
   ignore:
     # 是否启用网关的 uri权限鉴权 (设置为false，则后台不校验访问权限)
     authEnabled: true
@@ -35,16 +47,16 @@ lamp:
     caseSensitive: false
     anyone: # 请求中 需要携带Tenant 且 需要携带Token(不需要登录)，但不需要验证uri权限
       ALL:
-        - /**/anyone/**
+        - /anyone/**
         - /service/model/*/json
         - /service/model/*/save
         - /service/editor/stencilset
     anyUser: # 请求中 需要携带Tenant，但 不需要携带Token(不需要登录) 和 不需要验证uri权限
       ALL:
-        - /**/anyUser/**
+        - /anyUser/**
     anyTenant: # 请求中 不需要携带Tenant 且 不需要携带Token(不需要登录) 和 不需要验证uri权限
       ALL:
-        - /**/anyTenant/**
+        - /anyTenant/**
   echo: #详情看: EchoProperties
     # 是否启用 远程数据 手动注入
     enabled: true
@@ -237,6 +249,7 @@ spring:
       - classpath:config/${spring.profiles.active}/common.yml
       - classpath:config/${spring.profiles.active}/doc.yml
       - classpath:config/${spring.profiles.active}/oss.yml
+      - classpath:config/${spring.profiles.active}/sa-token.yml
       - classpath:config/${spring.profiles.active}/rabbitmq.yml
       - classpath:config/${spring.profiles.active}/redis.yml
       - classpath:config/${spring.profiles.active}/mysql.yml

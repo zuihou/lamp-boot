@@ -79,11 +79,7 @@
                 <artifactId>lamp-echo-starter</artifactId>
                 <version>${lamp-util.version}</version>
             </dependency>
-            <dependency>
-                <groupId>top.tangyh.basic</groupId>
-                <artifactId>lamp-jwt-starter</artifactId>
-                <version>${lamp-util.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-log-starter</artifactId>

@@ -6,6 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import top.tangyh.basic.constant.Constants;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 登录配置
  *
@@ -63,11 +67,19 @@ public class SystemProperties {
     /**
      * 缓存Key前缀
      *
-     * @author tangyh
-     * @date 2023/5/15 9:28 AM
-     * @create [2023/5/15 9:28 AM ] [tangyh] [初始创建]
+     * @since 2023/5/15 9:28 AM
      */
     private String cachePrefix;
     /** oauth 服务扫描枚举类的包路径 */
     private String enumPackage;
+
+
+    /**
+     * 是否禁止写入
+     */
+    private Boolean notAllowWrite = false;
+    /**
+     * 禁止写入名单
+     */
+    private Map<String, List<String>> notAllowWriteList = new HashMap<>();
 }

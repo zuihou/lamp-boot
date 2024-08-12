@@ -2,6 +2,7 @@ package top.tangyh.lamp.system.manager.application;
 
 import top.tangyh.basic.base.manager.SuperCacheManager;
 import top.tangyh.lamp.system.entity.application.DefResourceApi;
+import top.tangyh.lamp.system.vo.result.application.ResourceApiVO;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
  * @create [2021/9/29 1:26 下午 ] [tangyh] [初始创建]
  */
 public interface DefResourceApiManager extends SuperCacheManager<DefResourceApi> {
+    /** 查询系统中配置的所有API与资源编码 */
+    List<ResourceApiVO> findAllApi();
     /**
      * 根据资源id 删除资源的接口
      *

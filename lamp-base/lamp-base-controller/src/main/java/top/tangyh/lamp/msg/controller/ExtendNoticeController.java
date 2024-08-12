@@ -44,7 +44,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @RestController
-@RequestMapping("/extendNotice/anyone")
+@RequestMapping("/anyone/extendNotice")
 @Tag(name = "通知表")
 public class ExtendNoticeController extends SuperController<ExtendNoticeService, Long, ExtendNotice, ExtendNoticeSaveVO,
         ExtendNoticeUpdateVO, ExtendNoticePageQuery, ExtendNoticeResultVO> {

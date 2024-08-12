@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.tangyh.basic.annotation.user.LoginUser;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.lamp.base.service.system.BaseRoleService;
 import top.tangyh.lamp.common.properties.IgnoreProperties;
 import top.tangyh.lamp.model.entity.system.SysUser;
 import top.tangyh.lamp.oauth.biz.ResourceBiz;
@@ -41,6 +42,7 @@ import java.util.List;
 public class ResourceController {
     private final IgnoreProperties ignoreProperties;
     private final ResourceBiz oauthResourceBiz;
+    private final BaseRoleService baseRoleService;
 
 
     /**
@@ -65,7 +67,7 @@ public class ResourceController {
         return R.success(VisibleResourceVO.builder()
                 .enabled(ignoreProperties.getAuthEnabled())
                 .caseSensitive(ignoreProperties.getCaseSensitive())
-                .roleList(Collections.singletonList("PT_ADMIN"))
+                .roleList(baseRoleService.findRoleCodeByEmployeeId(employeeId))
                 .resourceList(oauthResourceBiz.findVisibleResource(employeeId, applicationId))
                 .routerList(
                         applicationId == null ? oauthResourceBiz.findAllVisibleRouter(employeeId, subGroup, type) : oauthResourceBiz.findVisibleRouter(applicationId, employeeId, subGroup, type)

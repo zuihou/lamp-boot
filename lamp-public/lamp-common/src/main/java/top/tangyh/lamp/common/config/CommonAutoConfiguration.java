@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -43,4 +44,9 @@ public class CommonAutoConfiguration {
         }
     }
 
+    @Bean
+    @ConditionalOnClass
+    public GlobalMvcConfigurer getGlobalMvcConfigurer(SystemProperties systemProperties) {
+        return new GlobalMvcConfigurer(systemProperties);
+    }
 }
