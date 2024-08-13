@@ -7,6 +7,8 @@ lamp:
     author: zuihou
     # 默认项目
     projectType: BOOT
-
+  system:
+    # 演示环境启用
+    notAllowWrite: true
 server:
   port: 28760
