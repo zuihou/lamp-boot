@@ -9,7 +9,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 /**
- * 企业版 拥有此插件的全部源码
+ * 赞助版 拥有此插件的全部源码
  * <p>
  *
  * @author zuihou
@@ -19,11 +19,11 @@ import org.apache.ibatis.session.RowBounds;
 public class DataScopeInnerInterceptor implements InnerInterceptor {
 
     /**
-     * 企业版 拥有此插件的全部源码
+     * 赞助版 拥有此插件的全部源码
      */
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        // 企业版 拥有数据权限插件的全部源码
+        // 赞助版 拥有数据权限插件的全部源码
     }
 
 
