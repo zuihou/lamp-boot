@@ -96,4 +96,6 @@ public class ProjectGeneratorVO implements Serializable {
     private String description;
     @NotNull(message = "请填写端口号")
     private Integer serverPort;
+    @NotNull(message = "接入Seata")
+    private Boolean seata;
 }
