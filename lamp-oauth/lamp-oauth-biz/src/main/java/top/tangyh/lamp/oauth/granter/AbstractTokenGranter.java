@@ -61,7 +61,6 @@ import static top.tangyh.basic.context.ContextConstants.JWT_KEY_COMPANY_ID;
 import static top.tangyh.basic.context.ContextConstants.JWT_KEY_DEPT_ID;
 import static top.tangyh.basic.context.ContextConstants.JWT_KEY_EMPLOYEE_ID;
 import static top.tangyh.basic.context.ContextConstants.JWT_KEY_TOP_COMPANY_ID;
-import static top.tangyh.basic.context.ContextConstants.JWT_KEY_USER;
 
 /**
  * 验证码TokenGranter
@@ -369,7 +368,6 @@ public abstract class AbstractTokenGranter implements TokenGranter {
         if (employee.getEmployeeId() != null) {
             tokenSession.set(JWT_KEY_EMPLOYEE_ID, employee.getEmployeeId());
         }
-        tokenSession.set(JWT_KEY_USER, defUser);
 
         LoginResultVO resultVO = new LoginResultVO();
         resultVO.setToken(StpUtil.getTokenValue());
