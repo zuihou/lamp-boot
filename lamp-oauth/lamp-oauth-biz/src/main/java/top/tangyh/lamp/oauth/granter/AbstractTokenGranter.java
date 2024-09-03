@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.boot.utils.WebUtils;
-import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.exception.UnauthorizedException;
@@ -40,7 +39,6 @@ import top.tangyh.lamp.base.service.user.BaseOrgService;
 import top.tangyh.lamp.base.vo.result.user.BaseEmployeeResultVO;
 import top.tangyh.lamp.common.properties.SystemProperties;
 import top.tangyh.lamp.common.utils.Base64Util;
-import top.tangyh.lamp.file.service.AppendixService;
 import top.tangyh.lamp.model.enumeration.StateEnum;
 import top.tangyh.lamp.model.enumeration.base.OrgTypeEnum;
 import top.tangyh.lamp.model.enumeration.base.UserStatusEnum;
@@ -71,11 +69,7 @@ import static top.tangyh.basic.context.ContextConstants.JWT_KEY_TOP_COMPANY_ID;
 public abstract class AbstractTokenGranter implements TokenGranter {
 
     @Autowired
-    protected CacheOps cacheOps;
-    @Autowired
     protected SystemProperties systemProperties;
-    @Autowired
-    protected AppendixService appendixService;
     @Autowired
     protected DefClientService defClientService;
     @Autowired

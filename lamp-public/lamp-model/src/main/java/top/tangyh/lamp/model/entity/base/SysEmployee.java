@@ -15,7 +15,6 @@ import top.tangyh.basic.base.entity.Entity;
 import top.tangyh.basic.interfaces.echo.EchoVO;
 import top.tangyh.lamp.model.constant.EchoApi;
 import top.tangyh.lamp.model.constant.EchoDictType;
-import top.tangyh.lamp.model.entity.system.SysUser;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,7 +37,7 @@ import static top.tangyh.lamp.model.constant.Condition.LIKE;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "员工")
 @TableName("base_employee")
 public class SysEmployee extends Entity<Long> implements Serializable, EchoVO {
