@@ -5,7 +5,7 @@
     <parent>
         <groupId>top.tangyh.lamp</groupId>
         <artifactId>lamp-dependencies-parent</artifactId>
-        <version>4.21.1-java17</version>
+        <version>4.21.2-java17</version>
         <relativePath>../lamp-dependencies-parent/pom.xml</relativePath>
     </parent>
 
