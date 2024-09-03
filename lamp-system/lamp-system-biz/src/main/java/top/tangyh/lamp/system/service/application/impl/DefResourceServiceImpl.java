@@ -17,6 +17,7 @@ import top.tangyh.basic.utils.CollHelper;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.basic.utils.TreeUtil;
 import top.tangyh.basic.utils.ValidatorUtil;
+import top.tangyh.lamp.common.cache.tenant.application.AllResourceApiCacheKeyBuilder;
 import top.tangyh.lamp.common.cache.tenant.application.ApplicationResourceCacheKeyBuilder;
 import top.tangyh.lamp.common.cache.tenant.application.ResourceResourceApiCacheKeyBuilder;
 import top.tangyh.lamp.common.constant.DefValConstants;
@@ -57,10 +58,12 @@ import java.util.stream.Collectors;
 
 public class DefResourceServiceImpl extends SuperCacheServiceImpl<DefResourceManager, Long, DefResource> implements DefResourceService {
     private final DefResourceApiManager defResourceApiManager;
+
     @Override
     public List<ResourceApiVO> findAllApi() {
         return defResourceApiManager.findAllApi();
     }
+
     @Override
     public Map<Long, Collection<Long>> findResource() {
         List<DefResource> list = super.list(Wraps.<DefResource>lbQ().eq(DefResource::getState, true));
@@ -134,6 +137,7 @@ public class DefResourceServiceImpl extends SuperCacheServiceImpl<DefResourceMan
 
         boolean result = this.removeByIds(ids);
         defResourceApiManager.removeByResourceId(ids);
+        cacheOps.del(AllResourceApiCacheKeyBuilder.builder());
         // TODO 删除租户下的 角色资源关系表 员工资源关系表
         // deleteRoleResourceRelByResourceId(ids);
         return result;
@@ -275,6 +279,7 @@ public class DefResourceServiceImpl extends SuperCacheServiceImpl<DefResourceMan
 
         // 淘汰资源下绑定的接口
         cacheOps.del(ResourceResourceApiCacheKeyBuilder.builder(resource.getId()));
+        cacheOps.del(AllResourceApiCacheKeyBuilder.builder());
         return resource;
     }
 
@@ -312,6 +317,7 @@ public class DefResourceServiceImpl extends SuperCacheServiceImpl<DefResourceMan
 
         // 淘汰资源下绑定的接口
         cacheOps.del(ResourceResourceApiCacheKeyBuilder.builder(resource.getId()));
+        cacheOps.del(AllResourceApiCacheKeyBuilder.builder());
         return resource;
     }
 

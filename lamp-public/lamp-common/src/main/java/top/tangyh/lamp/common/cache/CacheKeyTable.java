@@ -101,8 +101,6 @@ public interface CacheKeyTable {
          * 应用
          */
         String APPLICATION = "def_application";
-        /** 应用的资源 */
-        String APPLICATION_RESOURCE = "app_res";
         /**
          * 默认字典
          */
@@ -138,6 +136,7 @@ public interface CacheKeyTable {
          * 资源接口
          */
         String RESOURCE_API = "dra";
+        String ALL_RESOURCE_API = "all_dra";
     }
 
 
