@@ -136,6 +136,8 @@ public interface CacheKeyTable {
          * 资源接口
          */
         String RESOURCE_API = "dra";
+        /** 应用的资源 */
+        String APPLICATION_RESOURCE = "app_res";
         String ALL_RESOURCE_API = "all_dra";
     }
 
