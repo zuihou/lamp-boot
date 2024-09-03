@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import top.tangyh.basic.cache.redis2.CacheResult;
+import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.jackson.JsonUtil;
+import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.utils.BeanPlusUtil;
 import top.tangyh.basic.utils.CollHelper;
 import top.tangyh.basic.utils.StrPool;
@@ -16,6 +19,7 @@ import top.tangyh.basic.utils.TreeUtil;
 import top.tangyh.lamp.base.service.system.BaseRoleService;
 import top.tangyh.lamp.base.vo.result.user.RouterMeta;
 import top.tangyh.lamp.base.vo.result.user.VueRouter;
+import top.tangyh.lamp.common.cache.tenant.application.AllResourceApiCacheKeyBuilder;
 import top.tangyh.lamp.common.constant.BizConstant;
 import top.tangyh.lamp.common.constant.RoleConstant;
 import top.tangyh.lamp.model.enumeration.HttpMethod;
@@ -53,6 +57,7 @@ public class ResourceBiz {
     private final DefResourceService defResourceService;
     private final BaseRoleService baseRoleService;
     private final DefApplicationService defApplicationService;
+    private final CacheOps cacheOps;
 
     /**
      * 是否所有的子都是视图
@@ -202,6 +207,12 @@ public class ResourceBiz {
             forEachTree(tree, 1);
         }
         return tree;
+    }
+
+    public Map<ResourceApiVO, Set<String>> findAllApiByCache() {
+        CacheKey cacheKey = AllResourceApiCacheKeyBuilder.builder();
+        CacheResult<Map<ResourceApiVO, Set<String>>> result = cacheOps.get(cacheKey, (k) -> findAllApi());
+        return result.getValue();
     }
 
     public Map<ResourceApiVO, Set<String>> findAllApi() {

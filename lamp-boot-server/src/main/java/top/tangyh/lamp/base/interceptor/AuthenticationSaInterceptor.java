@@ -72,7 +72,7 @@ public class AuthenticationSaInterceptor extends SaInterceptor {
 
             // 接口权限
             Map<String, Set<String>> anyone = ignoreProperties.buildAnyone();
-            Map<ResourceApiVO, Set<String>> allApi = this.resourceBiz.findAllApi();
+            Map<ResourceApiVO, Set<String>> allApi = this.resourceBiz.findAllApiByCache();
 
             allApi.forEach((api, auth) ->
                     SaRouter.match(api.getUri()).matchMethod(api.getRequestMethod())
